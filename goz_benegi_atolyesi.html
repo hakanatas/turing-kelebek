@@ -1,0 +1,594 @@
+<title>Göz Beneği Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Düzen: adım adım ders — solda kısa anlatım, sağda canlı tuval; telefonda tuval üstte */
+:root{
+  --bg:#EDF0EA; --surface:#FBFCF9; --ink:#1C2220; --muted:#59625D; --line:#CBD2CA;
+  --signal:#1F7A8C; --s-col:#B8336A; --lam-col:#4B3BC4; --ok:#2E7D32; --bad:#B3261E; --warn:#9A5B00;
+  --chip:#E2E7DF;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111614; --surface:#1A201D; --ink:#E6EBE5; --muted:#9BA69F; --line:#2E3833;
+  --signal:#4FB8CC; --s-col:#F0729E; --lam-col:#9C8EFF; --ok:#6CC070; --bad:#F2766D; --warn:#E3A43C;
+  --chip:#252D29; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111614; --surface:#1A201D; --ink:#E6EBE5; --muted:#9BA69F; --line:#2E3833;
+  --signal:#4FB8CC; --s-col:#F0729E; --lam-col:#9C8EFF; --ok:#6CC070; --bad:#F2766D; --warn:#E3A43C;
+  --chip:#252D29; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;padding:20px 16px 40px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--signal)}
+.sub{color:var(--muted);margin:4px 0 0;max-width:60ch}
+nav.steps{display:flex;flex-wrap:wrap;gap:6px}
+nav.steps button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px 5px 6px;cursor:pointer;display:flex;align-items:center;gap:7px}
+nav.steps button .n{font-family:var(--f-mono);font-size:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--chip)}
+nav.steps button[aria-current="step"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+nav.steps button[aria-current="step"] .n{background:var(--signal);color:#fff}
+nav.steps button.done .n{background:var(--signal);color:#fff;opacity:.55}
+button:focus-visible,input:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+.lesson-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:22px;align-items:start}
+.lesson{min-width:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--signal)}
+.lesson h2{font-family:var(--f-display);font-weight:800;font-size:clamp(23px,2.6vw,30px);line-height:1.15;margin:4px 0 12px;text-wrap:balance}
+.lesson p{margin:0 0 12px;max-width:62ch}
+.lesson ul,.lesson ol{margin:0 0 12px;padding-left:22px}
+.lesson li{margin-bottom:5px}
+.s{color:var(--s-col);font-weight:700}.l{color:var(--lam-col);font-weight:700}
+.ask{border-left:4px solid var(--warn);background:var(--surface);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0 10px}
+.ask b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);font-family:var(--f-mono)}
+.formula{font-family:var(--f-mono);font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.formula code{color:var(--ink);font-family:inherit}
+.verdict{display:grid;gap:8px;margin:0 0 14px}
+.verdict div{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:15.5px;line-height:1.45}
+.verdict i{font-style:normal;font-weight:700;font-size:18px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.v-bad i{background:var(--bad)}.v-ok i{background:var(--ok)}.v-q i{background:var(--warn)}
+.stage{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px}
+.stage-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+canvas{width:100%;height:auto;aspect-ratio:640/420;display:block;border-radius:8px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:15px}
+.controls label{display:flex;align-items:center;gap:8px;flex:1 1 220px;min-width:0}
+.controls input[type=range]{flex:1;min-width:0;accent-color:var(--signal)}
+.controls .sv{font-family:var(--f-mono);font-size:14px;min-width:68px}
+.btn{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
+.ro{background:var(--bg);border-radius:8px;padding:6px 10px;font-size:13px;color:var(--muted)}
+.ro b{display:block;font-family:var(--f-mono);font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ro.hl{outline:2px solid var(--signal)}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:6px}
+details.gloss{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 16px}
+details.gloss summary{cursor:pointer;font-family:var(--f-display);font-weight:600;font-size:18px}
+dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 24px;margin:10px 0 4px}
+dl div{padding:6px 0;border-bottom:1px solid var(--line)}
+dt{font-weight:700}dd{margin:0;color:var(--muted);font-size:15px}
+.note{font-size:13px;color:var(--muted)}
+@media (max-width:860px){.lesson-grid{grid-template-columns:1fr}.stage{order:-1}.readouts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Kelebek kanadına <em>göz</em> nasıl çizilir?</h1>
+      <p class="sub">Turing Kelebek projesinin adım adım, canlandırmalı anlatımı. Her adımda tuvali izle, kaydırıcılarla oyna, sonra sarı kutudaki soruyu tartış.</p>
+    </div>
+  </header>
+
+  <nav class="steps" id="nav" aria-label="Adımlar"></nav>
+
+  <div class="lesson-grid">
+    <article class="lesson" id="lesson" aria-live="polite"></article>
+
+    <section class="stage" aria-label="Canlandırma">
+      <div class="stage-top"><span id="stageCap">Canlandırma</span><button class="btn" id="bPause" type="button">Duraklat</button></div>
+      <canvas id="cv" role="img" aria-label="Canlandırma"></canvas>
+
+      <div class="controls" data-for="1" hidden>
+        <span class="note">Kelebek: Çayır esmeri (<i>Maniola jurtina</i>). Sağdaki büyüteç, ön kanattaki beneği gösteriyor.</span>
+      </div>
+      <div class="controls" data-for="2" hidden>
+        <label for="lam2"><span class="l">Menzil λ</span><input id="lam2" type="range" min="4" max="14" step="0.5" value="8"><span class="sv" id="lam2v">8 hücre</span></label>
+        <button class="btn" id="b2reset" type="button">Damlayı yeniden bırak</button>
+      </div>
+      <div class="controls" data-for="3" hidden>
+        <span class="note">Dikey çizgi merkezden dışarı doğru ilerliyor. Her noktada sinyale bakılıyor ve hücrenin rengi seçiliyor.</span>
+      </div>
+      <div class="controls" data-for="4" hidden>
+        <label for="sS"><span class="s">Güç S</span><input id="sS" type="range" min="0" max="1000" step="1"><span class="sv" id="sSv"></span></label>
+        <label for="sL"><span class="l">Menzil λ</span><input id="sL" type="range" min="0.25" max="0.75" step="0.01" value="0.5"><span class="sv" id="sLv"></span></label>
+        <div class="readouts">
+          <div class="ro">Pupil yarıçapı<b id="oRp"></b></div>
+          <div class="ro">Disk yarıçapı<b id="oRd"></b></div>
+          <div class="ro hl">Fark (disk − pupil)<b id="oF"></b></div>
+          <div class="ro hl">Oran (pupil ÷ disk)<b id="oO"></b></div>
+        </div>
+        <button class="btn" id="b4reset" type="button">Başa döndür</button>
+      </div>
+      <div class="controls" data-for="5" hidden>
+        <span class="note">Üç benek aynı anda büyüyüp küçülüyor. Yeşil yazı, o senaryoda <b>hiç değişmeyen</b> sayıyı gösteriyor.</span>
+      </div>
+      <div class="controls" data-for="6" hidden>
+        <label for="zoom">Fotoğrafçı ne kadar yakın?<input id="zoom" type="range" min="2" max="16" step="0.5" value="5.5"><span class="sv" id="zoomv"></span></label>
+        <button class="btn" type="button" data-z="2.5">Uzaktan</button>
+        <button class="btn" type="button" data-z="6">Orta</button>
+        <button class="btn" type="button" data-z="15">Makro</button>
+        <div class="readouts">
+          <div class="ro">Pupil<b id="pRp"></b></div>
+          <div class="ro">Disk<b id="pRd"></b></div>
+          <div class="ro">Fark<b id="pF"></b></div>
+          <div class="ro hl">Oran<b id="pO"></b></div>
+        </div>
+      </div>
+      <div class="controls" data-for="7" hidden>
+        <button class="btn primary" id="b7run" type="button">Deneyi baştan başlat</button>
+        <span class="sv" id="mcStat"></span>
+      </div>
+      <div class="controls" data-for="8" hidden>
+        <span class="note">Noktalar: projenin otomatik ölçüm hattının 97 Türkiye fotoğrafından ölçtüğü gerçek değerler (veri/mj_analiz.csv).</span>
+      </div>
+
+      <div class="pager">
+        <button class="btn" id="bPrev" type="button">← Geri</button>
+        <button class="btn primary" id="bNext" type="button">İleri →</button>
+      </div>
+    </section>
+  </div>
+
+  <details class="gloss">
+    <summary>Küçük sözlük</summary>
+    <dl>
+      <div><dt>Göz beneği</dt><dd>Kanattaki halkalı benek. Ortası beyaz pupil, çevresi siyah disk.</dd></div>
+      <div><dt>Odak</dt><dd>Beneğin tam ortasındaki, sinyal salgılayan hücreler.</dd></div>
+      <div><dt>Morfogen (sinyal)</dt><dd>Odaktan yayılan, hücrelere "hangi rengi seçeceklerini" söyleyen kimyasal.</dd></div>
+      <div><dt>Eşik (θ)</dt><dd>Bir rengin seçilmesi için sinyalin aşması gereken değer.</dd></div>
+      <div><dt><span class="s">Güç S</span></dt><dd>Odağın ne kadar çok sinyal salgıladığı.</dd></div>
+      <div><dt><span class="l">Menzil λ</span></dt><dd>Sinyalin ne kadar uzağa yayılabildiği. λ = √(D/γ).</dd></div>
+      <div><dt>Piksel</dt><dd>Fotoğrafı oluşturan küçük karelerden biri. Bilgisayar boyları pikselle ölçer.</dd></div>
+      <div><dt>Oran</dt><dd>Pupil yarıçapı ÷ disk yarıçapı. Fotoğraf yakınlaştırmasından etkilenmez.</dd></div>
+      <div><dt>ρ (ro)</dt><dd>İki şeyin birlikte artıp azalmadığını gösteren sayı (−1 ile +1 arası).</dd></div>
+      <div><dt>Monte Carlo</dt><dd>Bir yöntemi, cevabı bilinen sahte verilerle yüzlerce kez deneyip sınamak.</dd></div>
+      <div><dt>iNaturalist</dt><dd>İnsanların doğada çektikleri fotoğrafları paylaştığı vatandaş bilimi sitesi.</dd></div>
+      <div><dt>Turing deseni</dt><dd>Alan Turing'in 1952'de gösterdiği fikir: yayılan kimyasallar desen oluşturabilir.</dd></div>
+    </dl>
+  </details>
+</div>
+
+<script>
+(() => {
+const STEPS = [
+ {short:"Soru", cap:"Kelebek ve göz beneği", html:`
+  <div class="eyebrow">Adım 1 / 8 · Soru</div>
+  <h2>Bir kelebek kanadına göz nasıl çizilir?</h2>
+  <p>Bu kelebek <b>Çayır esmeri</b> (<i>Maniola jurtina</i>). Türkiye'de deniz kıyısından 2000 metreye kadar her yerde yaşar. Ön kanadının ucunda siyah bir benek var, ortasında da küçük beyaz bir nokta.</p>
+  <p>Buna <b>göz beneği</b> diyoruz. Ortadaki beyaz kısım <b>pupil</b>, çevresindeki siyah kısım <b>disk</b>.</p>
+  <p>Bazı kelebeklerde benek büyük, bazılarında küçük. Projenin sorusu şu: bu fark nereden geliyor? Kanadı boyayan "talimat"ın hangi ayarı değişiyor?</p>
+  <div class="ask"><b>Sınıfta sor</b>Kanatta fırça yok. Hücreler nereye siyah, nereye beyaz koyacaklarını nasıl biliyor olabilir?</div>`},
+ {short:"Sinyal", cap:"Sinyal odaktan yayılıyor", html:`
+  <div class="eyebrow">Adım 2 / 8 · Sinyal</div>
+  <h2>Ortadaki hücreler bir sinyal salgılıyor</h2>
+  <p>Beneğin tam ortasında <b>odak</b> denen hücreler var. Bunlar bir kimyasal salgılar. Bilim insanları buna <b>morfogen</b> der; biz kısaca <b>sinyal</b> diyelim.</p>
+  <p>Suya damlattığın mürekkebi düşün. Mürekkep etrafa yayılır, uzaklaştıkça rengi açılır. Sinyal de böyle yayılır ve yolda yavaş yavaş söner.</p>
+  <p>Sonunda bir denge kurulur: odağın yanında sinyal güçlü, uzakta zayıf. Sinyalin ne kadar uzağa gidebildiğine <span class="l">menzil</span> diyoruz ve <span class="l">λ</span> (lamda) ile gösteriyoruz.</p>
+  <p>Tuvaldeki her küçük kare bir hücre. Bilgisayar, her hücrenin komşularıyla sinyal alışverişini adım adım hesaplıyor. Projedeki <code>kanat_turing.py</code> da aynısını yapıyor.</p>
+  <div class="ask"><b>Sınıfta sor</b>Menzil kaydırıcısını sağa çekince mavi bulut nasıl değişiyor? Sağdaki eğri ne oluyor?</div>
+  <p class="formula">Formül köşesi: <code>λ = √(D / γ)</code>. D yayılma hızı, γ sönme hızı. Hızlı yayılan, yavaş sönen sinyalin menzili uzundur.</p>`},
+ {short:"Eşik", cap:"Eşik kuralı: sinyale göre renk", html:`
+  <div class="eyebrow">Adım 3 / 8 · Eşik kuralı</div>
+  <h2>Her hücre sinyale bakıp rengini seçiyor</h2>
+  <p>Her hücrenin basit bir kuralı var:</p>
+  <ul>
+   <li>Sinyal çok güçlüyse (<b>beyaz eşiğinin</b> üstünde) → beyaz olurum.</li>
+   <li>Orta güçteyse (<b>siyah eşiğinin</b> üstünde) → siyah olurum.</li>
+   <li>Zayıfsa → turuncu kalırım.</li>
+  </ul>
+  <p>Mavi çizgi, merkezden uzaklaştıkça sinyalin nasıl azaldığını gösteriyor. Çizgi beyaz eşiğin altına indiği yerde pupil biter. Siyah eşiğin altına indiği yerde disk biter.</p>
+  <p>Dikey eksende her çizgi bir öncekinin <b>10 katı</b>. Bu yüzden sönen sinyal düz bir çizgi gibi görünüyor.</p>
+  <div class="ask"><b>Sınıfta sor</b>Sinyal en başta bile beyaz eşiğe ulaşamasaydı benek nasıl görünürdü?</div>`},
+ {short:"İki düğme", cap:"Güç ve menzil düğmeleri", html:`
+  <div class="eyebrow">Adım 4 / 8 · Oyun alanı</div>
+  <h2>Beneği büyütmenin iki yolu var</h2>
+  <p>Modelde beneğin boyunu iki "düğme" belirler:</p>
+  <ul>
+   <li><span class="s">S, güç:</span> Odak ne kadar çok sinyal salgılıyor? Hoparlörün sesini açmak gibi.</li>
+   <li><span class="l">λ, menzil:</span> Sinyal ne kadar uzağa gidebiliyor?</li>
+  </ul>
+  <p>İki düğme de beneği büyütür, ama farklı biçimde. Düğmelerle oyna ve alttaki çerçeveli iki sayıyı izle: <b>Fark</b> ve <b>Oran</b>.</p>
+  <div class="ask"><b>Sınıfta sor</b>Yalnız S'yi değiştirince hangi sayı hiç değişmiyor? Yalnız λ'yı değiştirince hangisi? (Önce "Başa döndür"e bas.)</div>
+  <p class="formula">Formül köşesi: <code>r = λ · ln(S / θ)</code>. Halka yarıçapı = menzil × (güç ile eşiğin oranının logaritması).</p>`},
+ {short:"İzler", cap:"Üç senaryo, üç farklı iz", html:`
+  <div class="eyebrow">Adım 5 / 8 · Öngörü</div>
+  <h2>Her düğme beneğe farklı bir iz bırakır</h2>
+  <p><b>Solda</b> yalnız <span class="s">güç</span> değişiyor. Benek büyüyüp küçülürken siyah halkanın kalınlığı (fark) değişmiyor. Benek küçülünce pupil kayboluyor!</p>
+  <p><b>Ortada</b> yalnız <span class="l">menzil</span> değişiyor. Benek fotokopide büyütülmüş gibi bütünüyle büyüyor. Pupil ile diskin oranı hep aynı.</p>
+  <p><b>Sağda</b> üçüncü bir olasılık var: pupil, odak hücrelerinin kendisi olsaydı boyu hiç değişmezdi.</p>
+  <p>Alttaki küçük grafikler, kelebekleri yan yana koyunca her senaryoda hangi çizgiyi göreceğimizi gösteriyor. Üç senaryo, üç farklı çizgi. Kelebekleri ölçersek hangisinin doğru olduğunu anlayabiliriz.</p>
+  <div class="ask"><b>Sınıfta sor</b>Doğada pupilsiz bir Çayır esmeri neredeyse hiç görülmez. Bu, hangi senaryo için kötü haber?</div>`},
+ {short:"Fotoğraf", cap:"Fotoğraf tuzağı: pikseller", html:`
+  <div class="eyebrow">Adım 6 / 8 · Ölçüm sorunu</div>
+  <h2>Ama fotoğrafın ölçeğini bilmiyoruz</h2>
+  <p>Hiç kelebek yakalamadık. Ölçümleri, insanların iNaturalist'te paylaştığı <b>390 Türkiye fotoğrafından</b> yaptık. Sorun şu: kimi fotoğrafçı çok yaklaşmış, kimi uzaktan çekmiş. Bilgisayar boyları milimetre değil <b>piksel</b> olarak ölçüyor.</p>
+  <p>Kaydırıcıyla fotoğrafçıyı yaklaştır. Aynı kelebeğin piksel cinsinden <b>farkı</b> sürekli değişiyor. <b>Oran</b> ise neredeyse aynı kalıyor, çünkü yakınlaştırma iki halkayı da aynı kat büyütüyor ve bölünce bu kat sadeleşiyor.</p>
+  <p>Bu yüzden projede farka değil orana güveniyoruz. Uzaktan çekilmiş fotoğraflarda pupil yalnızca 1–2 piksel. Oran bu yüzden biraz titriyor; buna nicemleme hatası denir.</p>
+  <div class="ask"><b>Sınıfta sor</b>Bir kelebeğin gerçek boyunu fotoğraftan bulmak için kanatta neyi ölçebiliriz?</div>`},
+ {short:"Deney", cap:"Monte Carlo: 400 sahte deney", html:`
+  <div class="eyebrow">Adım 7 / 8 · Bilgisayar deneyi</div>
+  <h2>Test gerçekten işe yarıyor mu?</h2>
+  <p>Ölçekten bağımsız testimizin sorusu şu: <b>büyük beneklerde oran büyüyor mu, küçülüyor mu, aynı mı kalıyor?</b> Cevabı tek bir sayıyla veriyoruz: <b>ρ</b> (ro). Artıysa ikisi birlikte artıyor, eksiyse biri artarken öteki azalıyor, sıfıra yakınsa ilişki yok.</p>
+  <p>Gerçek fotoğrafların bütün gürültüsüyle bu test yine çalışır mı? Bunu anlamak için bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz.</p>
+  <p>Her denemede 97 sahte kelebek üretilir, sahte fotoğraflarla ölçülür ve ρ hesaplanır. Bu her senaryo için 400 kez tekrarlanır. Bu yönteme <b>Monte Carlo</b> denir.</p>
+  <p>Üç senaryo üç ayrı bölgeye düşüyor, yani test çalışıyor. Kesikli çizgi gerçek kelebeklerimizin değeri: <b>−0.14</b>.</p>
+  <div class="ask"><b>Sınıfta sor</b>Gerçek değer hangi senaryonun tepesinden en uzakta? Hangisine en yakın?</div>
+  <p class="note">Bu deney tarayıcında canlı çalışıyor: <code>monte_carlo.py</code> içindeki oran testinin aynısı. Sonuçlar rapordakiyle aynı çıkıyor (+0.40 / −0.03 / −0.40).</p>`},
+ {short:"Sonuç", cap:"Gerçek veri: 97 kelebek", html:`
+  <div class="eyebrow">Adım 8 / 8 · Ne bulduk?</div>
+  <h2>Halkalar birlikte büyüyor</h2>
+  <p>Grafikteki her nokta, gerçek bir Çayır esmeri fotoğrafı (97 birey, 0–2144 m).</p>
+  <div class="verdict">
+   <div class="v-bad"><i>✗</i><span><b>Yalnız güç (S) değişiyor:</b> desteklenmiyor. Doğru olsaydı ρ yaklaşık +0.40 çıkardı ve kelebeklerin altıda birinde pupil kaybolurdu.</span></div>
+   <div class="v-ok"><i>✓</i><span><b>Yalnız menzil (λ) değişiyor:</b> en uyumlu. Oranların dağılımı (%19) bu senaryonun beklediğiyle (%21) örtüşüyor.</span></div>
+   <div class="v-q"><i>?</i><span><b>Pupil sabit:</b> henüz elenmedi. Ayırmak için kelebeğin gerçek boyunu (mm) bilmemiz gerek.</span></div>
+  </div>
+  <p><b>Sıradaki iş sizin:</b></p>
+  <ol>
+   <li>Her fotoğrafta ön kanat uzunluğunu elle işaretlemek (gerçek ölçek).</li>
+   <li>30 fotoğrafı iki kişi ayrı ayrı ölçüp sonuçları karşılaştırmak.</li>
+   <li>Dişi/erkek etiketi ve sıcaklık bilgisi eklemek.</li>
+   <li>3–4 halkalı Tavus kelebeğinde (<i>Aglais io</i>) aynı testi yapmak.</li>
+  </ol>
+  <p class="note">Bu bir ön bulgudur. Kesin sonucu sizin elle yapacağınız ölçümler verecek.</p>`}
+];
+
+const $ = s => document.querySelector(s);
+const cv = $('#cv'), ctx = cv.getContext('2d');
+const W = 640, H = 420;
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const W_OR = '#D4862F', W_BR = '#5A3D27', W_BK = '#17120E', W_PU = '#F7F3EA';
+let C = {};
+function readColors(){
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['bg','surface','ink','muted','line','signal','s-col','lam-col','ok','bad','warn','chip']) C[k] = cs.getPropertyValue('--'+k).trim();
+}
+readColors();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
+new MutationObserver(readColors).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+const rgb = h => { h = h.replace('#',''); return [0,2,4].map(i => parseInt(h.slice(i,i+2),16)); };
+const rgba = (h,a) => { const [r,g,b] = rgb(h); return `rgba(${r},${g},${b},${a})`; };
+const FONT = (sz, w=400) => `${w} ${sz}px "Atkinson Hyperlegible", system-ui, sans-serif`;
+const MONO = sz => `500 ${sz}px "JetBrains Mono", ui-monospace, monospace`;
+function txt(s, x, y, o={}){
+  ctx.font = o.mono ? MONO(o.size||12) : FONT(o.size||13, o.w||400);
+  ctx.fillStyle = o.color || C.ink; ctx.textAlign = o.align || 'left'; ctx.textBaseline = o.base || 'alphabetic';
+  ctx.fillText(s, x, y);
+}
+function line(x1,y1,x2,y2,col,w=1,dash){ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=w; if(dash) ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
+function disc(x,y,r,col){ if(r<=0) return; ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+function spot(c,x,y,k,rp,rd){ c.fillStyle=W_BK; c.beginPath(); c.arc(x,y,Math.max(0,rd*k),0,Math.PI*2); c.fill(); if(rp>0){ c.fillStyle=W_PU; c.beginPath(); c.arc(x,y,rp*k,0,Math.PI*2); c.fill(); } }
+const fmt = (v,d=2) => v.toFixed(d).replace('-', '−');
+
+function resize(){
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(r.width*dpr); cv.height = Math.round(r.width*H/W*dpr);
+  ctx.setTransform(cv.width/W,0,0,cv.height/H,0,0);
+}
+new ResizeObserver(resize).observe(cv);
+
+/* ---------- Model: r_i = λ·ln(S/θ_i); θ_disk = 1, θ_pupil = e^3.52 ---------- */
+const LAM0 = 0.5, S0 = Math.exp(4.4), THP = Math.exp(4.4-0.88);
+const ringsOf = (S, lam) => ({ rd: S>1 ? lam*Math.log(S) : 0, rp: S>THP ? lam*Math.log(S/THP) : 0 });
+
+/* ---------- Adım 1: kelebek ---------- */
+function wingRight(c){
+  c.beginPath(); c.moveTo(4,4); c.bezierCurveTo(60,0,120,20,128,62); c.bezierCurveTo(132,102,92,132,50,130); c.bezierCurveTo(20,122,6,60,4,10); c.closePath();
+  c.fillStyle=W_BR; c.fill(); c.strokeStyle='#33220F'; c.lineWidth=2; c.stroke();
+  const fw = new Path2D(); fw.moveTo(4,-8); fw.bezierCurveTo(40,-70,110,-132,162,-130); fw.bezierCurveTo(174,-100,172,-40,152,-5); fw.bezierCurveTo(110,10,50,12,4,4); fw.closePath();
+  c.fillStyle=W_BR; c.fill(fw);
+  c.save(); c.clip(fw);
+  const g = c.createRadialGradient(115,-70,8,115,-70,66); g.addColorStop(0,W_OR); g.addColorStop(.72,W_OR); g.addColorStop(1,'rgba(212,134,47,0)');
+  c.fillStyle=g; c.beginPath(); c.ellipse(115,-70,70,52,-.5,0,Math.PI*2); c.fill();
+  spot(c,130,-92,1,3,14);
+  c.restore(); c.strokeStyle='#33220F'; c.lineWidth=2; c.stroke(fw);
+}
+function scene1(t){
+  const flap = REDUCE ? 1 : 0.82 + 0.18*Math.cos(t*1.7), cx=200, cy=232, sc=1.12;
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(sc,sc);
+  for (const side of [1,-1]){ ctx.save(); ctx.scale(side*flap,1); wingRight(ctx); ctx.restore(); }
+  ctx.fillStyle='#2A1C10'; ctx.beginPath(); ctx.ellipse(0,0,6,58,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#2A1C10'; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(-2,-54); ctx.quadraticCurveTo(-14,-90,-24,-104); ctx.moveTo(2,-54); ctx.quadraticCurveTo(14,-90,24,-104); ctx.stroke();
+  ctx.restore();
+  const ex = cx + 130*flap*sc, ey = cy - 92*sc;
+  const pulse = REDUCE ? 0 : (t*0.8)%1;
+  ctx.save(); ctx.strokeStyle=rgba(C.signal, 1-pulse); ctx.lineWidth=2; ctx.beginPath(); ctx.arc(ex,ey,18+pulse*14,0,Math.PI*2); ctx.stroke(); ctx.restore();
+  const mx=505, my=180, R=112;
+  const a1=-Math.PI*0.72, a2=Math.PI*0.72;
+  line(ex,ey, mx+R*Math.cos(a1), my+R*Math.sin(a1), C.muted, 1, [4,4]);
+  line(ex,ey, mx+R*Math.cos(a2), my+R*Math.sin(a2), C.muted, 1, [4,4]);
+  ctx.save(); ctx.beginPath(); ctx.arc(mx,my,R,0,Math.PI*2); ctx.clip();
+  const g = ctx.createRadialGradient(mx,my,40,mx,my,R*1.2); g.addColorStop(0,W_OR); g.addColorStop(1,'#B66A22');
+  ctx.fillStyle=g; ctx.fillRect(mx-R,my-R,2*R,2*R);
+  spot(ctx,mx,my,1,16,78); ctx.restore();
+  ctx.strokeStyle=C.ink; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(mx,my,R,0,Math.PI*2); ctx.stroke();
+  txt('büyüteç', mx, my-R-10, {align:'center', color:C.muted, size:13});
+  const items=[[W_PU,'beyaz pupil'],[W_BK,'siyah disk'],[W_OR,'turuncu zemin']];
+  items.forEach(([col,lab],i)=>{ const y=325+i*26; ctx.fillStyle=col; ctx.strokeStyle=C.line; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(420,y,8,0,Math.PI*2); ctx.fill(); ctx.stroke(); txt(lab,436,y,{base:'middle',size:15}); });
+  txt('göz beneği', ex+8, ey-38, {size:15, w:700, color:C.signal});
+  txt('Çayır esmeri · Maniola jurtina', 24, 404, {color:C.muted, size:13});
+}
+
+/* ---------- Adım 2: difüzyon ---------- */
+const N = 90; let mA = new Float32Array(N*N), mB = new Float32Array(N*N), simT = 0, lamCells = 8;
+const SRC = []; for (let y=-2;y<=2;y++) for (let x=-2;x<=2;x++) if (x*x+y*y<=4) SRC.push(y*N+x);
+const off = document.createElement('canvas'); off.width = N; off.height = N; const octx = off.getContext('2d'); const img = octx.createImageData(N,N);
+function simReset(){ mA.fill(0); mB.fill(0); simT = 0; if (REDUCE) for (let i=0;i<3000;i++) simStep(); }
+function simStep(){
+  const gamma = 1/(lamCells*lamCells), dt = 0.2, c = (N>>1)*N + (N>>1);
+  for (let y=1;y<N-1;y++) for (let x=1;x<N-1;x++){ const i=y*N+x; mB[i] = mA[i] + dt*((mA[i-1]+mA[i+1]+mA[i-N]+mA[i+N]-4*mA[i]) - gamma*mA[i]); }
+  for (const o of SRC) mB[c+o] += dt/SRC.length; const tmp=mA; mA=mB; mB=tmp; simT += dt;
+}
+function scene2(t, dt){
+  if (!REDUCE && dt>0) for (let i=0;i<10;i++) simStep();
+  const c = (N>>1)*N + (N>>1), mc = mA[c+2] || 1e-9;
+  const s = rgb(C.surface), g = rgb(C.signal);
+  for (let i=0;i<N*N;i++){ const v = Math.pow(Math.min(1, Math.max(0, mA[i]/mc)), 0.4); img.data[i*4]=s[0]+(g[0]-s[0])*v; img.data[i*4+1]=s[1]+(g[1]-s[1])*v; img.data[i*4+2]=s[2]+(g[2]-s[2])*v; img.data[i*4+3]=255; }
+  octx.putImageData(img,0,0);
+  const X0=24, Y0=34, SZ=360, cs=SZ/N;
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(off,X0,Y0,SZ,SZ); ctx.imageSmoothingEnabled=true;
+  ctx.strokeStyle=C.line; ctx.lineWidth=1; ctx.strokeRect(X0,Y0,SZ,SZ);
+  const cx=X0+SZ/2, cy=Y0+SZ/2;
+  ctx.save(); ctx.strokeStyle=C['lam-col']; ctx.setLineDash([5,5]); ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(cx,cy,lamCells*cs,0,Math.PI*2); ctx.stroke(); ctx.restore();
+  txt('menzil λ', cx+lamCells*cs*0.72+4, cy-lamCells*cs*0.72-4, {color:C['lam-col'], size:13, w:700});
+  disc(cx,cy,3.5,C.ink); txt('odak', cx+7, cy+16, {size:13, w:700});
+  txt('her kare = bir hücre', X0, Y0-10, {color:C.muted, size:13});
+  txt('zaman: '+Math.round(simT), X0+SZ, Y0-10, {color:C.muted, size:12, mono:true, align:'right'});
+  // profil
+  const px0=420, px1=620, py0=70, py1=330, dmax=44;
+  txt('Sinyal, merkezden uzaklaştıkça', px0, 40, {size:13, w:700}); txt('(odaktaki değere göre)', px0, 56, {size:12, color:C.muted});
+  line(px0,py1,px1,py1,C.muted); line(px0,py0,px0,py1,C.muted);
+  ctx.beginPath(); for (let d=2; d<=dmax; d++){ const v=Math.min(1,mA[c+d]/mc), x=px0+(d/dmax)*(px1-px0), y=py1-v*(py1-py0); d>2?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.strokeStyle=C.signal; ctx.lineWidth=3; ctx.stroke();
+  const lx = px0+(lamCells/dmax)*(px1-px0); line(lx,py0,lx,py1,C['lam-col'],1.2,[4,4]); txt('λ', lx+4, py0+12, {color:C['lam-col'], w:700});
+  txt('çok', px0-6, py0+4, {align:'right', size:12, color:C.muted}); txt('az', px0-6, py1, {align:'right', size:12, color:C.muted});
+  txt('uzaklık (hücre) →', px1, py1+20, {align:'right', size:12, color:C.muted});
+  txt('Yayılıyor + sönüyor', px0, 372, {size:14, w:700, color:C.signal});
+  txt('= uzakta zayıf, yakında güçlü', px0, 392, {size:13, color:C.muted});
+}
+
+/* ---------- Adım 3 & 4: eşik grafiği ---------- */
+const G = {x0:78, x1:612, y0:22, y1:240, rmax:4, lmin:-0.6, lmax:2.75, sy0:272, sy1:388};
+const GX = r => G.x0 + r/G.rmax*(G.x1-G.x0), GY = l => G.y1 - (l-G.lmin)/(G.lmax-G.lmin)*(G.y1-G.y0), GK = (G.x1-G.x0)/G.rmax;
+function graph(S, lam, sweepR, ghost){
+  const yP = GY(Math.log10(THP)), yD = GY(0), {rp, rd} = ringsOf(S, lam);
+  ctx.fillStyle=rgba(C.ink,0.03); ctx.fillRect(G.x0,G.y0,G.x1-G.x0,yP-G.y0);
+  ctx.fillStyle=rgba(C.ink,0.11); ctx.fillRect(G.x0,yP,G.x1-G.x0,yD-yP);
+  ctx.fillStyle=rgba(W_OR,0.2); ctx.fillRect(G.x0,yD,G.x1-G.x0,G.y1-yD);
+  txt('→ BEYAZ olur', G.x1-8, G.y0+16, {align:'right', size:12, color:C.muted, w:700});
+  txt('→ SİYAH olur', G.x1-8, yP+16, {align:'right', size:12, color:C.muted, w:700});
+  txt('→ TURUNCU kalır', G.x1-8, yD+16, {align:'right', size:12, color:C.muted, w:700});
+  line(G.x0,yP,G.x1,yP,C.ink,1.2,[6,4]); line(G.x0,yD,G.x1,yD,C.ink,1.2,[6,4]);
+  txt('beyaz eşiği', G.x0+170, yP-6, {size:12, w:700}); txt('siyah eşiği', G.x0+170, yD-6, {size:12, w:700});
+  [[0,'1'],[1,'10'],[2,'100']].forEach(([l,s]) => { line(G.x0-4,GY(l),G.x0,GY(l),C.muted); txt(s, G.x0-8, GY(l)+4, {align:'right', size:12, color:C.muted, mono:true}); });
+  ctx.save(); ctx.translate(18,(G.y0+G.y1)/2); ctx.rotate(-Math.PI/2); txt('sinyal (×10 basamaklar)', 0, 0, {align:'center', size:12, color:C.muted}); ctx.restore();
+  for (let r=0;r<=4;r++){ txt(r+' mm', GX(r), G.y1+16, {align:'center', size:11, color:C.muted, mono:true}); }
+  ctx.strokeStyle=C.line; ctx.lineWidth=1; ctx.strokeRect(G.x0,G.y0,G.x1-G.x0,G.y1-G.y0);
+  const curve = (S_, lam_, rTo, col, w, dash) => { ctx.save(); ctx.beginPath(); ctx.rect(G.x0,G.y0,G.x1-G.x0,G.y1-G.y0); ctx.clip(); ctx.strokeStyle=col; ctx.lineWidth=w; if(dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(GX(0),GY(Math.log10(S_))); ctx.lineTo(GX(rTo),GY(Math.log10(S_)-rTo/(lam_*Math.LN10))); ctx.stroke(); ctx.restore(); };
+  if (ghost){ curve(S0, LAM0, G.rmax, C.muted, 1.5, [3,4]); txt('başlangıç', GX(0.15), GY(Math.log10(S0)-0.15/(LAM0*Math.LN10))-8, {size:11, color:C.muted}); }
+  const rTo = Math.min(sweepR, G.rmax);
+  curve(S, lam, rTo, C.signal, 3.5);
+  // şerit: beneğin büyütülmüş yarısı
+  ctx.save(); ctx.beginPath(); ctx.rect(G.x0,G.sy0,Math.max(0,GX(rTo)-G.x0),G.sy1-G.sy0); ctx.clip();
+  ctx.fillStyle=W_OR; ctx.fillRect(G.x0,G.sy0,G.x1-G.x0,G.sy1-G.sy0); spot(ctx,G.x0,(G.sy0+G.sy1)/2,GK,rp,rd); ctx.restore();
+  ctx.strokeStyle=C.line; ctx.strokeRect(G.x0,G.sy0,G.x1-G.x0,G.sy1-G.sy0);
+  txt('benek', G.x0-8, (G.sy0+G.sy1)/2+4, {align:'right', size:13, w:700});
+  if (rp>0 && rp<=rTo){ line(GX(rp),yP,GX(rp),G.sy1,C.ink,1,[2,3]); disc(GX(rp),yP,5,C.ink); txt('pupil '+fmt(rp)+' mm', GX(rp)-4, 410, {align:'right', size:12, mono:true}); }
+  if (rd>0 && rd<=rTo && rd<=G.rmax){ line(GX(rd),yD,GX(rd),G.sy1,C.ink,1,[2,3]); disc(GX(rd),yD,5,C.ink); txt('disk '+fmt(rd)+' mm', GX(rd)+4, 410, {size:12, mono:true}); }
+  if (rd>G.rmax) txt('disk grafikten taştı →', G.x1, 410, {align:'right', size:12, color:C.bad});
+  return {rp, rd};
+}
+function scene3(t){
+  const per=7.5, ph = REDUCE ? 1 : Math.min(1,(t%per)/5.5), sweep = ph*G.rmax;
+  graph(S0, LAM0, sweep, false);
+  if (ph<1){
+    const l = Math.log10(S0)-sweep/(LAM0*Math.LN10), x=GX(sweep), y=GY(l), v=Math.pow(10,l);
+    line(x,G.y0,x,G.sy1,C.signal,1.5); disc(x,y,6,C.signal);
+    const col = v>THP ? 'beyaz' : v>1 ? 'siyah' : 'turuncu';
+    const lab = 'sinyal '+(v>=10?v.toFixed(0):v.toFixed(1))+' → '+col;
+    ctx.font=FONT(13,700); const w=ctx.measureText(lab).width+14, bx=Math.min(x+10,G.x1-w-4), by=Math.max(G.y0+4,Math.min(y-34,G.y1-30));
+    ctx.fillStyle=C.surface; ctx.strokeStyle=C.signal; ctx.lineWidth=1.5; ctx.beginPath(); ctx.roundRect(bx,by,w,24,6); ctx.fill(); ctx.stroke();
+    txt(lab,bx+7,by+16,{size:13,w:700});
+  }
+}
+let S4 = S0, L4 = LAM0;
+function scene4(){
+  const {rp, rd} = graph(S4, L4, G.rmax, true);
+  if (rp<=0){ ctx.fillStyle=rgba(C.bad,0.12); ctx.fillRect(G.x0+8,G.y0+8,330,26); txt('Sinyal beyaz eşiğe hiç ulaşmıyor: pupil yok!', G.x0+16, G.y0+26, {size:13, w:700, color:C.bad}); }
+}
+const sS=$('#sS'), sL=$('#sL'), lnMin=Math.log(15), lnMax=Math.log(400);
+const sToSlider = S => Math.round((Math.log(S)-lnMin)/(lnMax-lnMin)*1000);
+function upd4(){
+  S4 = Math.exp(lnMin + sS.value/1000*(lnMax-lnMin)); L4 = +sL.value;
+  const {rp, rd} = ringsOf(S4, L4);
+  $('#sSv').textContent = S4.toFixed(0); $('#sLv').textContent = L4.toFixed(2)+' mm';
+  $('#oRp').textContent = fmt(rp)+' mm'; $('#oRd').textContent = fmt(rd)+' mm';
+  $('#oF').textContent = fmt(rd-rp)+' mm'; $('#oO').textContent = rd>0 ? fmt(rp/rd) : '—';
+}
+sS.addEventListener('input', upd4); sL.addEventListener('input', upd4);
+$('#b4reset').addEventListener('click', () => { sS.value = sToSlider(S0); sL.value = LAM0; upd4(); });
+sS.value = sToSlider(S0); upd4();
+
+/* ---------- Adım 5: üç senaryo ---------- */
+const trails = [[],[],[]]; let trailClock = 0;
+function scene5(t, dt){
+  const f = REDUCE ? 1 : Math.exp(0.36*Math.sin(t*0.9));
+  const rdT = 2.2*f;
+  const P = [
+    {name:'Yalnız GÜÇ (S)', col:C['s-col'], rd:rdT, rp:Math.max(0, LAM0*(0.88 + rdT/LAM0 - 4.4)), keep:'fark'},
+    {name:'Yalnız MENZİL (λ)', col:C['lam-col'], rd:rdT, rp:0.44*f, keep:'oran'},
+    {name:'Pupil hep aynı', col:C.warn, rd:rdT, rp:0.44, keep:'pupil'}
+  ];
+  trailClock += dt;
+  const push = trailClock > 0.06; if (push) trailClock = 0;
+  P.forEach((p,i) => {
+    const x0 = 10 + i*210, cx = x0+100, cy = 128, k = 27;
+    ctx.fillStyle=C.bg; ctx.beginPath(); ctx.roundRect(x0,8,200,404,10); ctx.fill();
+    txt(p.name, cx, 32, {align:'center', size:14, w:700, color:p.col});
+    ctx.save(); ctx.beginPath(); ctx.roundRect(x0+12,44,176,170,8); ctx.clip(); ctx.fillStyle=W_OR; ctx.fillRect(x0+12,44,176,170); spot(ctx,cx,cy,k,p.rp,p.rd); ctx.restore();
+    if (p.rp<=0) txt('pupil kayboldu!', cx, 206, {align:'center', size:12, w:700, color:'#7A1010'});
+    const rows = [['pupil', fmt(p.rp)+' mm', p.keep==='pupil'], ['fark', fmt(p.rd-p.rp)+' mm', p.keep==='fark'], ['oran', fmt(p.rd>0?p.rp/p.rd:0), p.keep==='oran']];
+    rows.forEach(([a,b,hl],j) => { const y=238+j*20; txt(a, x0+18, y, {size:13, color:hl?C.ok:C.muted, w:hl?700:400}); txt(b+(hl?'  sabit':''), x0+186, y, {align:'right', size:12, mono:true, color:hl?C.ok:C.ink}); });
+    const px0=x0+30, px1=x0+188, py0=308, py1=396, X=v=>px0+v/3.4*(px1-px0), Y=v=>py1-v/0.8*(py1-py0);
+    line(px0,py1,px1,py1,C.muted); line(px0,py0,px0,py1,C.muted);
+    txt('disk →', px1, py1+13, {align:'right', size:11, color:C.muted});
+    ctx.save(); ctx.translate(px0-8,(py0+py1)/2); ctx.rotate(-Math.PI/2); txt('pupil →',0,0,{align:'center',size:11,color:C.muted}); ctx.restore();
+    if (push){ trails[i].push([p.rd,p.rp]); if (trails[i].length>140) trails[i].shift(); }
+    trails[i].forEach(([a,b],j) => disc(X(a),Y(b),2.2,rgba(p.col, 0.15+0.6*j/trails[i].length)));
+    disc(X(p.rd),Y(p.rp),5,p.col);
+  });
+  txt('Her nokta = bir kelebek', W/2, 302, {align:'center', size:12, color:C.muted});
+}
+
+/* ---------- Adım 6: piksel tuzağı ---------- */
+let Z = 5.5; const pix = document.createElement('canvas'), pctx = pix.getContext('2d');
+const meas = k => { const rp = Math.round(2*0.44*k)/2, rd = Math.round(2*2.2*k)/2; return {rp, rd}; };
+function scene6(){
+  const FOV=7, n=Math.max(4, Math.round(FOV*Z)); pix.width=n; pix.height=n;
+  pctx.fillStyle=W_OR; pctx.fillRect(0,0,n,n);
+  const g=pctx.createRadialGradient(n/2,n/2,n*0.3,n/2,n/2,n*0.75); g.addColorStop(0,'rgba(90,61,39,0)'); g.addColorStop(1,'rgba(90,61,39,0.85)'); pctx.fillStyle=g; pctx.fillRect(0,0,n,n);
+  spot(pctx,n/2,n/2,Z,0.44,2.2);
+  const X0=24, Y0=56, SZ=320, sc=SZ/n;
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(pix,X0,Y0,SZ,SZ); ctx.imageSmoothingEnabled=true;
+  if (n<=48){ ctx.strokeStyle='rgba(0,0,0,0.18)'; ctx.lineWidth=1; ctx.beginPath(); for(let i=1;i<n;i++){ ctx.moveTo(X0+i*sc,Y0); ctx.lineTo(X0+i*sc,Y0+SZ); ctx.moveTo(X0,Y0+i*sc); ctx.lineTo(X0+SZ,Y0+i*sc);} ctx.stroke(); }
+  ctx.strokeStyle=C.ink; ctx.lineWidth=2; ctx.strokeRect(X0,Y0,SZ,SZ);
+  txt('Kameranın gördüğü: '+n+' × '+n+' piksel', X0, Y0-12, {size:13, w:700});
+  txt('(gerçekte hep aynı 7 mm × 7 mm)', X0, Y0+SZ+20, {size:12, color:C.muted});
+  const m = meas(Z), cx=X0+SZ/2, cy=Y0+SZ/2;
+  const arrow=(x2,y2,col)=>{ line(cx,cy,x2,y2,'#000',5); line(cx,cy,x2,y2,col,2.5); disc(x2,y2,3.5,col); };
+  arrow(cx+m.rd*sc, cy, '#FFE08A'); arrow(cx, cy-m.rp*sc, '#7FE0F0');
+  // sağ grafikler
+  const ch = (y0,y1,title,fn,ymax,col,fmtv) => {
+    const x0=392, x1=616, X=k=>x0+(k-2)/14*(x1-x0), Y=v=>y1-v/ymax*(y1-y0);
+    txt(title, x0, y0-10, {size:13, w:700});
+    line(x0,y1,x1,y1,C.muted); line(x0,y0,x0,y1,C.muted);
+    ctx.beginPath(); for(let k=2;k<=16;k+=0.05){ const v=fn(k); k===2?ctx.moveTo(X(k),Y(v)):ctx.lineTo(X(k),Y(v)); } ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.stroke();
+    line(X(Z),y0,X(Z),y1,C.ink,1,[3,3]); disc(X(Z),Y(fn(Z)),5,col);
+    txt(fmtv(fn(Z)), X(Z)+(Z>12?-8:8), Y(fn(Z))-8, {size:12, mono:true, align:Z>12?'right':'left'});
+    txt('uzak', x0, y1+15, {size:11, color:C.muted}); txt('yakın', x1, y1+15, {size:11, color:C.muted, align:'right'});
+  };
+  ch(70,180,'Fark (piksel): değişiyor!', k=>{const q=meas(k); return q.rd-q.rp;}, 30, C.bad, v=>v.toFixed(1)+' px');
+  ch(250,360,'Oran: neredeyse sabit', k=>{const q=meas(k); return q.rd>0?q.rp/q.rd:0;}, 0.4, C.ok, v=>fmt(v));
+  txt('İkisi de aynı kelebek!', 392, 404, {size:13, w:700, color:C.signal});
+}
+const zoom=$('#zoom');
+function upd6(){ Z=+zoom.value; const m=meas(Z); $('#zoomv').textContent=(Z.toFixed(1))+' px/mm'; $('#pRp').textContent=m.rp.toFixed(1)+' px'; $('#pRd').textContent=m.rd.toFixed(1)+' px'; $('#pF').textContent=(m.rd-m.rp).toFixed(1)+' px'; $('#pO').textContent=fmt(m.rp/m.rd); }
+zoom.addEventListener('input', upd6); document.querySelectorAll('[data-z]').forEach(b => b.addEventListener('click', () => { zoom.value=b.dataset.z; upd6(); }));
+upd6();
+
+/* ---------- Adım 7: Monte Carlo (monte_carlo.py → T2) ---------- */
+function mulberry32(a){ return () => { a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+let rnd = mulberry32(2204);
+const gauss = () => { let u=0; while(u===0) u=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*rnd()); };
+function ranks(a){ const idx=a.map((v,i)=>i).sort((i,j)=>a[i]-a[j]), r=new Array(a.length); let i=0; while(i<idx.length){ let j=i; while(j+1<idx.length && a[idx[j+1]]===a[idx[i]]) j++; const av=(i+j)/2+1; for(let k=i;k<=j;k++) r[idx[k]]=av; i=j+1; } return r; }
+function pearson(x,y){ const n=x.length; let mx=0,my=0; for(let i=0;i<n;i++){mx+=x[i];my+=y[i];} mx/=n; my/=n; let a=0,b=0,c=0; for(let i=0;i<n;i++){const u=x[i]-mx,v=y[i]-my; a+=u*v; b+=u*u; c+=v*v;} return a/Math.sqrt(b*c); }
+function mcRep(sen){
+  const X=[], Y=[], q = x => Math.round(2*(x+0.5*gauss()))/2;
+  for (let i=0;i<97;i++){
+    let lam=LAM0, lnS=0;
+    if (sen==='S') lnS = gauss()*0.2*4.4; else lam = LAM0*Math.exp(gauss()*0.2);
+    const rd = lam*(4.4+lnS); let rp = lam*(0.88+lnS);
+    if (sen==='P') rp = 0.44*Math.exp(gauss()*0.05);
+    const s = 9+1.2*gauss(), ppm = Math.exp(Math.log(5.7)+0.4*gauss());
+    const rdp=q(rd*ppm), rpp=q(rp*ppm), sp=ppm*(s+1.8*gauss());
+    if (rdp>=6 && rpp>=1 && sp/rdp>1.5 && sp/rdp<9){ X.push(rdp/sp); Y.push(rpp/rdp); }
+  }
+  return pearson(ranks(X), ranks(Y));
+}
+const MC = {S:[], L:[], P:[], running:false, R:400};
+function mcStart(){ rnd = mulberry32(2204); MC.S=[]; MC.L=[]; MC.P=[]; MC.running=true; if (REDUCE){ while(MC.S.length<MC.R){ MC.S.push(mcRep('S')); MC.L.push(mcRep('L')); MC.P.push(mcRep('P')); } MC.running=false; } }
+$('#b7run').addEventListener('click', mcStart);
+function scene7(t, dt){
+  if (MC.running && dt>0){ for (let i=0;i<6 && MC.S.length<MC.R;i++){ MC.S.push(mcRep('S')); MC.L.push(mcRep('L')); MC.P.push(mcRep('P')); } if (MC.S.length>=MC.R) MC.running=false; }
+  $('#mcStat').textContent = 'deney: '+MC.S.length+' / '+MC.R;
+  const x0=150, x1=620, X=v=>x0+(v+0.8)/1.6*(x1-x0), bins=40;
+  const rows=[['S','Yalnız güç (S)',C['s-col']],['L','Yalnız menzil (λ)',C['lam-col']],['P','Pupil sabit',C.warn]];
+  const H3 = rows.map(([key]) => { const h=new Array(bins).fill(0); MC[key].forEach(v => { const b=Math.floor((v+0.8)/1.6*bins); if(b>=0&&b<bins) h[b]++; }); return h; });
+  const hm = Math.max(10, ...H3.flat());
+  rows.forEach(([key,lab,col],i) => {
+    const y1=128+i*112, y0=y1-90, arr=MC[key], h=H3[i];
+    txt(lab, 12, y1-40, {size:14, w:700, color:col});
+    if (arr.length){ const mean=arr.reduce((a,b)=>a+b,0)/arr.length; txt('ortalama ρ = '+(mean>=0?'+':'')+fmt(mean), 12, y1-20, {size:12, mono:true, color:C.muted}); }
+    line(x0,y1,x1,y1,C.line);
+    h.forEach((c,b) => { const bh=Math.min(y1-y0, c/hm*(y1-y0)); ctx.fillStyle=rgba(col,0.85); ctx.fillRect(x0+b*(x1-x0)/bins+1, y1-bh, (x1-x0)/bins-2, bh); });
+  });
+  for (const v of [-0.8,-0.4,0,0.4,0.8]){ line(X(v),360,X(v),364,C.muted); txt((v>0?'+':'')+fmt(v,1), X(v), 378, {align:'center', size:12, mono:true, color:C.muted}); }
+  txt('← oran büyük beneklerde küçülüyor', x0, 398, {size:11, color:C.muted}); txt('büyüyor →', x1, 398, {size:11, color:C.muted, align:'right'});
+  line(X(-0.14),22,X(-0.14),362,C.ink,2,[6,4]);
+  txt('gerçek kelebekler: −0.14', X(-0.14)+6, 20, {size:13, w:700});
+  txt('ρ', x1+8, 364, {size:13, w:700});
+}
+
+/* ---------- Adım 8: gerçek veri ---------- */
+const DATA=[[0.246,0.240],[0.289,0.214],[0.323,0.206],[0.169,0.250],[0.273,0.200],[0.234,0.182],[0.211,0.188],[0.484,0.146],[0.189,0.321],[0.238,0.200],[0.310,0.190],[0.652,0.211],[0.179,0.184],[0.127,0.214],[0.223,0.188],[0.233,0.200],[0.301,0.227],[0.194,0.200],[0.264,0.263],[0.209,0.238],[0.284,0.172],[0.194,0.235],[0.293,0.206],[0.327,0.318],[0.124,0.158],[0.149,0.240],[0.267,0.174],[0.383,0.158],[0.238,0.222],[0.284,0.143],[0.157,0.172],[0.304,0.214],[0.173,0.222],[0.369,0.163],[0.208,0.150],[0.270,0.200],[0.267,0.160],[0.207,0.208],[0.238,0.111],[0.161,0.217],[0.273,0.250],[0.349,0.231],[0.116,0.280],[0.229,0.219],[0.195,0.174],[0.185,0.250],[0.252,0.182],[0.221,0.265],[0.282,0.184],[0.285,0.200],[0.332,0.167],[0.262,0.231],[0.197,0.185],[0.192,0.233],[0.277,0.206],[0.204,0.167],[0.226,0.167],[0.210,0.280],[0.302,0.195],[0.371,0.178],[0.306,0.200],[0.287,0.222],[0.208,0.200],[0.216,0.217],[0.225,0.154],[0.306,0.222],[0.155,0.222],[0.225,0.185],[0.200,0.174],[0.339,0.226],[0.249,0.179],[0.242,0.278],[0.179,0.188],[0.256,0.185],[0.205,0.188],[0.398,0.167],[0.342,0.182],[0.402,0.196],[0.229,0.176],[0.200,0.200],[0.241,0.154],[0.253,0.190],[0.171,0.192],[0.207,0.211],[0.198,0.333],[0.329,0.208],[0.354,0.200],[0.201,0.143],[0.217,0.154],[0.250,0.194],[0.401,0.214],[0.410,0.175],[0.273,0.130],[0.531,0.212],[0.186,0.192],[0.227,0.250],[0.246,0.217]];
+function scene8(t){
+  const x0=86, x1=610, y0=30, y1=350, xa=0.1, xb=0.68, ya=0.08, yb=0.36;
+  const X=v=>x0+(v-xa)/(xb-xa)*(x1-x0), Y=v=>y1-(v-ya)/(yb-ya)*(y1-y0);
+  ctx.strokeStyle=C.line; ctx.strokeRect(x0,y0,x1-x0,y1-y0);
+  for (const v of [0.1,0.2,0.3,0.4,0.5,0.6]) txt(fmt(v,1), X(v), y1+16, {align:'center', size:11, mono:true, color:C.muted});
+  for (const v of [0.1,0.2,0.3]){ line(x0,Y(v),x1,Y(v),C.line,1,[2,4]); txt(fmt(v,1), x0-6, Y(v)+4, {align:'right', size:11, mono:true, color:C.muted}); }
+  txt('benek boyu (kanada göre) →', x1, y1+34, {align:'right', size:12, color:C.muted});
+  ctx.save(); ctx.translate(26,(y0+y1)/2); ctx.rotate(-Math.PI/2); txt('oran (pupil ÷ disk) →',0,0,{align:'center',size:12,color:C.muted}); ctx.restore();
+  // senaryo eğrileri (gürültüsüz ideal), orta nokta: x=0.26 ↔ disk 2.2 mm
+  const curves=[[C['s-col'],'S olsaydı',x=>1-1.76/(2.2*x/0.26)],[C['lam-col'],'λ olsaydı',()=>0.2],[C.warn,'pupil sabit olsaydı',x=>0.44/(2.2*x/0.26)]];
+  ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,x1-x0,y1-y0); ctx.clip();
+  curves.forEach(([col,_,fn]) => { ctx.beginPath(); for(let x=0.12;x<=0.68;x+=0.005){ const y=Math.max(0,fn(x)); x<0.121?ctx.moveTo(X(x),Y(y)):ctx.lineTo(X(x),Y(y)); } ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.setLineDash([7,5]); ctx.stroke(); });
+  ctx.restore();
+  txt('S olsaydı', X(0.36), Y(1-1.76/(2.2*0.36/0.26))-8, {size:12, w:700, color:C['s-col']});
+  txt('λ olsaydı', X(0.6), Y(0.2)-8, {size:12, w:700, color:C['lam-col'], align:'right'});
+  txt('pupil sabit olsaydı', X(0.5), Y(0.44/(2.2*0.5/0.26))-10, {size:12, w:700, color:C.warn});
+  const shown = REDUCE ? DATA.length : Math.min(DATA.length, Math.floor(t*30));
+  for (let i=0;i<shown;i++){ const [a,b]=DATA[i]; ctx.fillStyle=rgba(C.ink,0.75); ctx.strokeStyle=C.surface; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(X(a),Y(b),4.2,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+  txt(shown+' / 97 kelebek', x1-8, y0+20, {align:'right', size:13, w:700});
+  if (shown===DATA.length) txt('ρ = −0.14 → en çok "λ olsaydı" çizgisine benziyor', x1-8, y0+40, {align:'right', size:13, color:C.ok, w:700});
+}
+
+/* ---------- Gezinme ---------- */
+const SCENES=[scene1,scene2,scene3,scene4,scene5,scene6,scene7,scene8];
+let step=0, tScene=0, last=performance.now(), paused=false;
+const nav=$('#nav');
+STEPS.forEach((s,i) => { const b=document.createElement('button'); b.type='button'; b.innerHTML=`<span class="n">${i+1}</span>${s.short}`; b.addEventListener('click',()=>go(i)); nav.appendChild(b); });
+function go(i){
+  step=Math.max(0,Math.min(STEPS.length-1,i)); tScene=0;
+  $('#lesson').innerHTML=STEPS[step].html; $('#stageCap').textContent=STEPS[step].cap; cv.setAttribute('aria-label', STEPS[step].cap);
+  [...nav.children].forEach((b,j)=>{ b.toggleAttribute('aria-current', j===step); if(j===step) b.setAttribute('aria-current','step'); b.classList.toggle('done', j<step); });
+  document.querySelectorAll('.controls').forEach(c => c.hidden = +c.dataset.for !== step+1);
+  $('#bPrev').disabled = step===0; $('#bNext').textContent = step===STEPS.length-1 ? 'Baştan başla ↺' : 'İleri →';
+  if (step===1) simReset();
+  if (step===4){ trails.forEach(a=>a.length=0); }
+  if (step===6 && MC.S.length===0) mcStart();
+  try { localStorage.setItem('gozbenegi-adim', step); } catch(e){}
+}
+$('#bPrev').addEventListener('click',()=>go(step-1));
+$('#bNext').addEventListener('click',()=>go(step===STEPS.length-1?0:step+1));
+$('#bPause').addEventListener('click',()=>{ paused=!paused; $('#bPause').textContent=paused?'Oynat':'Duraklat'; });
+$('#lam2').addEventListener('input',e=>{ lamCells=+e.target.value; $('#lam2v').textContent=lamCells+' hücre'; });
+$('#b2reset').addEventListener('click', simReset);
+document.addEventListener('keydown', e => { if (e.target.tagName==='INPUT') return; if (e.key==='ArrowRight') go(step+1); if (e.key==='ArrowLeft') go(step-1); });
+let start=0; try { start = +localStorage.getItem('gozbenegi-adim') || 0; } catch(e){}
+resize(); go(start);
+function frame(now){
+  const dt=Math.min(0.05,(now-last)/1000); last=now; const d = paused?0:dt; tScene+=d;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle=C.surface; ctx.fillRect(0,0,W,H);
+  SCENES[step](tScene, d);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
