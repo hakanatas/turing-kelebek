@@ -1,5 +1,9 @@
 # Turing Kelebek — proje paketi (7 Ekim 2026)
 
+## Öğrenci sayfaları
+- [Çalışma rehberi (11 bölüm, ara değerlendirmeler, final ve karne)](https://hakanatas.github.io/turing-kelebek/rehber/)
+- [Göz beneği atölyesi (8 adımlı canlandırmalı anlatım)](https://hakanatas.github.io/turing-kelebek/goz_benegi_atolyesi.html)
+
 ## Belgeler
 - **ARASTIRMA_RAPORU_v3.md / .pdf — GÜNCEL rapor: iki odaklı seviye eğrileri (kaynaşma teoremi, çift pupil penceresi, ölçeksiz test), varyans ayrışımı, sentetik doğrulama**
 - proje-tasarimi-v3-oneri.md — v3 yön kararı ve gerekçesi
