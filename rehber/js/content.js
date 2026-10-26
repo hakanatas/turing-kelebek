@@ -12,8 +12,8 @@ TK.U = [
   sections:[
     {h:'Projenin sorusu', html:`
       <p>Kelebek kanatlarındaki halkalı benekler, yani <b>göz benekleri</b>, nasıl oluşuyor? Bilim insanları 50 yıldır bunun için matematiksel bir model kullanıyor. Biz bu modelin öngörülerini <b>Türkiye'deki gerçek kelebeklerin fotoğraflarıyla</b> sınıyoruz.</p>
-      ${key('Tek cümlede proje','Türkiye kelebeklerinde göz beneği halkaları birlikte mi büyüyor, yoksa halkalar arası mesafe mi sabit kalıyor? Cevap, beneği çizen "kimyasal talimatın" hangi ayarının kelebekten kelebeğe değiştiğini söyler.')}
-      <p>Proje <b>Matematik</b> alanında, Biyoloji ile disiplinler arası. Yani işin kalbinde bir formül var; kelebekler o formülü sınamak için doğal bir laboratuvar.</p>`},
+      ${key('Tek cümlede proje','Beneği çizen "kimyasal talimatın" matematiğinden kesin öngörüler türetiyor ve bunları Türkiye\'deki Çayır esmerlerinin fotoğraflarıyla, ölçek bilmeden sınıyoruz: tek benekte hangi ayarın kelebekten kelebeğe değiştiğini, iki pupilli beneklerde ise iki sinyalin nasıl kaynaştığını.')}
+      <p>Proje <b>Matematik</b> alanında, uygulama alanı Biyoloji. İşin kalbinde formüller ve iki kanıtlanmış teorem var; kelebekler onları sınamak için doğal bir laboratuvar. Rehber, raporun güncel sürümüne (<b>v3</b>) göre hazırlandı.</p>`},
     {h:'Rehber nasıl çalışır?', html:`
       <ul>
         <li>Her ünite <b>öğrenme hedefleriyle</b> başlar. Ünite bitince bunları yapabiliyor olmalısın.</li>
@@ -51,7 +51,7 @@ TK.U = [
   sections:[
     {h:'Çayır esmeri: Maniola jurtina', html:`
       <p>Türkiye'de yaklaşık 380 gündüz kelebeği türü yaşar. Biz bunlardan <b>Çayır esmeri</b>ni (<i>Maniola jurtina</i>) seçtik. Neden mi?</p>
-      <ul><li>Ön kanadının ucunda <b>tek, büyük, beyaz pupilli siyah bir benek</b> var. Ölçmesi kolay.</li><li>Deniz kıyısından 2000 metreye kadar yaşar. Rakım karşılaştırması yapabiliriz.</li><li>Mayıs–Eylül arası uçar ve iNaturalist'te Türkiye'den <b>390 gözlem</b> var.</li></ul>
+      <ul><li>Ön kanadının ucunda <b>büyük, beyaz pupilli siyah bir benek</b> var. Ölçmesi kolay. Bu benek sık sık <b>iki pupilli</b> de olur; Ünite 6\'da bunun neden bir hazine olduğunu göreceksin.</li><li>Deniz kıyısından 2000 metreye kadar yaşar. Rakım karşılaştırması yapabiliriz.</li><li>Mayıs–Eylül arası uçar ve iNaturalist'te Türkiye'den <b>390 gözlem</b> var.</li></ul>
       <p>İkinci türümüz <b>Tavus kelebeği</b> (<i>Aglais io</i>). Beneklerinde 3–4 halka var; bu yüzden ileride daha güçlü bir test sağlayacak (105 gözlem).</p>`},
     {h:'Kanadın haritası', html:`<p>Ölçüm yaparken bu adları bilmek zorundasın. Özellikle <b>kanat tabanı</b> ve <b>apeks</b>: kanat uzunluğu L bu iki nokta arasında ölçülür.</p>${w('anatomy')}${c('k1')}`},
     {h:'Göz beneğinin yapısı', html:`
@@ -210,37 +210,91 @@ TK.U = [
   ]}
 },
 /* ============================== 5 ============================== */
-{ id:'senaryo', no:5, title:'Üç senaryo ve hipotezler', short:'Hipotezler', time:'35 dk',
-  lead:'İyi bir deney, farklı açıklamaların farklı sonuçlar öngördüğü bir deneydir. Bizde üç rakip senaryo var.',
-  goals:['Üç senaryoyu ve her birinde sabit kalan büyüklüğü söyleyebilmek','Her senaryonun (r<sub>d</sub>, r<sub>p</sub>) grafiğinde nasıl bir çizgi verdiğini çizebilmek','Oran testinin üç senaryoda beklenen işaretini bilmek','H1 ve H2 hipotezlerini kendi cümlelerinle yazabilmek'],
+{ id:'senaryo', no:5, title:'Dört senaryo ve hipotezler', short:'Hipotezler', time:'40 dk',
+  lead:'İyi bir deney, farklı açıklamaların farklı sonuçlar öngördüğü bir deneydir. Bizde dört rakip senaryo var.',
+  goals:['Dört senaryoyu ve her birinde neyin değiştiğini söyleyebilmek','Her senaryonun (r<sub>d</sub>, r<sub>p</sub>) grafiğinde nasıl bir iz bıraktığını tarif edebilmek','Oran testinin ve oran saçılımının (CV) dört senaryoda beklenen değerlerini bilmek','H1, H2 ve H3 hipotezlerini kendi cümlelerinle yazabilmek'],
   sections:[
     {h:'Rakip açıklamalar', html:`
-      <p>Kelebekler arasında benek boyu değişiyor. Bunun üç olası açıklaması var:</p>
-      <ol><li><b class="s">Yalnız güç S değişir.</b> Bazı odaklar daha çok sinyal üretir. → Halka farkı sabit. Küçük beneklerde pupil kaybolur.</li><li><b class="l">Yalnız menzil λ değişir.</b> Sinyal bazı kelebeklerde daha uzağa gider. → Bütün halkalar aynı oranda büyür; oran sabit.</li><li><b style="color:var(--warn)">Pupil sabit.</b> Pupil aslında eşik halkası değil, odak hücrelerinin kendisi. → Pupil hep aynı boyda, disk değişir.</li></ol>
+      <p>Kelebekler arasında benek boyu değişiyor. Modelin içinden bunun dört olası açıklaması var:</p>
+      <ol><li><b class="s">Yalnız güç S değişir.</b> Bazı odaklar daha çok sinyal üretir. → Halka farkı sabit. Küçük beneklerde pupil kaybolur.</li><li><b class="l">Yalnız menzil λ değişir.</b> Sinyal bazı kelebeklerde daha uzağa gider. → Bütün halkalar aynı oranda büyür; oran herkeste aynı.</li><li><b style="color:var(--warn)">Pupil sabit.</b> Pupil aslında eşik halkası değil, odak hücrelerinin kendisi. → Pupil hep aynı boyda, disk değişir.</li><li><b style="color:var(--ok)">λ + pupil eşiği.</b> Boyutu menzil belirler, ama beyaz eşiği θ<sub>p</sub> de kelebekten kelebeğe biraz farklı. → Oran boyuttan bağımsız ama herkeste aynı değil; <b>dağınık</b>.</li></ol>
       ${w('scenarios')}${c('s1')}`},
     {h:'Öngörü tablosu', html:`${w('hyptable')}
-      <p>Son sütundaki <b>oran testi</b> şunu soruyor: "Büyük benekli kelebeklerde oran daha mı büyük, daha mı küçük, yoksa aynı mı?" Neden bu test seçildi, Ünite 6'da göreceksin: fotoğrafların ölçeğini bilmediğimizde de çalışıyor.</p>${c('s2')}`},
+      <p>İki ölçüt birlikte kullanılıyor. <b>Oran testi</b> (ρ): "Büyük benekli kelebeklerde oran daha mı büyük, daha mı küçük, aynı mı?" <b>Oran saçılımı</b> (CV): "Oran kelebekten kelebeğe ne kadar değişiyor?" Tek başına ρ, yalnız-λ ile λ+eşik senaryolarını ayıramaz; ikisinde de ρ ≈ 0. Onları saçılım ayırır.</p>
+      ${key('Neden dördüncü senaryo?','Monteiro ve arkadaşları (1997) laboratuvardaki <i>Bicyclus</i> kelebeklerinde şunu buldu: benek <b>boyutu</b> odak sinyali üzerinden, halka <b>oranları</b> ise doku eşikleri üzerinden kalıtılıyor. Dördüncü senaryo bu iş bölümünün doğal popülasyondaki karşılığı.')}${c('s2')}`},
     {h:'Hipotezler', html:`
-      ${key('H1 · Ölçekleme','Üç senaryodan hangisi Türkiye\'deki Çayır esmeri verisiyle uyumlu?')}
-      ${key('H2 · Coğrafya','Menzil λ\'nın vekili (benek boyu ÷ kanat boyu) rakım ve sıcaklıkla değişiyor mu? D ve γ sıcaklığa bağlı hızlar olduğu için λ da sıcaklığa bağlı olabilir.')}
-      ${key('H0 · Yöntem','Testlerimiz gerçek ölçüm gürültüsü altında ne kadar güvenilir? (Monte Carlo ile, Ünite 7.)')}
+      ${key('H1 · Çift pupil geometrisi','Çift pupilli kelebeklerin benek biçimi, iki odaklı modelin öngördüğü eğriye oturuyor mu? (Ünite 6)')}
+      ${key('H2 · Tek benek değişkenliği','Oran testi ve oran saçılımı dört senaryodan hangisiyle uyumlu?')}
+      ${key('H3 · Coğrafya','Menzil λ\'nın vekili (benek boyu ÷ kanat boyu) rakım ve sıcaklıkla değişiyor mu? D ve γ sıcaklığa bağlı hızlar olduğu için λ da sıcaklığa bağlı olabilir.')}
       <p>Dikkat: <b>Hiçbir sonuç "başarısız" değildir.</b> Hangi senaryo çıkarsa çıksın, modelin hangi parametresinin değiştiğini öğreniriz.</p>${w('outcomes')}`}
   ],
   checks:{
-    s1:{q:'Soldaki panelde benek küçülünce pupil kayboluyor. Bu hangi senaryo?', opts:['Yalnız güç S değişir','Yalnız menzil λ değişir','Pupil sabit','Hiçbiri'], a:0, ex:'S, beyaz eşiğinin altına düşünce pupil kaybolur.'},
-    s2:{q:'"Pupil sabit" senaryosunda büyük beneklerde oran nasıl olur?', opts:['Küçük (ρ negatif)','Büyük (ρ pozitif)','Aynı (ρ ≈ 0)','Tanımsız'], a:0, ex:'Pupil aynı, disk büyüyor: oran = sabit ÷ büyük sayı → küçülür.'}
+    s1:{q:'Soldaki panelde benek küçülünce pupil kayboluyor. Bu hangi senaryo?', opts:['Yalnız güç S değişir','Yalnız menzil λ değişir','Pupil sabit','λ + pupil eşiği'], a:0, ex:'S, beyaz eşiğinin altına düşünce pupil kaybolur.'},
+    s2:{q:'İki senaryoda da ρ ≈ 0 bekleniyor. Yalnız-λ ile λ + eşik senaryolarını ne ayırır?', opts:['Oranın saçılımı (CV): yalnız-λ\'da çok küçük, λ + eşikte orta','Pupilin kaybolması','Rakım','Disk rengi'], a:0, ex:'Yalnız-λ\'da oran herkeste aynıdır; görülen saçılım sadece ölçüm gürültüsü olur (CV ≈ 0,09). λ + eşikte oran gerçekten değişir (CV ≈ 0,19).'}
   },
   quiz:{ id:'senaryo', qs:[
-    {t:'match', q:'Her senaryoda sabit kalan büyüklük hangisi?', pairs:[['Yalnız S değişir','Fark r_d − r_p'],['Yalnız λ değişir','Oran r_p / r_d'],['Pupil sabit','Pupil yarıçapı r_p']], ex:'Ünite 4\'teki iki özdeşliği hatırla.'},
-    {t:'match', q:'(r<sub>d</sub>, r<sub>p</sub>) grafiğinde hangi çizgi?', pairs:[['Yalnız S değişir','Eğimi 1 olan doğru'],['Yalnız λ değişir','Orijinden geçen doğru'],['Pupil sabit','Yatay doğru']], ex:'Fark sabitse r_p = r_d − c; oran sabitse r_p = k·r_d; pupil sabitse r_p = c.'},
-    {q:'Oran testinde ρ pozitif çıkarsa hangi senaryo desteklenir?', opts:['Yalnız S değişir','Yalnız λ değişir','Pupil sabit','Hiçbiri'], a:0, ex:'S senaryosunda büyük beneklerde pupil göreli olarak daha büyük olur.'},
-    {q:'Oran testinde ρ ≈ 0 hangi senaryoyla uyumludur?', opts:['Yalnız λ değişir','Yalnız S değişir','Pupil sabit','Hiçbiri'], a:0, ex:'Oran sabitse benek boyuyla ilişkisi olmaz.'},
-    {q:'H2 neden λ\'nın sıcaklıkla değişebileceğini düşünür?', opts:['D ve γ sıcaklığa bağlı hızlardır','Sıcakta kelebekler büyür','Fotoğraflar yazın çekilir','Turing öyle demiştir'], a:0, ex:'λ = √(D/γ); kimyasal hızlar sıcaklıkla değişir.'},
-    {q:'"Yalnız S değişir" senaryosu doğruysa doğada ne görmemiz beklenir?', opts:['Bazı kelebeklerde pupilsiz benekler','Hiç benek olmayan kelebekler','Hep aynı boyda benekler','İki pupilli benekler'], a:0, ex:'Raporda bu senaryo bireylerin yaklaşık %16\'sında pupil kaybı öngörüyor.'}
+    {t:'match', q:'Her senaryoda ne olur?', pairs:[['Yalnız S değişir','Fark r_d − r_p sabit'],['Yalnız λ değişir','Oran herkeste aynı'],['Pupil sabit','Pupil yarıçapı sabit'],['λ + pupil eşiği','Oran boyuttan bağımsız ama dağınık']], ex:'Ünite 4\'teki iki özdeşliği ve dördüncü senaryonun tanımını hatırla.'},
+    {t:'match', q:'(r<sub>d</sub>, r<sub>p</sub>) grafiğinde hangi iz?', pairs:[['Yalnız S değişir','Eğimi 1 olan doğru'],['Yalnız λ değişir','Orijinden geçen doğru'],['Pupil sabit','Yatay doğru']], ex:'Fark sabitse r_p = r_d − c; oran sabitse r_p = k·r_d; pupil sabitse r_p = c.'},
+    {q:'Oran testinde ρ belirgin biçimde pozitif çıkarsa hangi senaryo desteklenir?', opts:['Yalnız S değişir','Yalnız λ değişir','Pupil sabit','λ + pupil eşiği'], a:0, ex:'S senaryosunda büyük beneklerde pupil göreli olarak daha büyük olur.'},
+    {q:'ρ ≈ 0 ve oran CV\'si ≈ 0,19 ise hangi senaryo uyumludur?', opts:['λ + pupil eşiği','Yalnız λ','Yalnız S','Pupil sabit'], a:0, ex:'ρ sıfıra yakın: oran boyuttan bağımsız. CV orta: oran gerçekten değişiyor.'},
+    {q:'H3 neden λ\'nın sıcaklıkla değişebileceğini düşünür?', opts:['D ve γ sıcaklığa bağlı hızlardır','Sıcakta kelebekler büyür','Fotoğraflar yazın çekilir','Turing öyle demiştir'], a:0, ex:'λ = √(D/γ); kimyasal hızlar sıcaklıkla değişir.'},
+    {q:'"Yalnız S değişir" senaryosu doğruysa doğada ne görmemiz beklenir?', opts:['Bazı kelebeklerde pupilsiz benekler','Hiç benek olmayan kelebekler','Hep aynı boyda benekler','Hep çift pupilli benekler'], a:0, ex:'Monte Carlo\'ya göre bu senaryoda bireylerin yaklaşık %16\'sında pupil kaybolur.'}
   ]}
 },
 /* ============================== 6 ============================== */
-{ id:'veri', no:6, title:'Veri ve ölçüm', short:'Veri', time:'50 dk',
+{ id:'ikiodak', no:6, title:'İki odak: kaynaşan benekler', short:'İki odak', time:'55 dk',
+  lead:'Çayır esmerinin beneğinde bazen iki pupil olur. Bu "kusur", modeli sınamak için elimizdeki en güçlü araç.',
+  goals:['Üst üste binme ilkesini (sinyallerin toplanması) açıklayabilmek','Orta noktanın neden bir eyer noktası olduğunu söyleyebilmek','Teorem 1\'i (kaynaşma koşulu) türetebilmek','Teorem 2\'deki çift pupil penceresini ve genişliğini bilmek','Ölçek bilinmeden iki oranla a/λ ve r<sub>d</sub>/λ\'nın nasıl bulunduğunu anlatabilmek'],
+  sections:[
+    {h:'Çift pupilli benek', html:`
+      <p>Çayır esmerinin ön kanadındaki benekte çoğu zaman tek pupil var. Ama doğada sık sık <b>iki pupilli</b> benekler de görülür (Thomson 1969): tek bir siyah disk, içinde iki beyaz nokta.</p>
+      <p>Model bunu basitçe açıklar: beneğin altında <b>iki odak</b> vardır. İki odak yakınsa benekleri kaynaşır. Ünite 1'deki odak deneyinde iki odağı yan yana koyduğunda bunu görmüştün.</p>
+      ${key('Üst üste binme ilkesi','Sinyal denklemi <b>doğrusal</b>dır. Bu yüzden iki odağın sinyali, tek tek sinyallerin <b>toplamıdır</b>: m = m₁ + m₂. Monteiro ve arkadaşlarının (2001) "sinyaller toplanmalı" varsayımı aslında bir varsayım değil, denklemin bir sonucu.')}
+      <p>Her halka, toplam sinyalin bir eşiğe eşit olduğu çizgi, yani bir <b>seviye eğrisi</b>dir (haritalardaki eş yükselti eğrileri gibi).</p>`},
+    {h:'Odakları ayır', html:`<p>Aşağıda iki odak arasındaki yarı uzaklığı (a) değiştir. Sağdaki grafik sinyali iki odaktan geçen çizgi boyunca gösteriyor; kırmızı nokta orta noktadaki "geçit" değeri. Alttaki şerit hangi bölgede olduğunu söylüyor.</p>${w('twofocus')}${c('t1')}`},
+    {h:'Teorem 1: kaynaşma koşulu', html:`
+      ${key('Benzetme: dağ geçidi','İki dağ düşün. İki tepeyi birleştiren sırtın en alçak noktası bir geçittir. Geçit, sırt boyunca en alçak; ama sırta dik yönde (vadilere göre) en yüksek noktadır. Matematikte buna <b>eyer noktası</b> denir. Su seviyesi geçidin üstündeyse iki tepe tek ada olur, altındaysa iki ayrı ada.','analogy')}
+      ${w('fusion')}
+      <p>Bu kanıt tamamen lise matematiğiyle yapılıyor: üstel fonksiyon, logaritma ve iki değişkenli bir fonksiyonun kritik noktası.</p>${c('t2')}`},
+    {h:'Teorem 2: çift pupil penceresi', html:`
+      <div class="formula">r<sub>p</sub> + λ ln 2  &lt;  a  &lt;  r<sub>d</sub> + λ ln 2</div>
+      <ul><li>a bu aralığın <b>altındaysa</b> pupiller de kaynaşır: tek büyük pupil.</li><li>a bu aralığın <b>içindeyse</b>: tek disk, iki pupil.</li><li>a bu aralığın <b>üstündeyse</b>: iki ayrı benek.</li></ul>
+      <p>Pencerenin genişliği <b>r<sub>d</sub> − r<sub>p</sub></b>, yani tek beneğin halka farkı. Çayır esmeri için r<sub>d</sub> = 2,2 mm, r<sub>p</sub> = 0,44 mm, λ = 0,5 mm alırsak pencere 0,79 mm ile 2,55 mm arası; genişliği 1,76 mm.</p>
+      ${key('Yeni bir öngörü','Odak uzaklıkları rastgele dağılıyorsa, pencere genişliği r<sub>d</sub> − r<sub>p</sub> = λ(ℓ<sub>d</sub> − ℓ<sub>p</sub>) büyük olan kelebeklerde çift pupil <b>daha sık</b> görülmeli. Yani λ\'sı büyük, beneği büyük kelebeklerde. Bu, verilerle ayrıca sınanabilir.')}${c('t3')}`},
+    {h:'Önerme 3: ölçek bilmeden çöz', html:`
+      <p>Kaynaşmış diskte üç uzunluk ölçeriz: iki pupil arasındaki yarı uzaklık <b>a</b>, diskin ortadaki "bel" yarı genişliği <b>w</b> ve diskin eksen boyunca yarı uzunluğu <b>R</b>. Model bunları şöyle bağlar:</p>
+      <div class="formula">w² = (r<sub>d</sub> + λ ln 2)² − a²      R = r<sub>d</sub> + λ · ln(2 cosh(a/λ))</div>
+      <p>Fotoğrafın ölçeğini bilmediğimiz için <b>w/a</b> ve <b>R/a</b> oranlarını kullanırız. Bu iki oran iki bilinmeyeni (a/λ ve r<sub>d</sub>/λ) tek türlü belirler. Dene:</p>
+      ${w('invert')}
+      ${key('Aşırı belirlilik: modeli sınamak','İki ölçümle iki bilinmeyen bulmak henüz bir sınama değil, yalnızca bir hesap. Sınama <b>üçüncü</b> ölçümle gelir: aynı benekteki pupil boyutu da modelden hesaplanabilir. Hesaplanan ile ölçülen tutarsa model bir sınavı geçmiş olur. Ayrıca bulunan r<sub>d</sub>/λ değerleri bireyler arasında tutarlı olmalı ve tek pupilli kelebeklerden bulunanla örtüşmelidir.')}${c('t4')}`},
+    {h:'Bilgisayarda doğrulama', html:`
+      <p><code>sentetik_cift_odak.py</code>, iki odaklı denklemi sonlu farklarla çözüp beş farklı odak uzaklığında beneği üretti (λ = 12 px, r<sub>d</sub> = 36 px, r<sub>p</sub> = 7,2 px):</p>
+      <div class="tw"><table class="t"><thead><tr><th>a / λ</th><th>Teorem 2'nin öngörüsü</th><th>Disk parça</th><th>Pupil parça</th></tr></thead><tbody>
+      <tr><td class="num">1,00</td><td>tek pupil, tek disk</td><td class="num">1</td><td class="num">1</td></tr>
+      <tr><td class="num">1,67</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
+      <tr><td class="num">2,33</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
+      <tr><td class="num">3,00</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
+      <tr><td class="num">4,00</td><td>iki ayrı benek</td><td class="num">2</td><td class="num">2</td></tr></tbody></table></div>
+      <p>Beş durumun beşinde de öngörü tuttu. Önerme 3 ile geri çözümde r<sub>d</sub> %1–2 hatayla bulundu. λ ise üstel formülle %15–24 düşük çıktı; bunun nedeni üstel yaklaşımın tam çözüm K<sub>0</sub>'a göre biraz yavaş azalması. Gerçek veride K<sub>0</sub> sürümü kullanılacak.</p>
+      <p><b>Sınırlılık:</b> Teorem iki odağın <b>eşit güçlü</b> olduğunu varsayıyor. Güçler farklıysa geçit kayar ve kriter bilgisayarla hesaplanmalı.</p>`}
+  ],
+  checks:{
+    t1:{q:'a/λ\'yı yavaşça büyütürken sırayla ne görüyorsun?', opts:['Tek pupil → çift pupil → iki ayrı benek','İki ayrı benek → çift pupil → tek pupil','Hep çift pupil','Benek kaybolur'], a:0, ex:'Önce pupiller, sonra diskler ayrılır, çünkü beyaz eşiği siyah eşiğinden yüksektir.'},
+    t2:{q:'Orta nokta O neden eyer noktasıdır?', opts:['Odakları birleştiren çizgide en düşük, ona dik yönde en yüksek nokta','Sinyalin en büyük olduğu yer','Sinyalin sıfır olduğu yer','Odaklardan birinin üstü'], a:0, ex:'Dağ geçidi gibi: sırt boyunca en alçak, vadilere göre en yüksek.'},
+    t3:{q:'r<sub>d</sub> = 2,2 mm, r<sub>p</sub> = 0,44 mm ise çift pupil penceresinin genişliği kaç mm?', opts:['1,76','2,64','0,35','2,2'], a:0, ex:'Genişlik = r_d − r_p = 1,76 mm. λ ln 2 iki uçta da aynı olduğu için sadeleşir.'},
+    t4:{q:'Önerme 3\'te neden w ve R yerine w/a ve R/a kullanıyoruz?', opts:['Fotoğrafın ölçeği bilinmiyor; oranlar ölçekten bağımsız','Daha küçük sayılar olduğu için','a sıfır olduğu için','Kural öyle'], a:0, ex:'Ünite 7\'deki ölçek tuzağıyla aynı fikir: pikseldeki uzunluklar yakınlaştırmayla değişir, oranları değişmez.'}
+  },
+  quiz:{ id:'ikiodak', qs:[
+    {q:'İki odaklı benekte toplam sinyal nedir?', opts:['İki tek-odak sinyalinin toplamı','Büyük olanı','Çarpımı','Ortalaması'], a:0, ex:'Denklem doğrusal olduğu için üst üste binme geçerli.'},
+    {q:'Orta noktada sinyal 2e<sup>−a</sup> (λ = 1). Benekler hangi koşulda kaynaşır?', opts:['2e<sup>−a</sup> ≥ θ','e<sup>−a</sup> ≥ 2θ','a ≥ θ','2a ≤ θ'], a:0, ex:'Geçitte bile sinyal eşiğin üstündeyse halka iki odağı birlikte sarar.'},
+    {t:'num', q:'r<sub>d</sub> = 2,2 mm, λ = 0,5 mm. a\'nın hangi değerinin altında disk tek parçadır? (ln 2 ≈ 0,693)', a:2.55, tol:0.02, unit:'mm', ex:'r_d + λ ln 2 = 2,2 + 0,35 = 2,55 mm.'},
+    {t:'num', q:'Aynı kelebekte r<sub>p</sub> = 0,44 mm. Pupiller hangi a değerinin üstünde ayrı olur?', a:0.79, tol:0.02, unit:'mm', ex:'r_p + λ ln 2 = 0,44 + 0,35 = 0,79 mm.'},
+    {q:'Çift pupil penceresinin genişliği neye eşittir?', opts:['r<sub>d</sub> − r<sub>p</sub>','λ ln 2','r<sub>d</sub> + r<sub>p</sub>','2a'], a:0, ex:'İki sınırdaki λ ln 2 terimleri sadeleşir.'},
+    {q:'Teorem 2\'ye göre çift pupil hangi kelebeklerde daha sık beklenir?', opts:['λ\'sı (ve halka farkı) büyük olanlarda','Pupili olmayanlarda','En küçüklerde','Hiç fark yok'], a:0, ex:'Pencere genişliği r_d − r_p = λ(ℓ_d − ℓ_p); λ büyükse pencere geniş.'},
+    {q:'Önerme 3\'te iki oranla (w/a, R/a) iki bilinmeyen bulunuyor. Model nasıl <b>sınanır</b>?', opts:['Üçüncü bir ölçümle: pupil boyutu ya da konturun tamamı tutmalı','İki oranı tekrar ölçerek','Ölçeği tahmin ederek','Sınanamaz'], a:0, ex:'Bilinmeyenden fazla ölçüm = aşırı belirli sistem. Fazla ölçüm tutarsa model güçlenir.'}
+  ]}
+},
+/* ============================== 7 ============================== */
+{ id:'veri', no:7, title:'Veri ve ölçüm', short:'Veri', time:'50 dk',
   lead:'Hiç kelebek yakalamadan 97 kelebeği nasıl ölçtük? Vatandaş bilimi, lisanslar, bilgisayarla görme ve bir ölçek tuzağı.',
   goals:['iNaturalist ve vatandaş bilimini açıklayabilmek','Hangi lisanslı fotoğrafı kullanabileceğine karar verebilmek','Yarı-yükseklik yöntemiyle halka sınırının nasıl bulunduğunu anlatabilmek','Piksel ölçeğinde farkın neden yanıltıcı olduğunu, oranın neden güvenilir olduğunu gösterebilmek'],
   sections:[
@@ -276,27 +330,33 @@ TK.U = [
     {q:'508 fotoğraftan neden yalnız 97 birey analize girdi?', opts:['Lisans, tespit, geçerlilik ve tekil birey filtreleri','Bilgisayar yavaş olduğu için','Diğerleri başka türdü','Rastgele seçildi'], a:0, ex:'508 → 395 CC → 249 tespit → 154 geçerli → 97 birey.'}
   ]}
 },
-/* ============================== 7 ============================== */
-{ id:'istatistik', no:7, title:'İstatistik ve Monte Carlo', short:'İstatistik', time:'55 dk',
-  lead:'Gürültülü verilerden güvenilir sonuç çıkarmanın araçları: dağılım, korelasyon, p-değeri, güç ve bilgisayar deneyleri.',
-  goals:['Ortalama, standart sapma ve değişim katsayısını (CV) hesaplayıp yorumlayabilmek','Spearman ρ\'nun sıralarla nasıl çalıştığını açıklayabilmek','p-değerini karıştırma testiyle açıklayabilmek','Güç ve yanlış alarm kavramlarını Monte Carlo ile anlatabilmek','ICC\'nin neyi ölçtüğünü söyleyebilmek'],
+/* ============================== 8 ============================== */
+{ id:'istatistik', no:8, title:'İstatistik ve Monte Carlo', short:'İstatistik', time:'65 dk',
+  lead:'Gürültülü verilerden güvenilir sonuç çıkarmanın araçları: dağılım, korelasyon, p-değeri, gürültüyü ayırmak, güç ve bilgisayar deneyleri.',
+  goals:['Ortalama, standart sapma ve değişim katsayısını (CV) hesaplayıp yorumlayabilmek','Spearman ρ\'nun sıralarla nasıl çalıştığını açıklayabilmek','p-değerini karıştırma testiyle açıklayabilmek','Oran saçılımını gerçek fark ve ölçüm gürültüsü olarak ayırabilmek','Güç ve yanlış alarm kavramlarını Monte Carlo ile anlatabilmek','ICC\'nin neyi ölçtüğünü söyleyebilmek'],
   sections:[
     {h:'Dağılımı ölçmek', html:`
       <p><b>Ortalama</b> bir grubun "tipik" değeridir. <b>Standart sapma (SS)</b> değerlerin ortalamadan tipik olarak ne kadar uzaklaştığıdır. <b>Değişim katsayısı CV = SS ÷ ortalama</b>, dağılımı yüzde olarak verir; böylece farklı büyüklükleri karşılaştırabilirsin.</p>
       ${w('stats')}
-      <p>Gerçek 97 kelebekte oran 0,203 ± 0,039, yani <b>CV ≈ %19</b>. Bu sayı Ünite 8'de çok işimize yarayacak.</p>${c('i1')}`},
+      <p>Gerçek 97 kelebekte oran 0,203 ± 0,039, yani <b>CV ≈ %19</b>. Bu sayının ne kadarı gerçek, ne kadarı ölçüm hatası? Aşağıda bunu ayıracağız.</p>${c('i1')}`},
     {h:'Korelasyon ve Spearman ρ', html:`
-      <p><b>Korelasyon</b>, iki ölçümün birlikte değişip değişmediğini −1 ile +1 arasında bir sayıyla söyler. Projede <b>Spearman ρ</b> (ro) kullanıyoruz: değerlerin kendisine değil <b>sıralarına</b> bakar. Bu yüzden aykırı noktalara karşı daha dayanıklıdır.</p>
+      <p><b>Korelasyon</b>, iki ölçümün birlikte değişip değişmediğini −1 ile +1 arasında bir sayıyla söyler. Projede <b>Spearman ρ</b> (ro) kullanıyoruz: değerlerin kendisine değil <b>sıralarına</b> bakar. Bu yüzden uç değerlere karşı daha dayanıklıdır.</p>
       ${w('spearman')}${c('i2')}`},
     {h:'Şans mı, gerçek mi? p-değeri', html:`
       <p>Gerçek veride ρ = −0,14 çıktı. Ama 97 kelebekle, hiç ilişki olmasa da şansla küçük bir ρ çıkabilir. Bunu test etmenin zekice bir yolu: oranları kelebekler arasında <b>rastgele karıştır</b>, ρ\'yu yeniden hesapla, 1000 kez tekrarla.</p>
       ${w('permutation')}
       ${key('p-değeri','"Hiç ilişki olmasaydı, en az bu kadar uç bir sonucu ne sıklıkla görürdük?" Genelde p < 0,05 ise sonuca <b>anlamlı</b> denir. Anlamlı olmamak "ilişki yok" demek değildir; "bu veriyle ilişki gösterilemedi" demektir.')}${c('i3')}`},
+    {h:'Saçılım gerçek mi, gürültü mü?', html:`
+      <p>Oranın %19'luk saçılımının iki kaynağı olabilir: kelebekler <b>gerçekten</b> farklı, ya da biz <b>yanlış ölçüyoruz</b>. Ölçüm hatası piksel cinsinden yaklaşık sabittir (τ). 2 piksellik bir pupilde 0,2 piksel hata büyük, 5 piksellik pupilde küçüktür. Yani gürültü <b>küçük beneklerde</b> daha çok saçılım yaratır.</p>
+      <div class="formula">CV² ≈ CV²<sub>gerçek</sub> + τ² · (1/r<sub>p</sub>² + 1/r<sub>d</sub>²)</div>
+      <p>Kelebekleri benek boyuna göre üç gruba ayırıp her grubun CV\'sini ölçeriz. Sonra bu formülü üç noktaya oturtunca iki bilinmeyen çıkar: <b>kesme</b> gerçek saçılımı, <b>eğim</b> ölçüm gürültüsünü verir. Raporda buna Önerme 4b deniyor.</p>
+      ${w('variance')}
+      ${key('Raporun kendini düzelttiği yer','Raporun önceki sürümü (v2) ölçüm gürültüsünü 0,5 piksel <b>varsaymıştı</b> ve "saçılımın neredeyse tamamı gürültü" sonucuna varmıştı. v3 gürültüyü <b>veriden ölçtü</b>: τ ≈ 0,21 px. Bu, piksel yuvarlamasının tek başına verdiği 0,14 px\'e yakın. Sonuç tersine döndü: saçılımın büyük kısmı <b>gerçek</b>. Varsayım yerine ölçmek, bilimin en önemli alışkanlıklarından biri.')}${c('i5')}`},
     {h:'Monte Carlo: testi test etmek', html:`
-      <p>Ölçümlerimiz gürültülü: piksel hataları, bulanıklık, farklı yakınlaştırmalar. Oran testi bu gürültüde de senaryoları ayırabilir mi? Bunu bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üreterek sınıyoruz: her senaryoda 97 kelebek, 400 tekrar.</p>
+      <p>Testlerimiz gerçek gürültü altında senaryoları ayırabilir mi? Bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz: her senaryoda 97 kelebek, veriden ölçülen gürültü (τ = 0,15 px), 400 tekrar. Bu araç projedeki <code>monte_carlo.py</code>\'nin tarayıcı sürümü.</p>
       ${w('montecarlo')}
-      <ul><li><b>Güç:</b> Gerçekten bir etki varken testin onu yakalama olasılığı. Yalnız-S senaryosunda ≈ %94.</li><li><b>Yanlış alarm:</b> Etki yokken testin "var" deme olasılığı. Yalnız-λ senaryosunda ≈ %7 (beklenen %5'e yakın).</li></ul>
-      ${key('Monte Carlo\'nun bulduğu sürpriz','Ön analizde piksel ölçeğinde yapılan bir model karşılaştırması (AIC) "orantılı model açık ara kazandı" demişti. Monte Carlo bu testin <b>her senaryoda</b> orantılı modeli seçtiğini gösterdi; yani o sonuç bir yöntem yanılgısıydı. Bilimde kendi hatanı bulmak da bir bulgudur.')}${c('i4')}`},
+      <ul><li><b>Güç:</b> Gerçekten bir etki varken testin onu yakalama olasılığı. Yalnız-S senaryosunda ≈ %97–99.</li><li><b>Yanlış alarm:</b> Etki yokken testin "var" deme olasılığı. Yalnız-λ senaryosunda ≈ %6 (beklenen %5\'e yakın).</li><li><b>İki ölçüt birlikte:</b> ρ ve oran CV\'sinin <b>ikisi birden</b> gerçek veriye yalnız bir senaryoda uyuyor.</li></ul>
+      ${key('Monte Carlo\'nun bulduğu sürpriz','Ön analizde piksel ölçeğinde yapılan bir model karşılaştırması (AIC) "orantılı model açık ara kazandı" demişti. Monte Carlo bu testin <b>her senaryoda</b> orantılı modeli seçtiğini gösterdi (%82–100); yani o sonuç bir yöntem yanılgısıydı.')}${c('i4')}`},
     {h:'Ölçüm güvenilirliği: ICC', html:`
       <p>İki kişi aynı fotoğrafı ölçerse aynı sayıyı bulur mu? <b>ICC</b> (sınıf içi korelasyon katsayısı) bunu 0 ile 1 arasında ölçer. Hedefimiz <b>ICC > 0,8</b>.</p>${w('icc')}`}
   ],
@@ -304,54 +364,61 @@ TK.U = [
     i1:{q:'Ortalama 0,20, standart sapma 0,04 ise CV kaçtır?', opts:['%20','%4','%5','%80'], a:0, ex:'0,04 ÷ 0,20 = 0,20.'},
     i2:{q:'"Bir uç değer" ayarında Spearman 1 çıkarken Pearson neden daha düşük?', opts:['Pearson değerlerin büyüklüğünden etkilenir; Spearman yalnız sıralara bakar','Spearman hatalıdır','Pearson sıralara bakar','İkisi aslında aynıdır'], a:0, ex:'Uç değer Pearson\'ı doğrusal çizgiden uzaklaştırır; sıralamada ise hâlâ en büyük, yani sıralar tam uyumlu.'},
     i3:{q:'p = 0,17 için en doğru yorum hangisi?', opts:['Bu büyüklükte bir ρ şansla da sık çıkar; ilişki gösterilemedi','İlişki kesinlikle yok','İlişki %83 kesin','Ölçümler %17 hatalı'], a:0, ex:'Anlamlı olmamak, yokluğun kanıtı değildir.'},
-    i4:{q:'Monte Carlo\'da "yalnız λ" senaryosunda testin %7 "anlamlı" demesi neyi gösterir?', opts:['Yanlış alarm oranını; beklenen %5\'e yakın','Testin gücünü','Ölçümlerin %7\'sinin hatalı olduğunu','λ\'nın %7 değiştiğini'], a:0, ex:'Bu senaryoda gerçek ilişki yok; "var" demek yanlış alarmdır.'}
+    i5:{q:'Varyans ayrışımında küçük beneklerin CV\'si neden daha büyük?', opts:['Aynı piksel hatası küçük yarıçapta göreli olarak daha büyük','Küçük kelebekler daha dağınık','Küçük benekler daha çok fotoğraflanıyor','Rastlantı'], a:0, ex:'τ² · (1/r_p² + 1/r_d²): yarıçap küçükse bu terim büyür.'},
+    i4:{q:'Monte Carlo\'da "yalnız λ" senaryosu ρ\'da gerçek veriye uyuyor ama yine de elendi. Neden?', opts:['Oran CV\'si ≈ 0,09; gerçekte 0,19','Pupiller kayboluyor','ρ çok pozitif','Hiç benek çıkmıyor'], a:0, ex:'Yalnız λ değişseydi oran herkeste aynı olurdu; ölçülen saçılım gerçek veridekinin yarısı kadar kalırdı.'}
   },
   quiz:{ id:'istatistik', qs:[
     {t:'num', q:'2, 4 ve 6 sayılarının ortalaması kaçtır?', a:4, tol:0.001, ex:'(2+4+6) ÷ 3 = 4.'},
     {q:'Standart sapma neyi ölçer?', opts:['Değerlerin ortalamadan tipik uzaklığını','En büyük değeri','Veri sayısını','Ortalamanın karesini'], a:0, ex:'Dağılımın genişliği.'},
     {q:'Spearman ρ = 0,05 ne anlatır?', opts:['Neredeyse hiç ilişki yok','Güçlü pozitif ilişki','Güçlü negatif ilişki','Ölçüm hatası'], a:0, ex:'Sıfıra yakın = ilişki yok.'},
-    {q:'Karıştırma testinde oranları kelebekler arasında karıştırmak neyi taklit eder?', opts:['Oran ile benek boyu arasında hiçbir bağ olmadığı bir dünyayı','Ölçüm hatasını','Daha çok kelebeği','Fotoğraf yakınlaştırmasını'], a:0, ex:'Karıştırma, eşleşmeyi bozar; "ilişki yok" varsayımı altında ρ\'nun dağılımını verir.'},
-    {q:'Bir testin "gücü" nedir?', opts:['Gerçek bir etkiyi yakalama olasılığı','Hesaplama hızı','Yanlış alarm olasılığı','Veri sayısı'], a:0, ex:'Yalnız-S senaryosunda oran testinin gücü ≈ %94.'},
-    {t:'match', q:'Monte Carlo\'da senaryoların ortalama ρ değerlerini eşleştir.', pairs:[['Yalnız S','+0,40'],['Yalnız λ','−0,03'],['Pupil sabit','−0,40']], ex:'Üç senaryo üç ayrı bölgeye düşüyor; test ayırt edici.'},
-    {q:'Ön analizde ölçek vekili için ICC = 0,30 bulundu. Bu ne demek?', opts:['Aynı kelebeğin farklı fotoğrafları çok farklı değerler veriyor; ölçüm güvenilmez','Ölçüm mükemmel','Kelebeklerin %30\'u ölçüldü','Hata %30'], a:0, ex:'Hedef 0,8. Bu yüzden elle kanat uzunluğu ölçümüne geçildi.'},
-    {q:'Monte Carlo neden piksel ölçeğindeki AIC karşılaştırmasını geçersiz saydı?', opts:['Gerçek senaryo ne olursa olsun hep "orantılı" modeli seçtiği için','Çok yavaş çalıştığı için','Veri az olduğu için','AIC yanlış hesaplandığı için'], a:0, ex:'Pikselde r_p ve r_d ikisi de yakınlaştırmayla büyür; orantılı model her zaman kazanır.'}
-  ]}
-},
-/* ============================== 8 ============================== */
-{ id:'bulgular', no:8, title:'Bulgular ve yorum', short:'Bulgular', time:'35 dk',
-  lead:'97 gerçek kelebek ne dedi? Ne kadar emin olabiliriz? Hangi sorular hâlâ açık?',
-  goals:['Ön bulguyu üç cümleyle anlatabilmek','Neden "yalnız S" senaryosunun desteklenmediğini iki gerekçeyle açıklayabilmek','"Pupil sabit" senaryosunun neden henüz elenmediğini söyleyebilmek','Çalışmanın sınırlılıklarını sayabilmek'],
-  sections:[
-    {h:'Gerçek veri', html:`${w('realdata')}${c('b1')}`},
-    {h:'Senaryoların durumu', html:`
-      <div class="tw"><table class="t"><thead><tr><th>Senaryo</th><th>Beklenen ρ</th><th>Gözlenen</th><th>Beklenen oran CV</th><th>Gözlenen CV</th><th>Karar</th></tr></thead><tbody>
-      <tr><td><span class="s">Yalnız S</span></td><td class="num">+0,40</td><td class="num" rowspan="3">−0,14</td><td class="num">0,40</td><td class="num" rowspan="3">0,19</td><td style="color:var(--bad)"><b>Desteklenmiyor</b></td></tr>
-      <tr><td><span class="l">Yalnız λ</span></td><td class="num">−0,03</td><td class="num">0,21</td><td style="color:var(--ok)"><b>En uyumlu</b></td></tr>
-      <tr><td><b style="color:var(--warn)">Pupil sabit</b></td><td class="num">−0,40</td><td class="num">0,29</td><td style="color:var(--warn)"><b>Henüz elenmedi</b></td></tr></tbody></table></div>
-      <p><b>Neden yalnız-S değil?</b> (1) Bu senaryo %94 güçle pozitif bir ρ üretirdi; gözlenen değer negatif. (2) Bu senaryo kelebeklerin altıda birinde pupilsiz benek öngörür; Çayır esmerinde pupilsiz benek neredeyse hiç görülmez.</p>
-      <p><b>Neden λ en uyumlu?</b> Oranların dağılımı (CV %19), yalnız-λ senaryosunda <b>sadece ölçüm gürültüsünün</b> ürettiği dağılımla (%21) aynı. Yani oran aslında sabit olabilir; gördüğümüz dağılım piksel hatasından.</p>
-      ${key('Ön bulgu, üç cümlede','1) Çayır esmerinde göz beneği halkaları birlikte ölçekleniyor gibi görünüyor. 2) Bu, kelebekler arasındaki farkın sinyal gücünden çok sinyalin menzilinden (λ) kaynaklandığını düşündürüyor. 3) "Pupil sabit" olasılığını elemek için kanat uzunluğunun elle ölçülmesi gerekiyor.')}${c('b2')}`},
-    {h:'Literatürle bağlantı', html:`<ul><li><b>Palmer, McKenna ve Nijhout (2019):</b> <i>Junonia coenia</i>'da benek çapları kanat boyuyla orantılı (izometrik) büyüyor.</li><li><b>Mowbray vd. (2024):</b> <i>M. jurtina</i>'da ön kanat beneği kanat uzunluğuyla ölçekleniyor.</li><li><b>Monteiro vd. (1997):</b> <i>Bicyclus</i>'ta halka oranları eşikler üzerinden kalıtılıyor. Yani eşiklerin S ile birlikte kayması da oranı sabit tutabilir; bulgumuz "λ" ya da "eşdeğer bir ölçekleme mekanizması" anlamına gelir.</li></ul>
-      <p>Bizim katkımız: bu çalışmaların hiçbiri <b>halka oranlarını bireyler arasında</b> karşılaştırıp modelin hangi parametresinin değiştiğini sormadı.</p>`},
-    {h:'Sınırlılıklar', html:`<ol><li>Pupil yalnızca 1–7 piksel; nicemleme hatası büyük.</li><li>Otomatik ölçek vekilinin tekrarlanabilirliği düşük (ICC 0,30).</li><li>Üstel formül bir yaklaşım; odağa çok yakında sapma var.</li><li>Model kanadın büyümediğini varsayar.</li><li>Fotoğrafların açısı ve odağı değişken; cinsiyet yalnız vekille belirlendi; rakım, mevsim ve enlem iç içe.</li><li>Monte Carlo\'daki bazı sayılar (ör. bireyler arası CV) varsayım; duyarlılık analizi yapıldı.</li></ol>
-      ${key('Jüriye karşı dürüstlük','Sınırlılıkları saklamak yerine açıkça söylemek, jürinin gözünde projeyi güçlendirir. "Bunu biliyoruz ve şöyle çözmeyi planlıyoruz" cümlesi en iyi cevaptır.','analogy')}${c('b3')}`}
-  ],
-  checks:{
-    b1:{q:'Rakım grafiğinde eğim pozitif ama p = 0,18. Doğru yorum hangisi?', opts:['Küçük bir etki olabilir ama bu veriyle gösterilemedi','Rakım beneği kesinlikle büyütüyor','Rakımın hiçbir etkisi yok','Veri yanlış'], a:0, ex:'Anlamlı değil; ölçek gürültüsü küçük etkileri gizleyebilir.'},
-    b2:{q:'Gözlenen oran CV\'si (%19) neden önemli?', opts:['Yalnız-λ senaryosunda sadece ölçüm gürültüsünün üreteceği dağılıma (%21) eşit','Çok büyük olduğu için','Sıfır olduğu için','Yalnız-S\'ye uyduğu için'], a:0, ex:'Oranın "gerçek" dağılımı neredeyse sıfır olabilir: halkalar birlikte ölçekleniyor.'},
-    b3:{q:'Hangisi bu çalışmanın bir sınırlılığı DEĞİLDİR?', opts:['Kelebeklerin yakalanıp öldürülmesi','Pupilin az pikselle ölçülmesi','Ölçek vekilinin gürültülü olması','Cinsiyetin vekille belirlenmesi'], a:0, ex:'Hiç kelebek yakalanmadı.'}
-  },
-  quiz:{ id:'bulgular', qs:[
-    {t:'num', q:'Analize giren birey sayısı kaçtır?', a:97, tol:0, ex:'n = 97.'},
-    {q:'Gözlenen Spearman ρ değeri hangisidir?', opts:['−0,14','+0,40','−0,40','0'], a:0, ex:'ρ = −0,14, p = 0,17.'},
-    {q:'"Yalnız S" senaryosu neden desteklenmiyor? (en iyi cevap)', opts:['Pozitif ρ ve pupilsiz kelebekler öngörüyor; ikisi de gözlenmedi','ρ tam sıfır çıktığı için','Kelebekler çok büyük olduğu için','Veri az olduğu için'], a:0, ex:'İki bağımsız gerekçe.'},
-    {q:'"Pupil sabit" senaryosu neden henüz elenmedi?', opts:['Gözlenen ρ onunla λ arasında kalıyor; ayırmak için mm ölçeği gerekiyor','Çok güçlü desteklendiği için','Hiç sınanmadığı için','Pupil ölçülemediği için'], a:0, ex:'−0,14, −0,03 ile −0,40 arasında. Elle L ölçümü bu ayrımı yapacak (Monte Carlo: ≥ %95 doğru seçim).'},
-    {q:'Rakım ile göreli benek boyu arasındaki ilişki için doğru ifade hangisi?', opts:['Anlamlı değil (p = 0,18)','Güçlü ve anlamlı','Negatif ve anlamlı','Hiç incelenmedi'], a:0, ex:'+0,018 / 1000 m, p = 0,18.'},
-    {q:'Palmer vd. (2019) ve Mowbray vd. (2024) ile bulgumuz arasındaki ilişki nedir?', opts:['Tutarlı: benekler kanat boyuyla orantılı ölçekleniyor','Çelişkili','İlgisiz','Onlar başka bir soruyu cevapladı ve sonuçları yanlış'], a:0, ex:'İzometri, λ\'nın kanat boyuyla birlikte büyümesiyle uyumlu.'}
+    {q:'Karıştırma testinde oranları kelebekler arasında karıştırmak neyi taklit eder?', opts:['Oran ile benek boyu arasında hiçbir bağ olmadığı bir dünyayı','Ölçüm hatasını','Daha çok kelebeği','Fotoğraf yakınlaştırmasını'], a:0, ex:'Karıştırma eşleşmeyi bozar; "ilişki yok" varsayımı altında ρ\'nun dağılımını verir.'},
+    {q:'CV² ile q = 1/r<sub>p</sub>² + 1/r<sub>d</sub>² arasındaki doğrunun <b>kesmesi</b> neyi verir?', opts:['Gerçek bireysel saçılımı (CV²<sub>gerçek</sub>)','Ölçüm gürültüsünü','Kelebek sayısını','Ortalama oranı'], a:0, ex:'q = 0, sonsuz büyük benek demek; orada gürültünün katkısı sıfır, geriye gerçek saçılım kalır.'},
+    {t:'match', q:'Monte Carlo\'da senaryoların ortalama ρ değerleri:', pairs:[['Yalnız S','yaklaşık +0,45'],['Pupil sabit','yaklaşık −0,53'],['Yalnız λ ya da λ + eşik','sıfıra yakın']], ex:'Gerçek değer −0,14: S ve pupil sabit senaryolarının bölgelerinden uzak.'},
+    {t:'match', q:'Monte Carlo\'da oran CV\'leri:', pairs:[['Yalnız λ','≈ 0,09'],['λ + pupil eşiği','≈ 0,19'],['Yalnız S','≈ 0,39']], ex:'Gerçek veride CV 0,19: yalnız λ + eşik senaryosu uyuyor.'},
+    {q:'Bir testin "gücü" nedir?', opts:['Gerçek bir etkiyi yakalama olasılığı','Hesaplama hızı','Yanlış alarm olasılığı','Veri sayısı'], a:0, ex:'Yalnız-S senaryosunda oran testinin gücü ≈ %97–99.'},
+    {q:'v2 ile v3 arasındaki en önemli fark nedir?', opts:['v3 ölçüm gürültüsünü varsaymak yerine veriden ölçtü; saçılımın çoğunun gerçek olduğu çıktı','v3 daha çok kelebek ölçtü','v3 başka tür inceledi','v2 hiç Monte Carlo kullanmadı'], a:0, ex:'τ varsayımı 0,5 px idi; veriden 0,21 px çıktı.'},
+    {q:'Ön analizde ölçek vekili için ICC = 0,30 bulundu. Bu ne demek?', opts:['Aynı kelebeğin farklı fotoğrafları çok farklı değerler veriyor; ölçüm güvenilmez','Ölçüm mükemmel','Kelebeklerin %30\'u ölçüldü','Hata %30'], a:0, ex:'Hedef 0,8. Bu yüzden elle kanat uzunluğu ölçümüne geçildi.'}
   ]}
 },
 /* ============================== 9 ============================== */
-{ id:'gorev', no:9, title:'Senin görevin', short:'Görevler', time:'60 dk',
+{ id:'bulgular', no:9, title:'Bulgular ve yorum', short:'Bulgular', time:'40 dk',
+  lead:'97 gerçek kelebek ne dedi? Ne kadar emin olabiliriz? Hangi sorular hâlâ açık?',
+  goals:['Ön bulguyu üç cümleyle anlatabilmek','Dört senaryodan üçünün neden elendiğini gerekçeleriyle açıklayabilmek','Bulgunun Monteiro vd. (1997) ile ilişkisini söyleyebilmek','Çift pupil ölçümlerinin neden asıl sınav olduğunu anlatabilmek','Çalışmanın sınırlılıklarını sayabilmek'],
+  sections:[
+    {h:'Gerçek veri', html:`${w('realdata')}${c('b1')}`},
+    {h:'Dört senaryonun durumu', html:`
+      <div class="tw"><table class="t"><thead><tr><th>Senaryo</th><th>Beklenen ρ</th><th>Beklenen CV</th><th>Gözlenen</th><th>Karar</th></tr></thead><tbody>
+      <tr><td><span class="s">Yalnız S</span></td><td class="num">+0,45</td><td class="num">0,39</td><td class="num" rowspan="4">ρ = −0,14<br>CV = 0,19</td><td style="color:var(--bad)"><b>✗ ρ ve CV uymuyor</b></td></tr>
+      <tr><td><span class="l">Yalnız λ</span></td><td class="num">−0,01</td><td class="num">0,09</td><td style="color:var(--bad)"><b>✗ CV çok küçük</b></td></tr>
+      <tr><td><b style="color:var(--warn)">Pupil sabit</b></td><td class="num">−0,53</td><td class="num">0,22</td><td style="color:var(--bad)"><b>✗ ρ çok negatif</b></td></tr>
+      <tr><td><b style="color:var(--ok)">λ + pupil eşiği</b></td><td class="num">−0,01</td><td class="num">0,19</td><td style="color:var(--ok)"><b>✓ uyumlu</b></td></tr></tbody></table></div>
+      <p><b>Yalnız S neden değil?</b> Pozitif bir ρ beklenirdi (%97–99 güçle); gözlenen negatif. Ayrıca kelebeklerin altıda birinde pupilsiz benek öngörür.</p>
+      <p><b>Pupil sabit neden değil?</b> ρ ≈ −0,53 beklenirdi ve test bunu %100 yakalardı; gözlenen −0,14 çok uzakta.</p>
+      <p><b>Yalnız λ neden değil?</b> ρ uyuyor, ama varyans ayrışımı oranın gerçekten değiştiğini gösterdi (CV<sub>gerçek</sub> ≈ 0,17). Yalnız λ değişseydi oran herkeste aynı olurdu.</p>
+      ${key('Ön bulgu, üç cümlede','1) Çayır esmerinde benek <b>boyutu</b>, kelebekten kelebeğe sinyalin menzili λ üzerinden değişiyor gibi görünüyor. 2) Halka <b>oranı</b> ise boyuttan bağımsız biçimde, eşikler üzerinden değişiyor. 3) Bu, Monteiro ve arkadaşlarının (1997) laboratuvarda bulduğu iş bölümünün ("boyut → sinyal, oran → eşik") doğal popülasyondaki, hiçbir kelebeğe dokunmadan elde edilmiş karşılığı.')}${c('b2')}`},
+    {h:'Asıl sınav: çift pupilli benekler', html:`
+      <p>Tek benek sonucu güçlü bir ipucu, ama gürültülü bir ölçek vekiliyle alındı. Projenin matematiksel çekirdeği olan Teorem 1–2 ve Önerme 3 ise henüz gerçek kelebeklerde sınanmadı. Sıradaki adımlar:</p>
+      <ol><li>Çift pupilli fotoğrafları işaretlemek (hedef n ≈ 40): iki pupil merkezi (a), bel (w) ve eksen uçları (R).</li><li>Her kelebekten ölçek bilmeden a/λ ve r<sub>d</sub>/λ bulmak; pupil boyutuyla modeli sınamak.</li><li>Bulunan r<sub>d</sub>/λ değerlerini tek pupilli kelebeklerinkiyle karşılaştırmak.</li><li>Teorem 2\'nin öngörüsü: büyük benekli kelebeklerde çift pupil daha sık mı?</li></ol>`},
+    {h:'Literatürle bağlantı', html:`<ul><li><b>Monteiro vd. (1997):</b> <i>Bicyclus</i>\'ta benek boyutu odak sinyali, halka oranları eşikler üzerinden kalıtılıyor. Bizim bulgumuzla aynı iş bölümü.</li><li><b>Monteiro vd. (2001):</b> Birleşmiş beneklerin dış hattı iki sinyalin toplamına uyuyor (sayısal). Biz bunun koşulunu kapalı formülle (Teorem 1) türettik.</li><li><b>Palmer, McKenna ve Nijhout (2019)</b>, <b>Mowbray vd. (2024)</b>: Benekler kanat boyuyla orantılı büyüyor. Boyutun λ üzerinden değişmesiyle tutarlı.</li><li><b>Otaki (2011):</b> Tek sinyalli modele itiraz. Çift pupil sınaması bu tartışmaya doğrudan katkı verecek.</li></ul>`},
+    {h:'Sınırlılıklar', html:`<ol><li>Üstel formül tam çözüm K<sub>0</sub>\'ın yaklaşığı; λ kestirimini düşük çıkarır (sentetik testte %15–24).</li><li>Kaynaşma teoremi iki odağın eşit güçlü olduğunu varsayar.</li><li>Pupil yalnızca 1–7 piksel; çift pupil ölçümleri yüksek çözünürlüklü fotoğraflarla sınırlı kalmalı.</li><li>Otomatik ölçek vekilinin tekrarlanabilirliği düşük (ICC 0,30); mm ölçeği için elle kanat uzunluğu gerekli.</li><li>Model kanadın büyümediğini varsayar.</li><li>Fotoğrafların açısı değişken; cinsiyet şimdilik vekille belirlendi; rakım, mevsim ve enlem iç içe.</li></ol>
+      ${key('Jüriye karşı dürüstlük','Sınırlılıkları saklamak yerine açıkça söylemek, jürinin gözünde projeyi güçlendirir. "Bunu biliyoruz ve şöyle çözmeyi planlıyoruz" cümlesi en iyi cevaptır. v2\'den v3\'e kendi hatamızı düzeltmemiz de anlatılmaya değer bir hikâye.','analogy')}${c('b3')}`}
+  ],
+  checks:{
+    b1:{q:'Rakım grafiğinde eğim pozitif ama p = 0,18. Doğru yorum hangisi?', opts:['Küçük bir etki olabilir ama bu veriyle gösterilemedi','Rakım beneği kesinlikle büyütüyor','Rakımın hiçbir etkisi yok','Veri yanlış'], a:0, ex:'Anlamlı değil; ölçek gürültüsü küçük etkileri gizleyebilir.'},
+    b2:{q:'"Yalnız λ" senaryosunu eleyen kanıt hangisi?', opts:['Varyans ayrışımı: oranın gerçek saçılımı ≈ 0,17','ρ\'nun pozitif çıkması','Pupilsiz kelebekler','Rakım etkisi'], a:0, ex:'Yalnız λ değişseydi oran herkeste aynı olurdu; ama gerçek saçılım belirgin.'},
+    b3:{q:'Hangisi bu çalışmanın bir sınırlılığı DEĞİLDİR?', opts:['Kelebeklerin yakalanıp öldürülmesi','Pupilin az pikselle ölçülmesi','Kaynaşma teoreminin eşit güçlü odak varsayımı','Üstel yaklaşımın λ\'yı düşük kestirmesi'], a:0, ex:'Hiç kelebek yakalanmadı.'}
+  },
+  quiz:{ id:'bulgular', qs:[
+    {t:'num', q:'Tek benek ön analizine giren birey sayısı kaçtır?', a:97, tol:0, ex:'n = 97.'},
+    {q:'Gözlenen Spearman ρ değeri hangisidir?', opts:['−0,14','+0,45','−0,53','0'], a:0, ex:'ρ = −0,14, p = 0,17.'},
+    {t:'match', q:'Her senaryoyu eleyen (ya da destekleyen) kanıtla eşleştir.', pairs:[['Yalnız S','Pozitif ρ ve pupilsiz benek beklenirdi'],['Pupil sabit','ρ ≈ −0,53 beklenirdi'],['Yalnız λ','Oran saçılımı çok küçük kalırdı'],['λ + pupil eşiği','ρ ve CV ikisi de uyuyor']], ex:'İki ölçüt (ρ ve CV) birlikte tek bir senaryoyu bırakıyor.'},
+    {q:'Ön bulguya göre benek boyutu ve halka oranı nelerden etkileniyor?', opts:['Boyut menzil λ\'dan, oran eşiklerden','Boyut güç S\'den, oran λ\'dan','İkisi de yalnız λ\'dan','İkisi de rakımdan'], a:0, ex:'Monteiro vd. (1997)\'nin iş bölümüyle aynı.'},
+    {q:'Projenin "asıl sınavı" neden çift pupilli benekler?', opts:['Teorem 1–2 ve Önerme 3 ölçek bilmeden modeli doğrudan sınamaya izin veriyor','Daha güzel oldukları için','Daha çok fotoğrafları olduğu için','Tek benekler ölçülemediği için'], a:0, ex:'İki oranla iki bilinmeyen, üçüncü ölçümle sınama: aşırı belirli sistem.'},
+    {q:'Rakım ile göreli benek boyu arasındaki ilişki için doğru ifade hangisi?', opts:['Anlamlı değil (p = 0,18)','Güçlü ve anlamlı','Negatif ve anlamlı','Hiç incelenmedi'], a:0, ex:'+0,018 / 1000 m, p = 0,18.'}
+  ]}
+},
+/* ============================== 10 ============================== */
+{ id:'gorev', no:10, title:'Senin görevin', short:'Görevler', time:'60 dk',
   lead:'Artık projeyi anlıyorsun. Şimdi sıra senin ellerinle yapacağın ölçümlerde, raporda ve jüri karşısında.',
   goals:['Kanat uzunluğunu ve benek yarıçapını fotoğraftan ölçüp mm\'ye çevirebilmek','Dahil etme ölçütlerini uygulayabilmek','Kod dosyalarının ne yaptığını ve sırasını bilmek','Rolüne ait görevleri takip edebilmek','En olası jüri sorularına cevap verebilmek'],
   sections:[
@@ -361,7 +428,10 @@ TK.U = [
       <p>L<sub>mm</sub> olarak tür ve cinsiyet ortalaması kullanılır (erkek ~22 mm, dişi ~25 mm). Aşağıda üç fotoğrafla prova yap. Hedef: L hatası %5'in altında.</p>
       ${w('measure')}${c('g1')}`},
     {h:'Dahil etme ölçütleri', html:`<p>Protokole göre bir fotoğraf ancak şu koşullarda veri setine girer: kanat <b>dik açıyla</b> görünüyor (elipslik < 1,15), benek <b>bütün</b>, <b>aşınma yok</b>, görüntü <b>keskin</b> ve disk en az <b>6 piksel</b>.</p>${w('include')}`},
-    {h:'İki ölçücü çalışması', html:`<ol><li>Ö2 ve Ö3 aynı 30 fotoğrafı <b>birbirinden habersiz</b> ölçer.</li><li>ICC hesaplanır (Ünite 7'deki araç). Hedef > 0,8.</li><li>Uyuşmayan fotoğraflar birlikte incelenir: "Tabanı tam olarak nereden alıyoruz?" gibi belirsizlikler protokole yazılır (protokol v2).</li><li>Sonra bütün fotoğraflar ölçülür.</li></ol>
+    {h:'Çift pupilli benekleri ölçmek', html:`<p>Çift pupilli fotoğraflar ayrı bir kümeye alınır (hedef n ≈ 40). Her birinde tıklama aracıyla şunlar işaretlenir:</p>
+      <ol><li><b>İki pupil merkezi</b> → aralarındaki uzaklığın yarısı a</li><li><b>Diskin bel noktaları</b> (iki pupilin tam ortasında, diskin üst ve alt kenarı) → w</li><li><b>Diskin eksen uçları</b> (iki pupilden geçen çizginin diskten çıktığı yerler) → R</li></ol>
+      <p>Hepsi piksel; ama yalnızca <b>w/a</b> ve <b>R/a</b> oranları kullanılacağı için ölçek gerekmez. Dahil etme: dik açı (elipslik < 1,15), disk bütün, iki pupil belirgin. Bu ölçümler de iki kişi tarafından ayrı ayrı yapılır.</p>`},
+    {h:'İki ölçücü çalışması', html:`<ol><li>Ö2 ve Ö3 aynı 30 fotoğrafı <b>birbirinden habersiz</b> ölçer.</li><li>ICC hesaplanır (Ünite 8'deki araç). Hedef > 0,8.</li><li>Uyuşmayan fotoğraflar birlikte incelenir: "Tabanı tam olarak nereden alıyoruz?" gibi belirsizlikler protokole yazılır (protokol v2).</li><li>Sonra bütün fotoğraflar ölçülür.</li></ol>
       ${key('Altın kural','Kendi ellerinle yapmadığın hiçbir ölçüm "bulgu" olarak sunulmaz. Otomatik ölçümler öğrenci doğrulamasından geçmeden veri setine girmez.')}`},
     {h:'Kod haritası', html:`${w('codemap')}<p>Kodu yazmak zorunda değilsin, ama <b>ne yaptığını</b> anlatabilmelisin. Ö1, <code>kanat_turing.py</code>'yi satır satır anlamakla sorumlu.</p>`},
     {h:'Görev listem', html: w('tasks')},
@@ -380,8 +450,8 @@ TK.U = [
     {q:'Jüri "Yapay zekâ mı yaptı?" diye sorarsa en doğru cevap hangisi?', opts:['Kod danışman gözetiminde YZ desteğiyle yazıldı ve beyan edildi; ölçüm doğrulaması ve etiketler bizim elimizle yapıldı','Hayır, hiç kullanmadık','Evet, her şeyi o yaptı','Bilmiyoruz'], a:0, ex:'Dürüst beyan, rapor §5.7\'de de var.'}
   ]}
 },
-/* ============================== 10 ============================== */
-{ id:'final', no:10, title:'Final ve karne', short:'Final', time:'30 dk',
+/* ============================== 11 ============================== */
+{ id:'final', no:11, title:'Final ve karne', short:'Final', time:'30 dk',
   lead:'Bütün ünitelerden karışık 16 soru. Ön testteki puanınla karşılaştır ve hangi üniteleri tekrar etmen gerektiğini gör.',
   goals:['Bütün üniteleri birlikte kullanabilmek','Gelişimini ön testle karşılaştırmak','Zayıf kaldığın konuları belirlemek'],
   sections:[

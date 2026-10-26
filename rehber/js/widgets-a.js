@@ -10,8 +10,8 @@ W.timeline = el => {
     ['Eylül 2026','Aşama 0 · Hazırlık','done','Literatür, simülasyon kodu, iNaturalist veri çekimi (390 + 105 gözlem), otomatik ölçüm hattı ve 97 bireylik ön analiz. Danışman ve yapay zekâ aracıyla yapıldı; şimdi sizin devralmanız gerekiyor.'],
     ['Eyl. son – Ekim 2. hf','Aşama 1 · Devralma ve kuram','done','Ö1 modeli tahtada türetir; Ö2 teşhis görsellerini inceler ve 30 fotoğrafta elle ölçüm yapar; Ö3 tür biyolojisi notunu yazar. Hep birlikte "hangi sonuç ne anlama gelir" tablosu kesinleşir.'],
     ['Ekim 2. – 4. hf','Aşama 2 · Ölçüm aracı ve ICC','now','İşaretleme sayfasıyla aynı 30 fotoğrafı iki kişi ayrı ayrı ölçer (hedef ICC > 0.8). Ö1 sentetik beneklerle ölçüm hattını sınar.'],
-    ['Kasım','Aşama 3 · Ana veri toplama','next','Bütün geçerli fotoğraflarda kanat uzunluğu, cinsiyet ve geçerlilik etiketi. Hedef: Çayır esmeri ≥ 120, Tavus kelebeği ≥ 60 birey. İklim eşlemesi.'],
-    ['Aralık 1.–2. hf','Aşama 4 · Analiz','next','H1: üç senaryonun mm ölçeğinde karşılaştırılması ve oran testi. H2: λ vekili ile rakım ve sıcaklık. Duyarlılık analizleri.'],
+    ['Kasım','Aşama 3 · Ana veri toplama','next','Bütün geçerli fotoğraflarda kanat uzunluğu, cinsiyet ve geçerlilik etiketi; çift pupilli fotoğraflarda a, w ve R işaretleme (hedef n ≈ 40). İklim eşlemesi.'],
+    ['Aralık 1.–2. hf','Aşama 4 · Analiz','next','H1: çift pupilli beneklerde Önerme 3 sınaması (K₀ sürümüyle). H2: tek benekte dört senaryo. H3: λ vekili ile rakım ve sıcaklık.'],
     ['Aralık 3. hf – Ocak','Aşama 5 · Rapor ve sunum','next','Rapor, poster, 8 dakikalık sunum ve jüri provası. Her öğrenci kendi alanında 10 olası soruya hazırlanır.']
   ];
   const box = TK.el('div', {class:'timeline'});
@@ -310,24 +310,34 @@ W.units = el => {
 };
 
 /* ===== Adım adım türetme ===== */
-W.derive = el => {
-  TK.shell(el, 'Formülü birlikte türetelim', 'Her adımda "Neden?"e bas');
-  const S = [
-    ['m(r) = S · e<sup>−r/λ</sup>','Sinyalin odaktan r uzaklıktaki değeri. Odakta (r = 0) değer S; her λ adımında e\'ye bölünüyor.'],
-    ['Halkanın kenarında: m(r) = θ','Halka, sinyalin tam eşik değerine indiği yerde biter. O noktada sinyal = eşik.'],
-    ['S · e<sup>−r/λ</sup> = θ','İlk iki satırı birleştirdik.'],
-    ['e<sup>−r/λ</sup> = θ / S','İki tarafı S\'ye böldük.'],
-    ['−r/λ = ln(θ / S)','e\'nin üssünü almak için iki tarafın ln\'ini aldık: ln(e<sup>a</sup>) = a.'],
-    ['r/λ = ln(S / θ)','Eksiyi içeri attık: −ln(θ/S) = ln(S/θ). (Kesri ters çevirince logaritmanın işareti değişir.)'],
-    ['<b>r = λ · ln(S / θ)</b>','İki tarafı λ ile çarptık. Projenin ana formülü! Halka yarıçapı = menzil × ln(güç ÷ eşik).']
-  ];
+const makeDerive = (title, S, doneText) => el => {
+  TK.shell(el, title, 'Her adımda "Neden?"e bas');
   const list = TK.el('ol', {style:'display:grid;gap:8px;padding-left:24px;margin:0'}); el.append(list);
   let shown = 1;
   const nx = TK.el('button', {class:'btn primary', type:'button'}, 'Sonraki adım →');
-  const render = () => { list.innerHTML=''; S.slice(0,shown).forEach(s => { const li=TK.el('li',{}, `<span class="formula" style="display:inline-block;white-space:normal">${s[0]}</span> <button class="btn" type="button" style="font-size:13px;padding:2px 8px">Neden?</button><div class="ex" hidden>${s[1]}</div>`); li.querySelector('button').onclick=()=>{ const d=li.querySelector('.ex'); d.hidden=!d.hidden; }; list.appendChild(li); }); nx.disabled = shown>=S.length; nx.textContent = shown>=S.length ? 'Türetme tamam ✓' : 'Sonraki adım →'; };
+  const render = () => { list.innerHTML=''; S.slice(0,shown).forEach(s => { const li=TK.el('li',{}, `<span class="formula" style="display:inline-block;white-space:normal">${s[0]}</span> <button class="btn" type="button" style="font-size:13px;padding:2px 8px">Neden?</button><div class="ex" hidden>${s[1]}</div>`); li.querySelector('button').onclick=()=>{ const d=li.querySelector('.ex'); d.hidden=!d.hidden; }; list.appendChild(li); }); nx.disabled = shown>=S.length; nx.textContent = shown>=S.length ? doneText : 'Sonraki adım →'; };
   nx.onclick = () => { shown++; render(); };
   const ctr = TK.el('div', {class:'ctrl'}); const rs=TK.el('button',{class:'btn',type:'button'},'Baştan'); rs.onclick=()=>{shown=1;render();}; ctr.append(nx, rs); el.append(ctr); render();
 };
+W.derive = makeDerive('Formülü birlikte türetelim', [
+  ['m(r) = S · e<sup>−r/λ</sup>','Sinyalin odaktan r uzaklıktaki değeri. Odakta (r = 0) değer S; her λ adımında e\'ye bölünüyor.'],
+  ['Halkanın kenarında: m(r) = θ','Halka, sinyalin tam eşik değerine indiği yerde biter. O noktada sinyal = eşik.'],
+  ['S · e<sup>−r/λ</sup> = θ','İlk iki satırı birleştirdik.'],
+  ['e<sup>−r/λ</sup> = θ / S','İki tarafı S\'ye böldük.'],
+  ['−r/λ = ln(θ / S)','e\'nin üssünü almak için iki tarafın ln\'ini aldık: ln(e<sup>a</sup>) = a.'],
+  ['r/λ = ln(S / θ)','Eksiyi içeri attık: −ln(θ/S) = ln(S/θ). (Kesri ters çevirince logaritmanın işareti değişir.)'],
+  ['<b>r = λ · ln(S / θ)</b>','İki tarafı λ ile çarptık. Projenin ana formülü! Halka yarıçapı = menzil × ln(güç ÷ eşik).']
+], 'Türetme tamam ✓');
+W.fusion = makeDerive('Teorem 1: iki benek ne zaman kaynaşır?', [
+  ['m(x, y) = e<sup>−d₁</sup> + e<sup>−d₂</sup>','İki odak (−a, 0) ve (+a, 0) noktalarında. d₁ ve d₂ bir noktanın iki odağa uzaklığı. Kolaylık için λ = 1 ve S = 1 aldık. Denklem doğrusal olduğu için iki odağın sinyalleri <b>toplanır</b> (üst üste binme ilkesi).'],
+  ['Orta nokta O = (0, 0): m(O) = 2e<sup>−a</sup>','O iki odağa eşit uzaklıkta: d₁ = d₂ = a. İki eşit terim toplanır.'],
+  ['O bir <b>eyer noktası</b>','x ekseni boyunca O en düşük noktadır (odaklara gittikçe sinyal artar); y ekseni boyunca ise O en yüksek noktadır (yukarı aşağı gittikçe azalır). İki dağ arasındaki geçit gibi: geçidin kendisi sırttaki en alçak, vadiye göre en yüksek nokta.'],
+  ['Bağlı ⟺ m(O) ≥ θ','İki bölge ancak geçitten geçerek birleşebilir. Geçitte bile sinyal eşiğin üstündeyse halka iki odağı birlikte sarar; değilse orta çizgi bölgeyi ikiye böler.'],
+  ['2e<sup>−a</sup> ≥ θ  ⟺  a ≤ ln(2/θ)','İki tarafı 2\'ye böl, ln al, işareti çevir: e<sup>−a</sup> ≥ θ/2 → −a ≥ ln(θ/2) → a ≤ ln(2/θ).'],
+  ['ln(2/θ) = ln(1/θ) + ln 2 = r<sub>θ</sub> + ln 2','Çarpımın logaritması toplamdır. ln(1/θ), aynı eşiğin tek odaktaki yarıçapı r<sub>θ</sub> (λ = 1 iken).'],
+  ['<b>a &lt; r<sub>θ</sub> + λ · ln 2</b>','mm\'ye dönünce λ geri gelir. λ·ln 2 ≈ 0,69 λ bir "kaynaşma payı": iki benek, yarıçapları toplamından biraz uzakta olsalar bile sinyaller toplandığı için birleşir.'],
+  ['<b>Teorem 2:</b> r<sub>p</sub> + λ ln 2 &lt; a &lt; r<sub>d</sub> + λ ln 2','Aynı sonucu pupil eşiğine ve disk eşiğine ayrı ayrı uygula. Pupiller ayrık ama disk bağlıysa <b>çift pupilli benek</b> olur. Bu pencerenin genişliği tam olarak r<sub>d</sub> − r<sub>p</sub>, yani tek beneğin halka farkı!']
+], 'Kanıt tamam ∎');
 
 /* ===== Eşik grafiği (tarama ve oyun alanı) ===== */
 const G = {x0:78, x1:612, y0:22, y1:240, rmax:4, lmin:-0.6, lmax:2.75, sy0:272, sy1:388};
@@ -399,37 +409,115 @@ W.samespot = el => {
   a.oninput=upd; b.oninput=upd; upd();
 };
 
-/* ===== Üç senaryo yan yana ===== */
+/* ===== Dört senaryo yan yana ===== */
 W.scenarios = el => {
-  TK.shell(el, 'Üç senaryo', 'Yeşil = o senaryoda hiç değişmeyen sayı');
-  const c = TK.canvas(el, 640, 420, 'Üç senaryonun benekleri ve grafikleri');
-  const trails=[[],[],[]]; let clock=0;
+  TK.shell(el, 'Dört senaryo', 'Yeşil = o senaryoda boyuttan bağımsız kalan sayı');
+  const c = TK.canvas(el, 640, 420, 'Dört senaryonun benekleri ve grafikleri');
+  const trails=[[],[],[],[]]; let clock=0;
   c.animate((t, dt) => {
-    const ctx=c.ctx, f=TK.REDUCE?1:Math.exp(0.36*Math.sin(t*0.9)), rdT=2.2*f;
-    const P=[{n:'Yalnız GÜÇ (S)',col:C['s-col'],rd:rdT,rp:Math.max(0,M.LAM0*(0.88+rdT/M.LAM0-4.4)),k:'fark'},{n:'Yalnız MENZİL (λ)',col:C['lam-col'],rd:rdT,rp:0.44*f,k:'oran'},{n:'Pupil hep aynı',col:C.warn,rd:rdT,rp:0.44,k:'pupil'}];
+    const ctx=c.ctx, f=TK.REDUCE?1:Math.exp(0.36*Math.sin(t*0.9)), rdT=2.2*f, wob=TK.REDUCE?1:Math.exp(0.17*1.4*Math.sin(t*2.7+1.3));
+    const P=[{n:'Yalnız güç S',col:C['s-col'],rd:rdT,rp:Math.max(0,M.LAM0*(0.88+rdT/M.LAM0-4.4)),k:'fark'},
+             {n:'Yalnız menzil λ',col:C['lam-col'],rd:rdT,rp:0.44*f,k:'oran'},
+             {n:'Pupil sabit',col:C.warn,rd:rdT,rp:0.44,k:'pupil'},
+             {n:'λ + pupil eşiği',col:C.ok,rd:rdT,rp:0.44*f*wob,k:'oran~'}];
     clock+=dt; const push=clock>0.06; if (push) clock=0;
-    P.forEach((p,i) => { const x0=10+i*210, cx=x0+100, cy=128;
-      ctx.fillStyle=C.bg; ctx.beginPath(); ctx.roundRect(x0,8,200,404,10); ctx.fill();
-      T(ctx,p.n,cx,32,{align:'center',w:700,size:14,color:p.col});
-      ctx.save(); ctx.beginPath(); ctx.roundRect(x0+12,44,176,170,8); ctx.clip(); ctx.fillStyle=WING.or; ctx.fillRect(x0+12,44,176,170); SP(ctx,cx,cy,27,p.rp,p.rd); ctx.restore();
-      if (p.rp<=0) T(ctx,'pupil kayboldu!',cx,206,{align:'center',size:12,w:700,color:'#7A1010'});
-      [['pupil',fmt(p.rp)+' mm',p.k==='pupil'],['fark',fmt(p.rd-p.rp)+' mm',p.k==='fark'],['oran',fmt(p.rd>0?p.rp/p.rd:0),p.k==='oran']].forEach(([a,b,h],j) => { const y=238+j*20; T(ctx,a,x0+18,y,{color:h?C.ok:C.muted,w:h?700:400}); T(ctx,b+(h?'  sabit':''),x0+186,y,{align:'right',size:12,mono:true,color:h?C.ok:C.ink}); });
-      const px0=x0+30,px1=x0+188,py0=308,py1=396,X=v=>px0+v/3.4*(px1-px0),Y=v=>py1-v/0.8*(py1-py0);
-      L(ctx,px0,py1,px1,py1,C.muted); L(ctx,px0,py0,px0,py1,C.muted); T(ctx,'disk →',px1,py1+13,{align:'right',size:11,color:C.muted});
-      ctx.save(); ctx.translate(px0-8,(py0+py1)/2); ctx.rotate(-Math.PI/2); T(ctx,'pupil →',0,0,{align:'center',size:11,color:C.muted}); ctx.restore();
+    P.forEach((p,i) => { const x0=4+i*159, w=154, cx=x0+w/2, cy=118;
+      ctx.fillStyle=C.bg; ctx.beginPath(); ctx.roundRect(x0,6,w,408,10); ctx.fill();
+      T(ctx,p.n,cx,28,{align:'center',w:700,size:13,color:p.col});
+      ctx.save(); ctx.beginPath(); ctx.roundRect(x0+8,40,w-16,150,8); ctx.clip(); ctx.fillStyle=WING.or; ctx.fillRect(x0+8,40,w-16,150); SP(ctx,cx,cy,21,p.rp,p.rd); ctx.restore();
+      if (p.rp<=0) T(ctx,'pupil kayboldu!',cx,184,{align:'center',size:12,w:700,color:'#7A1010'});
+      const rows=[['pupil',fmt(p.rp)+' mm',p.k==='pupil','sabit'],['fark',fmt(p.rd-p.rp)+' mm',p.k==='fark','sabit'],['oran',fmt(p.rd>0?p.rp/p.rd:0),p.k==='oran'||p.k==='oran~',p.k==='oran~'?'dağınık':'sabit']];
+      rows.forEach(([a,b,h,tag],j) => { const y=212+j*19; T(ctx,a+(h?' · '+tag:''),x0+10,y,{size:12,color:h?C.ok:C.muted,w:h?700:400}); T(ctx,b,x0+w-10,y,{align:'right',size:12,mono:true,color:h?C.ok:C.ink}); });
+      const px0=x0+26,px1=x0+w-8,py0=300,py1=392,X=v=>px0+v/3.4*(px1-px0),Y=v=>py1-v/0.8*(py1-py0);
+      L(ctx,px0,py1,px1,py1,C.muted); L(ctx,px0,py0,px0,py1,C.muted); T(ctx,'disk →',px1,py1+13,{align:'right',size:10,color:C.muted});
+      ctx.save(); ctx.translate(px0-8,(py0+py1)/2); ctx.rotate(-Math.PI/2); T(ctx,'pupil →',0,0,{align:'center',size:10,color:C.muted}); ctx.restore();
       if (push){ trails[i].push([p.rd,p.rp]); if (trails[i].length>140) trails[i].shift(); }
-      trails[i].forEach(([a,b],j) => D(ctx,X(a),Y(b),2.2,TK.rgba(p.col,0.15+0.6*j/trails[i].length))); D(ctx,X(p.rd),Y(p.rp),5,p.col);
+      trails[i].forEach(([a,b],j) => D(ctx,X(a),Y(b),2,TK.rgba(p.col,0.15+0.6*j/trails[i].length))); D(ctx,X(p.rd),Y(p.rp),4.5,p.col);
     });
-    T(ctx,'Her nokta = bir kelebek',320,302,{align:'center',size:12,color:C.muted});
   });
 };
 
-/* ===== Senaryo → öngörü eşleştirme tablosu (statik özet) ===== */
+/* ===== Senaryo → öngörü tablosu ===== */
 W.hyptable = el => {
   TK.shell(el, 'Hipotez tablosu', 'Projenin kalbi');
-  el.append(TK.el('div', {class:'tw'}, `<table class="t"><thead><tr><th>Senaryo</th><th>Sabit kalan</th><th>(r<sub>d</sub>, r<sub>p</sub>) grafiği</th><th>Oran testi ρ beklentisi</th></tr></thead><tbody>
-  <tr><td><span class="s">Yalnız S değişir</span></td><td>Fark r<sub>d</sub> − r<sub>p</sub></td><td>Eğimi 1 olan doğru</td><td>Pozitif (+)</td></tr>
-  <tr><td><span class="l">Yalnız λ değişir</span></td><td>Oran r<sub>p</sub> / r<sub>d</sub></td><td>Orijinden geçen doğru</td><td>Sıfıra yakın (0)</td></tr>
-  <tr><td><b style="color:var(--warn)">Pupil sabit</b></td><td>Pupil r<sub>p</sub></td><td>Yatay doğru</td><td>Negatif (−)</td></tr></tbody></table>`));
+  el.append(TK.el('div', {class:'tw'}, `<table class="t"><thead><tr><th>Senaryo</th><th>Değişen</th><th>(r<sub>d</sub>, r<sub>p</sub>) grafiği</th><th>Oran testi ρ</th><th>Oran saçılımı (CV)</th></tr></thead><tbody>
+  <tr><td><span class="s">Yalnız S</span></td><td>Sinyal gücü</td><td>Eğimi 1 olan doğru (fark sabit)</td><td>Pozitif (≈ +0,45)</td><td>Çok büyük (≈ 0,39)</td></tr>
+  <tr><td><span class="l">Yalnız λ</span></td><td>Menzil</td><td>Orijinden geçen doğru (oran sabit)</td><td>Sıfıra yakın</td><td>Çok küçük (≈ 0,09)</td></tr>
+  <tr><td><b style="color:var(--warn)">Pupil sabit</b></td><td>Yalnız disk</td><td>Yatay doğru</td><td>Negatif (≈ −0,53)</td><td>Orta (≈ 0,22)</td></tr>
+  <tr><td><b style="color:var(--ok)">λ + pupil eşiği</b></td><td>Menzil ve beyaz eşik ayrı ayrı</td><td>Orijinden geçen dağınık bulut</td><td>Sıfıra yakın</td><td>Orta (≈ 0,19)</td></tr></tbody></table>`));
+  el.append(TK.el('p', {style:'margin:0;font-size:14px;color:var(--muted)'}, 'Sayılar Monte Carlo deneyinden (rapor v3, Tablo §6.4): 97 kelebek, gerçekçi ölçüm gürültüsü, 400 tekrar.'));
+};
+
+/* ===== İki odak: kaynaşma, çift pupil penceresi ===== */
+const field2 = (x, y, a) => Math.exp(-Math.hypot(x-a, y)) + Math.exp(-Math.hypot(x+a, y));
+W.twofocus = el => {
+  TK.shell(el, 'İki odak simülatörü', 'Odakları birbirinden uzaklaştır');
+  const c = TK.canvas(el, 640, 430, 'İki odaklı benek');
+  let a = 2.4, ld = 4.4; const lpr = 0.2;
+  const ctr = TK.el('div', {class:'ctrl'}, `<label>Yarı uzaklık a / λ<input type="range" min="0" max="6.5" step="0.05" value="2.4" class="ia"><span class="sv va"></span></label><label>Disk yarıçapı r<sub>d</sub> / λ<input type="range" min="2.5" max="5.5" step="0.1" value="4.4" class="id"><span class="sv vd"></span></label>`);
+  const msg = TK.el('div', {class:'msg'}); el.append(ctr, msg);
+  const GW=200, GH=140, off=document.createElement('canvas'); off.width=GW; off.height=GH; const o=off.getContext('2d'), img=o.createImageData(GW,GH);
+  const upd = () => { a=+ctr.querySelector('.ia').value; ld=+ctr.querySelector('.id').value; ctr.querySelector('.va').textContent=a.toFixed(2); ctr.querySelector('.vd').textContent=ld.toFixed(1); c.draw(); };
+  ctr.querySelector('.ia').oninput=upd; ctr.querySelector('.id').oninput=upd;
+  c.static(() => {
+    const ctx=c.ctx, lp=ld*lpr, thd=Math.exp(-ld), thp=Math.exp(-lp), SC=400/24, X0=12, Y0=10;
+    for (let j=0;j<GH;j++) for (let i=0;i<GW;i++){ const x=(i-GW/2+0.5)*2/SC, y=(j-GH/2+0.5)*2/SC, m=field2(x,y,a), k=(j*GW+i)*4; const col = m>=thp?[247,243,234]: m>=thd?[23,18,14]:[212,134,47]; img.data[k]=col[0]; img.data[k+1]=col[1]; img.data[k+2]=col[2]; img.data[k+3]=255; }
+    o.putImageData(img,0,0); ctx.imageSmoothingEnabled=false; ctx.drawImage(off,X0,Y0,400,280); ctx.imageSmoothingEnabled=true; ctx.strokeStyle=C.line; ctx.strokeRect(X0,Y0,400,280);
+    const cx=X0+200, cy=Y0+140; [[-a],[a]].forEach(([x]) => { ctx.strokeStyle='#4FB8CC'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(cx+x*SC,cy,3,0,Math.PI*2); ctx.stroke(); });
+    const pc=a<lp+Math.LN2, dc=a<ld+Math.LN2;
+    if (dc && a>0.05){ const w=Math.sqrt((ld+Math.LN2)**2-a*a), R=ld+Math.log(2*Math.cosh(a));
+      L(ctx,cx,cy-w*SC,cx,cy+w*SC,'#7FE0F0',2,[4,3]); L(ctx,cx,cy,cx+R*SC,cy,'#FFE08A',2,[4,3]); L(ctx,cx-a*SC,cy+6,cx,cy+6,'#fff',2);
+      T(ctx,'w',cx+5,cy-w*SC+14,{w:700,color:'#7FE0F0'}); T(ctx,'R',cx+R*SC-14,cy-6,{w:700,color:'#FFE08A'}); T(ctx,'a',cx-a*SC/2,cy+20,{w:700,color:'#fff',align:'center'}); }
+    // profil: x ekseni boyunca (log)
+    const px0=440,px1=628,py0=24,py1=280, Xp=x=>px0+(x+8)/16*(px1-px0), Yp=v=>py1-(Math.log10(Math.max(v,1e-4))+3.2)/3.6*(py1-py0);
+    T(ctx,'Sinyal, iki odaktan geçen çizgide',px0,16,{size:12,w:700});
+    ctx.save(); ctx.beginPath(); ctx.rect(px0,py0,px1-px0,py1-py0); ctx.clip();
+    [[thp,'beyaz eşiği'],[thd,'siyah eşiği']].forEach(([v,s]) => { L(ctx,px0,Yp(v),px1,Yp(v),C.ink,1,[5,4]); T(ctx,s,px1-4,Yp(v)-4,{align:'right',size:10,color:C.muted}); });
+    ctx.beginPath(); for (let x=-8;x<=8;x+=0.02){ const v=field2(x,0,a); x===-8?ctx.moveTo(Xp(x),Yp(v)):ctx.lineTo(Xp(x),Yp(v)); } ctx.strokeStyle=C.signal; ctx.lineWidth=2.5; ctx.stroke();
+    ctx.restore(); ctx.strokeStyle=C.line; ctx.strokeRect(px0,py0,px1-px0,py1-py0);
+    const mO=2*Math.exp(-a); D(ctx,Xp(0),Yp(mO),5,C['s-col']); T(ctx,'O: geçit',Xp(0)+6,Yp(mO)+16,{size:11,w:700,color:C['s-col']});
+    // faz şeridi
+    const bx0=40,bx1=620,by=330, A=v=>bx0+v/7*(bx1-bx0), p1=lp+Math.LN2, p2=ld+Math.LN2;
+    T(ctx,'a / λ ekseni',bx0,by-14,{size:12,w:700});
+    [[0,p1,TK.rgba(C.muted,.35),'tek büyük pupil'],[p1,p2,TK.rgba(C.ok,.35),'ÇİFT PUPİL PENCERESİ'],[p2,7,TK.rgba(C['s-col'],.25),'iki ayrı benek']].forEach(([u,v,col,s]) => { ctx.fillStyle=col; ctx.fillRect(A(u),by,A(Math.min(v,7))-A(u),26); if (A(Math.min(v,7))-A(u)>70) T(ctx,s,(A(u)+A(Math.min(v,7)))/2,by+17,{align:'center',size:11,w:700}); });
+    [0,1,2,3,4,5,6,7].forEach(v => T(ctx,String(v),A(v),by+42,{align:'center',size:11,mono:true,color:C.muted}));
+    L(ctx,A(a),by-6,A(a),by+32,C.ink,3); D(ctx,A(a),by-8,5,C.ink);
+    L(ctx,A(p1),by+50,A(p2),by+50,C.ok,1.5); T(ctx,'genişlik = r_d − r_p = '+(ld-lp).toFixed(2)+' λ',(A(p1)+A(p2))/2,by+66,{align:'center',size:12,w:700,color:C.ok});
+    T(ctx,'r_p + λ ln2',A(p1),by+82,{align:'center',size:10,mono:true,color:C.muted}); T(ctx,'r_d + λ ln2',A(p2),by+82,{align:'center',size:10,mono:true,color:C.muted});
+    const state = !dc ? 'İki ayrı benek: orta noktadaki sinyal siyah eşiğinin bile altında.' : pc ? 'Tek büyük pupil: geçitteki sinyal beyaz eşiğin bile üstünde, pupiller kaynaştı.' : '<b>Çift pupilli benek!</b> Geçitte sinyal siyah eşiğin üstünde ama beyaz eşiğin altında: tek disk, iki pupil.';
+    msg.className = 'msg ' + (dc && !pc ? 'ok' : ''); msg.innerHTML = state + ` Geçitteki sinyal m(O) = 2e<sup>−a</sup> = ${mO<0.01?mO.toFixed(4):mO.toFixed(3)}.` + (dc && a>0.05 ? ` Ölçek bağımsız oranlar: w/a = ${(Math.sqrt((ld+Math.LN2)**2-a*a)/a).toFixed(2)}, R/a = ${((ld+Math.log(2*Math.cosh(a)))/a).toFixed(2)}.` : '');
+  });
+  upd();
+};
+
+/* ===== Ölçek bilmeden çöz (Önerme 3) ===== */
+W.invert = el => {
+  TK.shell(el, 'Ölçek bilmeden çöz', 'Modelin konturunu fotoğraftaki beneğe oturt');
+  const c = TK.canvas(el, 640, 330, 'Kaynaşmış benek ve model konturu');
+  let ta, tl, tk, ga=2, gl=4;
+  const ctr = TK.el('div', {class:'ctrl'}, `<label>Tahminin a / λ<input type="range" min="0.8" max="4.5" step="0.02" value="2" class="ia"><span class="sv va"></span></label><label>Tahminin r<sub>d</sub> / λ<input type="range" min="2.8" max="5.6" step="0.02" value="4" class="il"><span class="sv vl"></span></label>`);
+  const ctr2 = TK.el('div', {class:'ctrl'}); const bn=TK.el('button',{class:'btn',type:'button'},'Yeni fotoğraf'), br=TK.el('button',{class:'btn',type:'button'},'Cevabı göster'); ctr2.append(bn,br);
+  const msg = TK.el('div', {class:'msg'}); el.append(ctr, ctr2, msg);
+  const fresh = () => { ta=1.9+Math.random()*1.6; tl=3.6+Math.random()*1.3; tk=12+Math.random()*7; upd(); };
+  const ratios = (a,l) => [Math.sqrt(Math.max(0,(l+Math.LN2)**2-a*a))/a, (l+Math.log(2*Math.cosh(a)))/a];
+  const upd = () => { ga=+ctr.querySelector('.ia').value; gl=+ctr.querySelector('.il').value; ctr.querySelector('.va').textContent=ga.toFixed(2); ctr.querySelector('.vl').textContent=gl.toFixed(2); c.draw(); };
+  ctr.querySelector('.ia').oninput=upd; ctr.querySelector('.il').oninput=upd; bn.onclick=fresh;
+  br.onclick = () => { ctr.querySelector('.ia').value=ta; ctr.querySelector('.il').value=tl; upd(); };
+  const GW=210, GH=150, off=document.createElement('canvas'); off.width=GW; off.height=GH; const o=off.getContext('2d'), img=o.createImageData(GW,GH);
+  c.static(() => { if (!ta) return;
+    const ctx=c.ctx, X0=10, Y0=10, PW=420, PH=300, cs=PW/GW, apx=ta*tk;
+    const thd=Math.exp(-tl), thp=Math.exp(-tl*0.2);
+    for (let j=0;j<GH;j++) for (let i=0;i<GW;i++){ const x=((i-GW/2+0.5)*cs)/tk, y=((j-GH/2+0.5)*cs)/tk, m=field2(x,y,ta), k=(j*GW+i)*4, col=m>=thp?[247,243,234]:m>=thd?[23,18,14]:[212,134,47]; img.data[k]=col[0]; img.data[k+1]=col[1]; img.data[k+2]=col[2]; img.data[k+3]=255; }
+    o.putImageData(img,0,0); ctx.imageSmoothingEnabled=false; ctx.drawImage(off,X0,Y0,PW,PH); ctx.imageSmoothingEnabled=true;
+    const gk = apx/ga, gthd=Math.exp(-gl); ctx.fillStyle='#4FD8F0';
+    for (let j=1;j<GH;j++) for (let i=1;i<GW;i++){ const f=(ii,jj)=>field2(((ii-GW/2+0.5)*cs)/gk, ((jj-GH/2+0.5)*cs)/gk, ga)>=gthd; const v=f(i,j); if (v!==f(i-1,j) || v!==f(i,j-1)) ctx.fillRect(X0+i*cs-1,Y0+j*cs-1,2.6,2.6); }
+    ctx.strokeStyle=C.line; ctx.strokeRect(X0,Y0,PW,PH); T(ctx,'fotoğraf (ölçek bilinmiyor)',X0+6,Y0+PH-8,{size:11,color:'#fff'}); T(ctx,'mavi çizgi: senin modelin',X0+PW-6,Y0+PH-8,{size:11,color:'#4FD8F0',align:'right'});
+    const [tw,tR]=ratios(ta,tl), [gw,gR]=ratios(ga,gl), e1=Math.abs(gw-tw)/tw, e2=Math.abs(gR-tR)/tR;
+    const x0=448; T(ctx,'Fotoğraftan ölçülen',x0,40,{w:700}); T(ctx,'w / a = '+tw.toFixed(2),x0,64,{mono:true,size:13}); T(ctx,'R / a = '+tR.toFixed(2),x0,86,{mono:true,size:13});
+    T(ctx,'Modelinin verdiği',x0,128,{w:700}); T(ctx,'w / a = '+gw.toFixed(2),x0,152,{mono:true,size:13,color:e1<0.02?C.ok:C.bad}); T(ctx,'R / a = '+gR.toFixed(2),x0,174,{mono:true,size:13,color:e2<0.02?C.ok:C.bad});
+    T(ctx,'İki oran, iki bilinmeyen:',x0,220,{size:12,color:C.muted}); T(ctx,'a/λ ve r_d/λ tek türlü belli.',x0,238,{size:12,color:C.muted}); T(ctx,'Milimetre hiç gerekmedi!',x0,262,{size:12,w:700,color:C.signal});
+    const ok = e1<0.02 && e2<0.02; msg.className='msg '+(ok?'ok':''); msg.innerHTML = ok ? `<b>Oturdu!</b> a/λ ≈ ${ga.toFixed(2)}, r<sub>d</sub>/λ ≈ ${gl.toFixed(2)}. Fotoğrafın ölçeğini bilmeden iki boyutsuz bilinmeyeni buldun. Pupil boyutu üçüncü bir ölçüm verir: model doğruysa o da tutmalı (aşırı belirlilik).` : 'İki kaydırıcıyı oynatarak mavi konturu siyah diskin kenarına oturt. Sağdaki iki oran kırmızıdan yeşile döndüğünde tamam.';
+  });
+  fresh();
 };
 })();

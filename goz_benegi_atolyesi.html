@@ -214,6 +214,7 @@ const STEPS = [
   <p><b>Ortada</b> yalnız <span class="l">menzil</span> değişiyor. Benek fotokopide büyütülmüş gibi bütünüyle büyüyor. Pupil ile diskin oranı hep aynı.</p>
   <p><b>Sağda</b> üçüncü bir olasılık var: pupil, odak hücrelerinin kendisi olsaydı boyu hiç değişmezdi.</p>
   <p>Alttaki küçük grafikler, kelebekleri yan yana koyunca her senaryoda hangi çizgiyi göreceğimizi gösteriyor. Üç senaryo, üç farklı çizgi. Kelebekleri ölçersek hangisinin doğru olduğunu anlayabiliriz.</p>
+  <p>Bir de <b>dördüncü</b> olasılık var: boyutu menzil belirler, ama beyaz eşiği de kelebekten kelebeğe biraz farklıdır. O zaman oran boyuttan bağımsız kalır ama herkeste aynı olmaz. Bu senaryoyu 7. adımda göreceksin.</p>
   <div class="ask"><b>Sınıfta sor</b>Doğada pupilsiz bir Çayır esmeri neredeyse hiç görülmez. Bu, hangi senaryo için kötü haber?</div>`},
  {short:"Fotoğraf", cap:"Fotoğraf tuzağı: pikseller", html:`
   <div class="eyebrow">Adım 6 / 8 · Ölçüm sorunu</div>
@@ -228,26 +229,29 @@ const STEPS = [
   <p>Ölçekten bağımsız testimizin sorusu şu: <b>büyük beneklerde oran büyüyor mu, küçülüyor mu, aynı mı kalıyor?</b> Cevabı tek bir sayıyla veriyoruz: <b>ρ</b> (ro). Artıysa ikisi birlikte artıyor, eksiyse biri artarken öteki azalıyor, sıfıra yakınsa ilişki yok.</p>
   <p>Gerçek fotoğrafların bütün gürültüsüyle bu test yine çalışır mı? Bunu anlamak için bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz.</p>
   <p>Her denemede 97 sahte kelebek üretilir, sahte fotoğraflarla ölçülür ve ρ hesaplanır. Bu her senaryo için 400 kez tekrarlanır. Bu yönteme <b>Monte Carlo</b> denir.</p>
-  <p>Üç senaryo üç ayrı bölgeye düşüyor, yani test çalışıyor. Kesikli çizgi gerçek kelebeklerimizin değeri: <b>−0.14</b>.</p>
+  <p>Dördüncü senaryo da var: <b>λ + pupil eşiği</b>. Bunda ρ, yalnız-λ gibi sıfıra yakın; ama oran kelebekten kelebeğe gerçekten değişiyor. İkisini <b>oranın saçılımı</b> ayırıyor: yalnız-λ'da saçılım %9, λ + eşikte %19. Gerçek kelebeklerde %19.</p>
+  <p>Kesikli çizgi gerçek kelebeklerimizin değeri: <b>−0.14</b>. Hem ρ hem saçılım yalnızca bir senaryoya uyuyor.</p>
   <div class="ask"><b>Sınıfta sor</b>Gerçek değer hangi senaryonun tepesinden en uzakta? Hangisine en yakın?</div>
-  <p class="note">Bu deney tarayıcında canlı çalışıyor: <code>monte_carlo.py</code> içindeki oran testinin aynısı. Sonuçlar rapordakiyle aynı çıkıyor (+0.40 / −0.03 / −0.40).</p>`},
+  <p class="note">Bu deney tarayıcında canlı çalışıyor: <code>monte_carlo.py</code> içindeki oran testinin aynısı. Sonuçlar rapor v3'tekiyle aynı çıkıyor (+0.45 / −0.01 / −0.53 / −0.01).</p>`},
  {short:"Sonuç", cap:"Gerçek veri: 97 kelebek", html:`
   <div class="eyebrow">Adım 8 / 8 · Ne bulduk?</div>
-  <h2>Halkalar birlikte büyüyor</h2>
+  <h2>Boyut menzilden, oran eşikten</h2>
   <p>Grafikteki her nokta, gerçek bir Çayır esmeri fotoğrafı (97 birey, 0–2144 m).</p>
   <div class="verdict">
-   <div class="v-bad"><i>✗</i><span><b>Yalnız güç (S) değişiyor:</b> desteklenmiyor. Doğru olsaydı ρ yaklaşık +0.40 çıkardı ve kelebeklerin altıda birinde pupil kaybolurdu.</span></div>
-   <div class="v-ok"><i>✓</i><span><b>Yalnız menzil (λ) değişiyor:</b> en uyumlu. Oranların dağılımı (%19) bu senaryonun beklediğiyle (%21) örtüşüyor.</span></div>
-   <div class="v-q"><i>?</i><span><b>Pupil sabit:</b> henüz elenmedi. Ayırmak için kelebeğin gerçek boyunu (mm) bilmemiz gerek.</span></div>
+   <div class="v-bad"><i>✗</i><span><b>Yalnız güç (S):</b> ρ yaklaşık +0.45 çıkardı ve kelebeklerin altıda birinde pupil kaybolurdu.</span></div>
+   <div class="v-bad"><i>✗</i><span><b>Pupil sabit:</b> ρ yaklaşık −0.53 çıkardı; −0.14 çok uzakta.</span></div>
+   <div class="v-bad"><i>✗</i><span><b>Yalnız menzil (λ):</b> ρ uyuyor ama oranların saçılımı %9 kalırdı; gerçekte %19 ve bunun çoğu ölçüm hatası değil, gerçek fark.</span></div>
+   <div class="v-ok"><i>✓</i><span><b>λ + pupil eşiği:</b> ρ ve saçılım ikisi de uyuyor. Benek boyutu menzil λ üzerinden, halka oranı eşikler üzerinden değişiyor.</span></div>
   </div>
   <p><b>Sıradaki iş sizin:</b></p>
   <ol>
+   <li>Çift pupilli beneklerde iki pupil, bel ve eksen uçlarını işaretleyip iki odaklı modeli ölçek bilmeden sınamak (asıl sınav).</li>
    <li>Her fotoğrafta ön kanat uzunluğunu elle işaretlemek (gerçek ölçek).</li>
    <li>30 fotoğrafı iki kişi ayrı ayrı ölçüp sonuçları karşılaştırmak.</li>
    <li>Dişi/erkek etiketi ve sıcaklık bilgisi eklemek.</li>
    <li>3–4 halkalı Tavus kelebeğinde (<i>Aglais io</i>) aynı testi yapmak.</li>
   </ol>
-  <p class="note">Bu bir ön bulgudur. Kesin sonucu sizin elle yapacağınız ölçümler verecek.</p>`}
+  <p class="note">Bu bir ön bulgudur. Kesin sonucu sizin elle yapacağınız ölçümler verecek. Ayrıntılar ve iki odaklı benekler için çalışma rehberine bakın.</p>`}
 ];
 
 const $ = s => document.querySelector(s);
@@ -501,32 +505,34 @@ const gauss = () => { let u=0; while(u===0) u=rnd(); return Math.sqrt(-2*Math.lo
 function ranks(a){ const idx=a.map((v,i)=>i).sort((i,j)=>a[i]-a[j]), r=new Array(a.length); let i=0; while(i<idx.length){ let j=i; while(j+1<idx.length && a[idx[j+1]]===a[idx[i]]) j++; const av=(i+j)/2+1; for(let k=i;k<=j;k++) r[idx[k]]=av; i=j+1; } return r; }
 function pearson(x,y){ const n=x.length; let mx=0,my=0; for(let i=0;i<n;i++){mx+=x[i];my+=y[i];} mx/=n; my/=n; let a=0,b=0,c=0; for(let i=0;i<n;i++){const u=x[i]-mx,v=y[i]-my; a+=u*v; b+=u*u; c+=v*v;} return a/Math.sqrt(b*c); }
 function mcRep(sen){
-  const X=[], Y=[], q = x => Math.round(2*(x+0.5*gauss()))/2;
+  const X=[], Y=[], q = x => Math.round(2*(x+0.15*gauss()))/2;
   for (let i=0;i<97;i++){
     let lam=LAM0, lnS=0;
     if (sen==='S') lnS = gauss()*0.2*4.4; else lam = LAM0*Math.exp(gauss()*0.2);
     const rd = lam*(4.4+lnS); let rp = lam*(0.88+lnS);
     if (sen==='P') rp = 0.44*Math.exp(gauss()*0.05);
+    if (sen==='T') rp = lam*0.88*Math.exp(gauss()*0.17);
     const s = 9+1.2*gauss(), ppm = Math.exp(Math.log(5.7)+0.4*gauss());
     const rdp=q(rd*ppm), rpp=q(rp*ppm), sp=ppm*(s+1.8*gauss());
     if (rdp>=6 && rpp>=1 && sp/rdp>1.5 && sp/rdp<9){ X.push(rdp/sp); Y.push(rpp/rdp); }
   }
   return pearson(ranks(X), ranks(Y));
 }
-const MC = {S:[], L:[], P:[], running:false, R:400};
-function mcStart(){ rnd = mulberry32(2204); MC.S=[]; MC.L=[]; MC.P=[]; MC.running=true; if (REDUCE){ while(MC.S.length<MC.R){ MC.S.push(mcRep('S')); MC.L.push(mcRep('L')); MC.P.push(mcRep('P')); } MC.running=false; } }
+const MC = {S:[], L:[], P:[], T:[], running:false, R:400};
+const mcAdd = () => ['S','L','P','T'].forEach(k => MC[k].push(mcRep(k)));
+function mcStart(){ rnd = mulberry32(2204); MC.S=[]; MC.L=[]; MC.P=[]; MC.T=[]; MC.running=true; if (REDUCE){ while(MC.S.length<MC.R) mcAdd(); MC.running=false; } }
 $('#b7run').addEventListener('click', mcStart);
 function scene7(t, dt){
-  if (MC.running && dt>0){ for (let i=0;i<6 && MC.S.length<MC.R;i++){ MC.S.push(mcRep('S')); MC.L.push(mcRep('L')); MC.P.push(mcRep('P')); } if (MC.S.length>=MC.R) MC.running=false; }
+  if (MC.running && dt>0){ for (let i=0;i<5 && MC.S.length<MC.R;i++) mcAdd(); if (MC.S.length>=MC.R) MC.running=false; }
   $('#mcStat').textContent = 'deney: '+MC.S.length+' / '+MC.R;
   const x0=150, x1=620, X=v=>x0+(v+0.8)/1.6*(x1-x0), bins=40;
-  const rows=[['S','Yalnız güç (S)',C['s-col']],['L','Yalnız menzil (λ)',C['lam-col']],['P','Pupil sabit',C.warn]];
+  const rows=[['S','Yalnız güç (S)',C['s-col']],['L','Yalnız menzil (λ)',C['lam-col']],['P','Pupil sabit',C.warn],['T','λ + pupil eşiği',C.ok]];
   const H3 = rows.map(([key]) => { const h=new Array(bins).fill(0); MC[key].forEach(v => { const b=Math.floor((v+0.8)/1.6*bins); if(b>=0&&b<bins) h[b]++; }); return h; });
   const hm = Math.max(10, ...H3.flat());
   rows.forEach(([key,lab,col],i) => {
-    const y1=128+i*112, y0=y1-90, arr=MC[key], h=H3[i];
-    txt(lab, 12, y1-40, {size:14, w:700, color:col});
-    if (arr.length){ const mean=arr.reduce((a,b)=>a+b,0)/arr.length; txt('ortalama ρ = '+(mean>=0?'+':'')+fmt(mean), 12, y1-20, {size:12, mono:true, color:C.muted}); }
+    const y1=104+i*84, y0=y1-68, arr=MC[key], h=H3[i];
+    txt(lab, 12, y1-34, {size:14, w:700, color:col});
+    if (arr.length){ const mean=arr.reduce((a,b)=>a+b,0)/arr.length; txt('ortalama ρ = '+(mean>=0?'+':'')+fmt(mean), 12, y1-14, {size:12, mono:true, color:C.muted}); }
     line(x0,y1,x1,y1,C.line);
     h.forEach((c,b) => { const bh=Math.min(y1-y0, c/hm*(y1-y0)); ctx.fillStyle=rgba(col,0.85); ctx.fillRect(x0+b*(x1-x0)/bins+1, y1-bh, (x1-x0)/bins-2, bh); });
   });
@@ -548,17 +554,17 @@ function scene8(t){
   txt('benek boyu (kanada göre) →', x1, y1+34, {align:'right', size:12, color:C.muted});
   ctx.save(); ctx.translate(26,(y0+y1)/2); ctx.rotate(-Math.PI/2); txt('oran (pupil ÷ disk) →',0,0,{align:'center',size:12,color:C.muted}); ctx.restore();
   // senaryo eğrileri (gürültüsüz ideal), orta nokta: x=0.26 ↔ disk 2.2 mm
-  const curves=[[C['s-col'],'S olsaydı',x=>1-1.76/(2.2*x/0.26)],[C['lam-col'],'λ olsaydı',()=>0.2],[C.warn,'pupil sabit olsaydı',x=>0.44/(2.2*x/0.26)]];
+  const curves=[[C['s-col'],'S olsaydı',x=>1-1.76/(2.2*x/0.26)],[C['lam-col'],'λ (ve λ + eşik) olsaydı',()=>0.2],[C.warn,'pupil sabit olsaydı',x=>0.44/(2.2*x/0.26)]];
   ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,x1-x0,y1-y0); ctx.clip();
   curves.forEach(([col,_,fn]) => { ctx.beginPath(); for(let x=0.12;x<=0.68;x+=0.005){ const y=Math.max(0,fn(x)); x<0.121?ctx.moveTo(X(x),Y(y)):ctx.lineTo(X(x),Y(y)); } ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.setLineDash([7,5]); ctx.stroke(); });
   ctx.restore();
   txt('S olsaydı', X(0.36), Y(1-1.76/(2.2*0.36/0.26))-8, {size:12, w:700, color:C['s-col']});
-  txt('λ olsaydı', X(0.6), Y(0.2)-8, {size:12, w:700, color:C['lam-col'], align:'right'});
+  txt('λ (ve λ + eşik) olsaydı', X(0.6), Y(0.2)-8, {size:12, w:700, color:C['lam-col'], align:'right'});
   txt('pupil sabit olsaydı', X(0.5), Y(0.44/(2.2*0.5/0.26))-10, {size:12, w:700, color:C.warn});
   const shown = REDUCE ? DATA.length : Math.min(DATA.length, Math.floor(t*30));
   for (let i=0;i<shown;i++){ const [a,b]=DATA[i]; ctx.fillStyle=rgba(C.ink,0.75); ctx.strokeStyle=C.surface; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(X(a),Y(b),4.2,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
   txt(shown+' / 97 kelebek', x1-8, y0+20, {align:'right', size:13, w:700});
-  if (shown===DATA.length) txt('ρ = −0.14 → en çok "λ olsaydı" çizgisine benziyor', x1-8, y0+40, {align:'right', size:13, color:C.ok, w:700});
+  if (shown===DATA.length) txt('ρ = −0.14: yatay çizgi çevresinde ama geniş bir bantta', x1-8, y0+40, {align:'right', size:13, color:C.ok, w:700});
 }
 
 /* ---------- Gezinme ---------- */

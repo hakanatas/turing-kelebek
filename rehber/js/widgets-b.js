@@ -160,34 +160,63 @@ W.permutation = el => {
 
 /* ===== Monte Carlo (monte_carlo.py T2'nin tarayıcı sürümü) ===== */
 W.montecarlo = el => {
-  TK.shell(el, 'Monte Carlo deneyi', 'Cevabı bilinen sahte kelebeklerle testi sına');
-  const c = TK.canvas(el, 640, 420, 'Monte Carlo histogramları');
-  let rnd=TK.rng(2204), gauss=TK.gaussFrom(rnd); const R=400, MC={S:[],L:[],P:[],sigS:0,sigL:0,sigP:0}; let run=false;
-  const rep = (sen) => { const X=[],Y=[], q=x=>Math.round(2*(x+0.5*gauss()))/2;
+  TK.shell(el, 'Monte Carlo deneyi', 'Dört senaryo · cevabı bilinen sahte kelebekler');
+  const c = TK.canvas(el, 640, 470, 'Monte Carlo histogramları');
+  const KEYS=['S','L','P','T']; let rnd=TK.rng(2204), gauss=TK.gaussFrom(rnd); const R=400; let MC, run=false;
+  const reset = () => { MC={}; KEYS.forEach(k => MC[k]={r:[],sig:0,cv:0}); };
+  const rep = (sen) => { const X=[],Y=[], q=x=>Math.round(2*(x+0.15*gauss()))/2;
     for (let i=0;i<97;i++){ let lam=M.LAM0, lnS=0; if (sen==='S') lnS=gauss()*0.2*4.4; else lam=M.LAM0*Math.exp(gauss()*0.2);
-      const rd=lam*(4.4+lnS); let rp=lam*(0.88+lnS); if (sen==='P') rp=0.44*Math.exp(gauss()*0.05);
+      const rd=lam*(4.4+lnS); let rp=lam*(0.88+lnS); if (sen==='P') rp=0.44*Math.exp(gauss()*0.05); if (sen==='T') rp=lam*0.88*Math.exp(gauss()*0.17);
       const s=9+1.2*gauss(), ppm=Math.exp(Math.log(5.7)+0.4*gauss()), rdp=q(rd*ppm), rpp=q(rp*ppm), sp=ppm*(s+1.8*gauss());
       if (rdp>=6 && rpp>=1 && sp/rdp>1.5 && sp/rdp<9){ X.push(rdp/sp); Y.push(rpp/rdp); } }
-    const r = TK.spearman(X,Y), crit = 1.96/Math.sqrt(X.length-1); return [r, Math.abs(r)>crit]; };
-  const add = () => { for (const k of ['S','L','P']){ const [r,s]=rep(k); MC[k].push(r); if (s) MC['sig'+k]++; } };
+    const r=TK.spearman(X,Y), crit=1.96/Math.sqrt(X.length-1); return [r, Math.abs(r)>crit, TK.sd(Y)/TK.mean(Y)]; };
+  const add = () => KEYS.forEach(k => { const [r,s,cv]=rep(k); MC[k].r.push(r); if (s) MC[k].sig++; MC[k].cv+=cv; });
   const ctr = TK.el('div', {class:'ctrl'}); const b=TK.el('button',{class:'btn primary',type:'button'},'Deneyi başlat'); const st=TK.el('span',{class:'sv'}); ctr.append(b,st); el.append(ctr);
-  const ro = TK.el('div', {class:'ro-grid'}, `<div class="ro">Yalnız S: "anlamlı" bulma<b class="a">—</b></div><div class="ro">Yalnız λ: yanlış alarm<b class="b">—</b></div><div class="ro">Pupil sabit: "anlamlı" bulma<b class="c">—</b></div>`); el.append(ro);
-  b.onclick = () => { rnd=TK.rng(2204); gauss=TK.gaussFrom(rnd); MC.S=[];MC.L=[];MC.P=[];MC.sigS=MC.sigL=MC.sigP=0; run=true; if (TK.REDUCE){ while(MC.S.length<R) add(); run=false; } };
+  const ro = TK.el('div', {class:'tw'}); el.append(ro);
+  reset();
+  b.onclick = () => { rnd=TK.rng(2204); gauss=TK.gaussFrom(rnd); reset(); run=true; if (TK.REDUCE){ while(MC.S.r.length<R) add(); run=false; } };
+  const rows=()=>[['S','Yalnız güç S',C['s-col']],['L','Yalnız menzil λ',C['lam-col']],['P','Pupil sabit',C.warn],['T','λ + pupil eşiği',C.ok]];
+  let lastN=-1;
   c.animate((t, dt) => {
-    if (run && dt>0){ for (let i=0;i<6 && MC.S.length<R;i++) add(); if (MC.S.length>=R) run=false; }
-    st.textContent = 'deney: '+MC.S.length+' / '+R; const n=MC.S.length||1;
-    if (MC.S.length){ ro.querySelector('.a').textContent='%'+Math.round(100*MC.sigS/n); ro.querySelector('.b').textContent='%'+Math.round(100*MC.sigL/n); ro.querySelector('.c').textContent='%'+Math.round(100*MC.sigP/n); }
-    const ctx=c.ctx, x0=150,x1=620, X=v=>x0+(v+0.8)/1.6*(x1-x0), bins=40;
-    const rows=[['S','Yalnız güç (S)',C['s-col']],['L','Yalnız menzil (λ)',C['lam-col']],['P','Pupil sabit',C.warn]];
-    const H=rows.map(([k]) => { const h=new Array(bins).fill(0); MC[k].forEach(v => { const q=Math.floor((v+0.8)/1.6*bins); if (q>=0&&q<bins) h[q]++; }); return h; }); const hm=Math.max(10,...H.flat());
-    rows.forEach(([k,lab,col],i) => { const y1=128+i*112, y0=y1-90; T(ctx,lab,12,y1-40,{w:700,size:14,color:col});
-      if (MC[k].length){ const m=TK.mean(MC[k]); T(ctx,'ortalama ρ = '+(m>=0?'+':'')+fmt(m),12,y1-20,{size:12,mono:true,color:C.muted}); }
+    if (run && dt>0){ for (let i=0;i<5 && MC.S.r.length<R;i++) add(); if (MC.S.r.length>=R) run=false; }
+    const n=MC.S.r.length; st.textContent='deney: '+n+' / '+R;
+    if (n!==lastN){ lastN=n; ro.innerHTML = n ? `<table class="t"><thead><tr><th>Senaryo</th><th>Ortalama ρ</th><th>"Anlamlı" bulma</th><th>Oran CV</th><th>Gerçek veriyle (ρ −0,14 · CV 0,19)</th></tr></thead><tbody>${rows().map(([k,lab]) => { const m=TK.mean(MC[k].r), cv=MC[k].cv/n, ok=Math.abs(m+0.14)<0.2 && Math.abs(cv-0.19)<0.05; return `<tr><td>${lab}</td><td class="num">${(m>=0?'+':'')+fmt(m)}</td><td class="num">%${Math.round(100*MC[k].sig/n)}</td><td class="num">${fmt(cv)}</td><td>${n>=R?(ok?'<b style="color:var(--ok)">✓ uyumlu</b>':'<span style="color:var(--bad)">✗</span>'):'…'}</td></tr>`; }).join('')}</tbody></table>` : ''; }
+    const ctx=c.ctx, x0=150,x1=620, X=v=>x0+(v+0.8)/1.6*(x1-x0), bins=40, RW=rows();
+    const H=RW.map(([k]) => { const h=new Array(bins).fill(0); MC[k].r.forEach(v => { const q=Math.floor((v+0.8)/1.6*bins); if (q>=0&&q<bins) h[q]++; }); return h; }); const hm=Math.max(10,...H.flat());
+    RW.forEach(([k,lab,col],i) => { const y1=112+i*92, y0=y1-74; T(ctx,lab,12,y1-36,{w:700,size:14,color:col});
+      if (MC[k].r.length){ const m=TK.mean(MC[k].r); T(ctx,'ort. ρ = '+(m>=0?'+':'')+fmt(m),12,y1-16,{size:12,mono:true,color:C.muted}); }
       L(ctx,x0,y1,x1,y1,C.line); H[i].forEach((v,q) => { const bh=Math.min(y1-y0,v/hm*(y1-y0)); ctx.fillStyle=TK.rgba(col,.85); ctx.fillRect(x0+q*(x1-x0)/bins+1,y1-bh,(x1-x0)/bins-2,bh); }); });
-    [-0.8,-0.4,0,0.4,0.8].forEach(v => { L(ctx,X(v),360,X(v),364,C.muted); T(ctx,(v>0?'+':'')+fmt(v,1),X(v),378,{align:'center',size:12,mono:true,color:C.muted}); });
-    T(ctx,'← oran büyük beneklerde küçülüyor',x0,398,{size:11,color:C.muted}); T(ctx,'büyüyor →',x1,398,{align:'right',size:11,color:C.muted});
-    L(ctx,X(-0.14),22,X(-0.14),362,C.ink,2,[6,4]); T(ctx,'gerçek kelebekler: −0.14',X(-0.14)+6,20,{w:700});
-    if (!MC.S.length) T(ctx,'"Deneyi başlat"a bas',(x0+x1)/2,200,{align:'center',size:16,color:C.muted});
+    [-0.8,-0.4,0,0.4,0.8].forEach(v => { L(ctx,X(v),404,X(v),408,C.muted); T(ctx,(v>0?'+':'')+fmt(v,1),X(v),422,{align:'center',size:12,mono:true,color:C.muted}); });
+    T(ctx,'← oran büyük beneklerde küçülüyor',x0,446,{size:11,color:C.muted}); T(ctx,'büyüyor →',x1,446,{align:'right',size:11,color:C.muted});
+    L(ctx,X(-0.14),22,X(-0.14),406,C.ink,2,[6,4]); T(ctx,'gerçek kelebekler: −0.14',X(-0.14)+6,18,{w:700});
+    if (!n) T(ctx,'"Deneyi başlat"a bas',(x0+x1)/2,220,{align:'center',size:16,color:C.muted});
   });
+};
+
+/* ===== Varyans ayrışımı (Önerme 4b) ===== */
+W.variance = el => {
+  TK.shell(el, 'Saçılım gerçek mi, gürültü mü?', 'Eğriyi üç noktaya oturt');
+  const c = TK.canvas(el, 640, 330, 'CV ve q grafiği');
+  const PTS = [[0.312,0.202,'küçük benekler (6,5–11,5 px)'],[0.155,0.193,'orta (11,5–15 px)'],[0.085,0.175,'büyük (15–34 px)']];
+  const ctr = TK.el('div', {class:'ctrl'}, `<label>Gerçek saçılım CV<sub>gerçek</sub><input type="range" min="0" max="0.22" step="0.002" value="0.05" class="ig"><span class="sv vg"></span></label><label>Ölçüm gürültüsü τ<input type="range" min="0" max="0.6" step="0.01" value="0.5" class="it"><span class="sv vt"></span></label>`);
+  const ctr2 = TK.el('div', {class:'ctrl'}); const bf=TK.el('button',{class:'btn',type:'button'},'En iyi uyumu göster'), bo=TK.el('button',{class:'btn',type:'button'},'v2\'nin varsayımı (τ = 0,5 px)'); ctr2.append(bf,bo);
+  const msg = TK.el('div', {class:'msg'}); el.append(ctr, ctr2, msg);
+  const ig=ctr.querySelector('.ig'), it=ctr.querySelector('.it');
+  const upd = () => { ctr.querySelector('.vg').textContent=(+ig.value).toFixed(3); ctr.querySelector('.vt').textContent=(+it.value).toFixed(2)+' px'; c.draw(); };
+  ig.oninput=upd; it.oninput=upd; bf.onclick=()=>{ ig.value=0.169; it.value=0.21; upd(); }; bo.onclick=()=>{ ig.value=0.03; it.value=0.5; upd(); };
+  c.static(() => { const ctx=c.ctx, g=+ig.value, tau=+it.value, x0=70,x1=600,y0=24,y1=280, X=q=>x0+q/0.36*(x1-x0), Y=v=>y1-v/0.3*(y1-y0);
+    ctx.strokeStyle=C.line; ctx.strokeRect(x0,y0,x1-x0,y1-y0);
+    [0,0.1,0.2,0.3].forEach(v => { L(ctx,x0,Y(v),x1,Y(v),C.line,1,[2,4]); T(ctx,fmt(v,1),x0-6,Y(v)+4,{align:'right',size:11,mono:true,color:C.muted}); });
+    [0,0.1,0.2,0.3].forEach(v => T(ctx,fmt(v,1),X(v),y1+16,{align:'center',size:11,mono:true,color:C.muted}));
+    T(ctx,'q = 1/r_p² + 1/r_d²  (küçük benek → büyük q)',x1,y1+34,{align:'right',size:12,color:C.muted});
+    ctx.save(); ctx.translate(24,(y0+y1)/2); ctx.rotate(-Math.PI/2); T(ctx,'oranın CV\'si',0,0,{align:'center',size:12,color:C.muted}); ctx.restore();
+    ctx.beginPath(); for (let q=0;q<=0.36;q+=0.003){ const v=Math.sqrt(g*g+tau*tau*q); q?ctx.lineTo(X(q),Y(v)):ctx.moveTo(X(q),Y(v)); } ctx.strokeStyle=C.signal; ctx.lineWidth=3; ctx.stroke();
+    D(ctx,X(0),Y(g),6,C.ok); T(ctx,'kesme = CV_gerçek',X(0)+8,Y(g)+18,{size:12,w:700,color:C.ok});
+    let sse=0; PTS.forEach(([q,v,s]) => { const m=Math.sqrt(g*g+tau*tau*q); sse+=(m-v)**2; D(ctx,X(q),Y(v),7,C.ink); T(ctx,s,X(q),Y(v)-12,{align:'center',size:11,color:C.muted}); });
+    const rmse=Math.sqrt(sse/3), good=rmse<0.006, noiseShare = tau*tau*0.17/(g*g+tau*tau*0.17);
+    msg.className='msg '+(good?'ok':''); msg.innerHTML = (good ? '<b>Eğri oturdu.</b> ' : `Eğri noktalardan ortalama ${(rmse*100).toFixed(1)} puan uzakta. `) + `Bu ayarda tipik bir benekteki saçılımın <b>%${Math.round(100*(1-noiseShare))}</b>'i gerçek bireysel fark, %${Math.round(100*noiseShare)}'i ölçüm gürültüsü.` + (good ? ' Rapor v3: CV<sub>gerçek</sub> = 0,169, τ = 0,21 px. Saçılımın büyük kısmı <b>gerçek</b>: kelebeklerin oranları gerçekten farklı.' : '');
+  });
+  upd();
 };
 
 /* ===== İki ölçücü uyumu (ICC) ===== */
@@ -235,10 +264,10 @@ W.realdata = el => {
       T(ctx,'göreli benek boyu r_d / s →',x1,y1+34,{align:'right',size:12,color:C.muted}); ctx.save(); ctx.translate(26,(y0+y1)/2); ctx.rotate(-Math.PI/2); T(ctx,'oran r_p / r_d →',0,0,{align:'center',size:12,color:C.muted}); ctx.restore();
       const cur=[[C['s-col'],x=>1-1.76/(2.2*x/0.26)],[C['lam-col'],()=>0.2],[C.warn,x=>0.44/(2.2*x/0.26)]];
       ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,x1-x0,y1-y0); ctx.clip(); cur.forEach(([col,fn]) => { ctx.beginPath(); for (let x=0.12;x<=0.68;x+=0.005){ const y=Math.max(0,fn(x)); x<0.121?ctx.moveTo(X(x),Y(y)):ctx.lineTo(X(x),Y(y)); } ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.setLineDash([7,5]); ctx.stroke(); }); ctx.restore();
-      T(ctx,'S olsaydı',X(0.36),Y(1-1.76/(2.2*0.36/0.26))-8,{w:700,size:12,color:C['s-col']}); T(ctx,'λ olsaydı',X(0.6),Y(0.2)-8,{align:'right',w:700,size:12,color:C['lam-col']}); T(ctx,'pupil sabit olsaydı',X(0.5),Y(0.44/(2.2*0.5/0.26))-10,{w:700,size:12,color:C.warn});
+      T(ctx,'S olsaydı',X(0.36),Y(1-1.76/(2.2*0.36/0.26))-8,{w:700,size:12,color:C['s-col']}); T(ctx,'λ (ve λ + eşik) olsaydı',X(0.6),Y(0.2)-8,{align:'right',w:700,size:12,color:C['lam-col']}); T(ctx,'pupil sabit olsaydı',X(0.5),Y(0.44/(2.2*0.5/0.26))-10,{w:700,size:12,color:C.warn});
       for (let i=0;i<shown;i++){ const d=TK.DATA[i]; ctx.fillStyle=TK.rgba(C.ink,.75); ctx.strokeStyle=C.surface; ctx.beginPath(); ctx.arc(X(d[0]),Y(d[1]),4.2,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
       T(ctx,shown+' / 97 kelebek',x1-8,y0+20,{align:'right',w:700});
-      msg.innerHTML = 'Her nokta bir kelebek. Spearman <b>ρ = −0.14</b> (p = 0.17). "S olsaydı" eğrisinin öngördüğü yükseliş yok. Noktalar en çok yatay "λ olsaydı" çizgisinin çevresinde toplanıyor.';
+      msg.innerHTML = 'Her nokta bir kelebek. Spearman <b>ρ = −0.14</b> (p = 0.17). "S olsaydı" eğrisinin yükselişi yok; "pupil sabit" eğrisinin güçlü düşüşü de yok. Noktalar yatay çizginin çevresinde ama <b>geniş</b> bir bantta (CV %19): oran boyuttan bağımsız, yine de kelebekten kelebeğe gerçekten değişiyor. Bu, "λ + pupil eşiği" senaryosunun izi.';
     } else {
       const x0=86,x1=610,y0=30,y1=350,X=v=>x0+v/2200*(x1-x0),ya=0,yb=0.7,Y=v=>y1-(v-ya)/(yb-ya)*(y1-y0);
       ctx.strokeStyle=C.line; ctx.strokeRect(x0,y0,x1-x0,y1-y0);
@@ -254,7 +283,7 @@ W.realdata = el => {
 /* ===== "Ne çıkarsa çıksın" tablosu ===== */
 W.outcomes = el => {
   TK.shell(el, 'Ne çıkarsa çıksın', 'Bir olası sonuç seç');
-  const O = [['Halka farkı sabit (mm)','Bireyler arası fark kaynak gücünden (S) geliyor.','Nijhout\'un gradyan modeli doğal popülasyonda doğrulandı.'],['Halkalar orantılı büyüyor (ön bulgu bu yönde)','Fark yayılma uzunluğundan (λ = √(D/γ)) geliyor.','Model geçerli; değişen parametre λ. H2 ile tutarlı bir çerçeve.'],['Pupil sabit, disk değişken','Pupil, kaynak hücre grubunun kendisi.','Modelin "pupil da bir eşik halkasıdır" varsayımı yanlış çıkar.'],['λ rakım/sıcaklıkla değişiyor','D ve γ sıcaklığa bağlı.','İklim–desen bağı; iklim değişikliğini izlemek için bir gösterge önerisi.'],['λ rakımla değişmiyor','Desen sıcaklığa karşı "tamponlanmış".','Gelişimin çevre değişimine karşı korunduğu bulgusu.']];
+  const O = [['Halka farkı sabit (mm)','Bireyler arası fark kaynak gücünden (S) geliyor.','Nijhout\'un gradyan modeli doğal popülasyonda doğrulandı.'],['Halkalar orantılı büyüyor, oran saçılımı küçük','Fark yalnızca yayılma uzunluğundan (λ = √(D/γ)) geliyor.','Model geçerli; değişen tek parametre λ.'],['Oran boyuttan bağımsız ama gerçekten saçılıyor (v3 ön bulgu)','Boyut λ üzerinden, oran pupil eşiği üzerinden değişiyor.','Monteiro vd. (1997)\'nin laboratuvarda bulduğu iş bölümünün doğal popülasyondaki karşılığı.'],['Çift pupilliler Önerme 3 eğrisine oturuyor','İki odaklı alan gerçekten sinyallerin toplamı.','Kaynaşma geometrisi doğal popülasyonda, cerrahi deney olmadan sınandı.'],['Çift pupilliler eğriye oturmuyor','Sinyaller toplanmıyor ya da üstel yaklaşım yetersiz (K₀ ile yeniden denenir).','Modelin hangi varsayımının çöktüğü tartışılır; yine raporlanabilir bir sonuç.'],['Pupil sabit, disk değişken','Pupil, kaynak hücre grubunun kendisi.','Modelin "pupil da bir eşik halkasıdır" varsayımı yanlış çıkar.'],['λ rakım/sıcaklıkla değişiyor','D ve γ sıcaklığa bağlı.','İklim–desen bağı; iklim değişikliğini izlemek için bir gösterge önerisi.'],['λ rakımla değişmiyor','Desen sıcaklığa karşı "tamponlanmış".','Gelişimin çevre değişimine karşı korunduğu bulgusu.']];
   const ctr = TK.el('div', {style:'display:grid;gap:6px'}), out = TK.el('div', {class:'msg'}, 'Hangi sonuç çıkarsa çıksın proje bir şey öğretir. Bir satır seç.');
   O.forEach(o => { const b=TK.el('button',{class:'btn',type:'button',style:'text-align:left'},o[0]); b.onclick=()=>{ [...ctr.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); out.className='msg ok'; out.innerHTML=`<b>Model içi anlamı:</b> ${o[1]}<br><b>Raporda nasıl sunulur:</b> ${o[2]}`; }; ctr.appendChild(b); });
   el.append(ctr, out);
@@ -321,9 +350,9 @@ W.codemap = el => {
 W.tasks = el => {
   TK.shell(el, 'Görev listem', 'İşaretlediklerin bu tarayıcıda saklanır');
   const R = {
-    'Ö1 · Matematik ve simülasyon':['r = λ·ln(S/θ) türetmesini tahtada anlatabiliyorum','Üç senaryonun öngörülerini kendi cümlelerimle yazdım','kanat_turing.py\'yi satır satır okudum','Sentetik beneklerle hattın λ\'yı geri bulup bulmadığını sınadım','Monte Carlo tablosunu jüriye anlatabiliyorum','"Kuramsal çerçeve" ve "Tartışma" bölümlerini yazdım'],
-    'Ö2 · Ölçüm ve veri kalitesi':['Teşhis görsellerini inceledim (veri/teshis_ornek/)','30 fotoğrafta elle ölçüm yaptım','İkinci ölçücüyle ICC hesapladım (hedef > 0.8)','Dahil etme ölçütlerini protokole yazdım','Tüm geçerli fotoğraflarda kanat uzunluğu ve cinsiyet etiketi','"Yöntem – Ölçüm" bölümünü yazdım'],
-    'Ö3 · Biyoloji ve saha':['M. jurtina ve A. io için 2 sayfalık biyoloji notu','Erkek/dişi ayrım ölçütlerini kaynakla doğruladım','Kanat uzunluğu ortalamalarını (♂ ~22, ♀ ~25 mm) literatürden doğruladım','Her kayda aylık ortalama sıcaklık eşledim (MGM/WorldClim)','Lisans listesini (Ek A) kontrol ettim','"Giriş – biyoloji" ve "Etik" bölümlerini yazdım']
+    'Ö1 · Matematik ve simülasyon':['r = λ·ln(S/θ) türetmesini tahtada anlatabiliyorum','Teorem 1–2 kanıtını (eyer noktası) tahtada anlatabiliyorum','Önerme 3\'ün w ve R formüllerini türettim','Üç senaryonun öngörülerini kendi cümlelerimle yazdım','kanat_turing.py\'yi satır satır okudum','Sentetik beneklerle hattın λ\'yı geri bulup bulmadığını sınadım','Monte Carlo tablosunu jüriye anlatabiliyorum','"Kuramsal çerçeve" ve "Tartışma" bölümlerini yazdım'],
+    'Ö2 · Ölçüm ve veri kalitesi':['Teşhis görsellerini inceledim (veri/teshis_ornek/)','30 fotoğrafta elle ölçüm yaptım','İkinci ölçücüyle ICC hesapladım (hedef > 0.8)','Dahil etme ölçütlerini protokole yazdım','Tüm geçerli fotoğraflarda kanat uzunluğu ve cinsiyet etiketi','Çift pupilli fotoğraflarda iki pupil merkezi, bel ve eksen uçlarını işaretledim (hedef n ≈ 40)','"Yöntem – Ölçüm" bölümünü yazdım'],
+    'Ö3 · Biyoloji ve saha':['M. jurtina ve A. io için 2 sayfalık biyoloji notu','Erkek/dişi ayrım ölçütlerini kaynakla doğruladım','Kanat uzunluğu ortalamalarını (♂ ~22, ♀ ~25 mm) literatürden doğruladım','Her kayda aylık ortalama sıcaklık eşledim (MGM/WorldClim)','Lisans listesini (Ek A) kontrol ettim','Çift pupilli bireylerin sıklığını boyuta göre not ettim (Teorem 2 öngörüsü)','"Giriş – biyoloji" ve "Etik" bölümlerini yazdım']
   };
   const sel = TK.el('div', {class:'ctrl'}), list = TK.el('div'); el.append(sel, list);
   const draw = role => { TK.state.role = role; TK.save(); [...sel.children].forEach(b=>b.classList.toggle('on', b.dataset.r===role));
@@ -338,7 +367,7 @@ W.tasks = el => {
 /* ===== Jüri kartları ===== */
 W.jury = el => {
   TK.shell(el, 'Jüri provası', 'Önce kendin cevapla, sonra karta dokun');
-  const Q = [['Turing deseni ile göz beneği aynı şey mi?','Hayır. Turing deseni iki kimyasalın kendiliğinden desen kurmasıdır. Göz beneği için tek kaynaktan yayılan bir sinyal ve eşik kuralı yeter (Nijhout modeli). Biz bu daha yalın modeli sınıyoruz.'],['Neden fark yerine oran kullandınız?','Fotoğrafların ölçeği bilinmiyor. Yakınlaştırma iki yarıçapı aynı kat büyütür; oranda bu kat sadeleşir, farkta sadeleşmez.'],['S ile θ\'yı neden ayrı ayrı bulamıyorsunuz?','Formülde yalnızca S/θ oranı geçiyor. S ve θ aynı kat değişirse benek aynı kalır. Bu yüzden "λ mı, ln(S/θ) mı değişiyor?" diye soruyoruz.'],['ρ = −0.14 anlamlı değilse neden sonuç çıkarıyorsunuz?','Sonucumuz "ilişki var" değil. Yalnız-S senaryosu %94 güçle pozitif ρ üretirdi; pozitif ρ görmememiz bu senaryoyu zayıflatıyor. Ayrıca bu senaryo pupilsiz kelebekler öngörür, doğada yok denecek kadar azlar.'],['Monte Carlo\'ya neden ihtiyaç duydunuz?','Gerçek fotoğraflar gürültülü. Testin bu gürültüde de çalışıp çalışmadığını, cevabını bildiğimiz sahte verilerle 400 kez deneyerek gördük. Piksel ölçeğindeki AIC karşılaştırmasının yanıltıcı olduğunu da böyle bulduk.'],['Ölçümleri kim yaptı? Yapay zekâ mı?','Otomatik hat ve kodlar danışman gözetiminde yapay zekâ desteğiyle yazıldı ve raporda beyan edildi. Ölçümlerin doğrulanması, kanat uzunluğu ve cinsiyet etiketleri öğrenciler tarafından elle yapıldı.'],['Kelebeklere zarar verdiniz mi?','Hayır. Hiç kelebek yakalanmadı. Yalnızca Creative Commons lisanslı vatandaş bilimi fotoğrafları kullanıldı ve her fotoğrafçının adı ekte listelendi.'],['Ölçümleriniz ne kadar güvenilir?','İki ölçücü aynı 30 fotoğrafı ayrı ayrı ölçtü; ICC hedefi 0.8. Ön analizdeki otomatik ölçek vekili ICC 0.30 çıktı; bu yüzden elle ölçüme geçtik.'],['Sonucunuz neden "ön bulgu"?','Pupil fotoğraflarda yalnızca 1–7 piksel ve ölçek gürültülü. "Pupil sabit" senaryosu henüz elenmedi; elle ölçülen kanat uzunluğuyla mm ölçeğinde karar verilecek.'],['λ = √(D/γ) neden uzunluk birimi veriyor?','D mm²/s, γ 1/s. D/γ = mm², karekökü mm. Denklemdeki tek uzunluk ölçeği bu.']];
+  const Q = [['Turing deseni ile göz beneği aynı şey mi?','Hayır. Turing deseni iki kimyasalın kendiliğinden desen kurmasıdır. Göz beneği için tek kaynaktan yayılan bir sinyal ve eşik kuralı yeter (Nijhout modeli). Biz bu daha yalın modeli sınıyoruz.'],['Neden fark yerine oran kullandınız?','Fotoğrafların ölçeği bilinmiyor. Yakınlaştırma iki yarıçapı aynı kat büyütür; oranda bu kat sadeleşir, farkta sadeleşmez.'],['S ile θ\'yı neden ayrı ayrı bulamıyorsunuz?','Formülde yalnızca S/θ oranı geçiyor. S ve θ aynı kat değişirse benek aynı kalır. Bu yüzden "λ mı, ln(S/θ) mı değişiyor?" diye soruyoruz.'],['ρ = −0.14 anlamlı değilse neden sonuç çıkarıyorsunuz?','Sonucumuz "ilişki var" değil. Yalnız-S senaryosu %97–99 güçle +0,45 civarında, pupil-sabit senaryosu %100 güçle −0,53 civarında bir ρ üretirdi. İkisini de görmüyoruz. Sıfıra yakın ρ ile %19\'luk gerçek oran saçılımı birlikte yalnız "λ + pupil eşiği" senaryosuna uyuyor.'],['Oranın saçılımı ölçüm hatası olamaz mı?','Varyans ayrışımıyla (Önerme 4b) ayırdık: küçük, orta ve büyük beneklerde CV farklı. Eğriye oturtunca gerçek saçılım 0,169, ölçüm gürültüsü τ = 0,21 px çıktı; bu, piksel yuvarlamasının tek başına verdiği 0,14 px\'e yakın. Yani saçılımın çoğu gerçek.'],['İki benek ne zaman kaynaşır?','Odaklar arası yarı uzaklık a < r + λ·ln 2 iken. Kanıt: iki odağın ortasındaki nokta bir eyer noktası; sinyal orada eşiğin üstündeyse halka iki odağı birlikte sarar. λ·ln 2 bir "kaynaşma payı".'],['Çift pupilli benek neden önemli?','Teorem 2\'ye göre ancak r_p + λ ln2 < a < r_d + λ ln2 aralığında oluşur. Kaynaşmış diskin bel genişliği ve uzunluğundan ölçek bilmeden a/λ ve r_d/λ bulunur; pupil boyu üçüncü bir ölçüm olarak modeli sınar.'],['Monte Carlo\'ya neden ihtiyaç duydunuz?','Gerçek fotoğraflar gürültülü. Testin bu gürültüde de çalışıp çalışmadığını, cevabını bildiğimiz sahte verilerle 400 kez deneyerek gördük. Piksel ölçeğindeki AIC karşılaştırmasının yanıltıcı olduğunu da böyle bulduk.'],['Ölçümleri kim yaptı? Yapay zekâ mı?','Otomatik hat ve kodlar danışman gözetiminde yapay zekâ desteğiyle yazıldı ve raporda beyan edildi. Ölçümlerin doğrulanması, kanat uzunluğu ve cinsiyet etiketleri öğrenciler tarafından elle yapıldı.'],['Kelebeklere zarar verdiniz mi?','Hayır. Hiç kelebek yakalanmadı. Yalnızca Creative Commons lisanslı vatandaş bilimi fotoğrafları kullanıldı ve her fotoğrafçının adı ekte listelendi.'],['Ölçümleriniz ne kadar güvenilir?','İki ölçücü aynı 30 fotoğrafı ayrı ayrı ölçtü; ICC hedefi 0.8. Ön analizdeki otomatik ölçek vekili ICC 0.30 çıktı; bu yüzden elle ölçüme geçtik.'],['Sonucunuz neden "ön bulgu"?','Tek benek sonucu 97 bireyle ve gürültülü bir ölçek vekiliyle alındı. Asıl sınav, çift pupilli beneklerin (hedef n ≈ 40) Önerme 3 eğrisine oturup oturmadığı; bu ölçümler henüz yapılmadı.'],['λ = √(D/γ) neden uzunluk birimi veriyor?','D mm²/s, γ 1/s. D/γ = mm², karekökü mm. Denklemdeki tek uzunluk ölçeği bu.']];
   const grid = TK.el('div', {class:'cards'});
   Q.forEach(q => { const b = TK.el('button', {class:'card flip', type:'button', 'aria-expanded':'false'}, `<h4>${q[0]}</h4><span class="front-hint">Cevabı görmek için dokun</span><p class="back">${q[1]}</p>`); b.onclick=()=>{ b.classList.toggle('open'); b.setAttribute('aria-expanded', String(b.classList.contains('open'))); }; grid.appendChild(b); });
   el.append(grid);
@@ -351,7 +380,7 @@ W.karne = el => {
   const units = TK.U.filter(u => u.quiz);
   const rowsHtml = units.map(u => { const r = TK.state.quiz[u.quiz.id]; const best = r ? r.best : null; return `<div class="r"><span>${u.no}. ${u.title}</span><span><span class="bar" style="display:block"><i style="width:${best||0}%;background:${best>=70?'var(--ok)':'var(--warn)'}"></i></span></span><span class="num">${best===null?'—':'%'+best}</span></div>`; }).join('');
   const pre = TK.state.quiz['on-test'], fin = TK.state.quiz['final'];
-  const learn = units.filter(u => u.no>=1 && u.no<=9), done = learn.filter(u => (TK.state.quiz[u.quiz.id]?.best||0) >= 70).length, total = learn.length;
+  const learn = units.filter(u => u.id!=='baslangic' && u.id!=='final'), done = learn.filter(u => (TK.state.quiz[u.quiz.id]?.best||0) >= 70).length, total = learn.length;
   const weak = learn.filter(u => TK.state.quiz[u.quiz.id] && TK.state.quiz[u.quiz.id].best < 70);
   box.innerHTML = rowsHtml + `<div class="msg ${done===total?'ok':''}">Geçilen ünite: <b>${done} / ${total}</b>. ${pre?`Ön test: <b>%${pre.first}</b>. `:''}${fin?`Final: <b>%${fin.best}</b>. `:''}${pre&&fin?`Gelişim: <b>${fin.best-pre.first>=0?'+':''}${fin.best-pre.first} puan</b>.`:''}</div>` + (weak.length?`<div class="msg warn">Tekrar et: ${weak.map(u=>`<a href="#${u.id}">${u.no}. ${u.title}</a>`).join(', ')}</div>`:'');
 };

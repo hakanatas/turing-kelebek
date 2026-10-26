@@ -8,7 +8,7 @@ const passed = u => { const r = TK.state.quiz[u.quiz.id]; return !!r && r.best >
 TK.U.forEach(u => { const li = TK.el('li'); li.innerHTML = `<a href="#${u.id}" data-id="${u.id}"><span class="no">${u.no}</span><span>${u.short}</span><span class="sc"></span></a>`; list.appendChild(li); });
 
 TK.refreshNav = () => {
-  let n = 0; const learn = TK.U.filter(u => u.no>=1 && u.no<=9);
+  let n = 0; const learn = TK.U.filter(u => u.id!=='baslangic' && u.id!=='final');
   list.querySelectorAll('a').forEach(a => { const u = TK.U.find(x => x.id===a.dataset.id), r = TK.state.quiz[u.quiz.id];
     a.classList.toggle('visited', !!TK.state.visited[u.id]); a.classList.toggle('passed', passed(u));
     a.querySelector('.sc').textContent = r ? '%'+r.best : (u.time||''); });

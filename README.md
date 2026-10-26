@@ -8,7 +8,7 @@ Kelebek kanatlarındaki halkalı benekler, bir odaktan yayılıp sönen bir siny
 
 | | |
 |---|---|
-| **[Çalışma rehberi](https://hakanatas.github.io/turing-kelebek/rehber/)** | Öğrenciler için 11 bölüm: etkileşimli araçlar, ara değerlendirmeler, final ve karne |
+| **[Çalışma rehberi](https://hakanatas.github.io/turing-kelebek/rehber/)** | Öğrenciler için 12 bölüm: etkileşimli araçlar, ara değerlendirmeler, final ve karne |
 | **[Göz beneği atölyesi](https://hakanatas.github.io/turing-kelebek/goz_benegi_atolyesi.html)** | 8 adımlı canlandırmalı tanışma |
 | **[Araştırma raporu v3 (PDF)](ARASTIRMA_RAPORU_v3.pdf)** | Güncel rapor taslağı |
 
