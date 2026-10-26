@@ -1,8 +1,22 @@
-# Turing Kelebek — proje paketi (7 Ekim 2026)
+# Kelebek kanadına göz nasıl çizilir?
 
-## Öğrenci sayfaları
-- [Çalışma rehberi (11 bölüm, ara değerlendirmeler, final ve karne)](https://hakanatas.github.io/turing-kelebek/rehber/)
-- [Göz beneği atölyesi (8 adımlı canlandırmalı anlatım)](https://hakanatas.github.io/turing-kelebek/goz_benegi_atolyesi.html)
+**TÜBİTAK 2204-A lise araştırma projesi · Matematik × Biyoloji**
+
+Kelebek kanatlarındaki halkalı benekler, bir odaktan yayılıp sönen bir sinyalle çizilir. Bu projede o sinyalin matematik modelini kuruyor ve Türkiye'deki Çayır esmeri (*Maniola jurtina*) kelebeklerinin iNaturalist fotoğraflarıyla sınıyoruz.
+
+### 👉 [Proje sitesini aç: hakanatas.github.io/turing-kelebek](https://hakanatas.github.io/turing-kelebek/)
+
+| | |
+|---|---|
+| **[Çalışma rehberi](https://hakanatas.github.io/turing-kelebek/rehber/)** | Öğrenciler için 11 bölüm: etkileşimli araçlar, ara değerlendirmeler, final ve karne |
+| **[Göz beneği atölyesi](https://hakanatas.github.io/turing-kelebek/goz_benegi_atolyesi.html)** | 8 adımlı canlandırmalı tanışma |
+| **[Araştırma raporu v3 (PDF)](ARASTIRMA_RAPORU_v3.pdf)** | Güncel rapor taslağı |
+
+![Göz beneği modeli: tek odak, iki odak, küçük menzil ve radyal profil](sekiller/04_goz_benegi.png)
+
+---
+
+# Proje paketi (7 Ekim 2026)
 
 ## Belgeler
 - **ARASTIRMA_RAPORU_v3.md / .pdf — GÜNCEL rapor: iki odaklı seviye eğrileri (kaynaşma teoremi, çift pupil penceresi, ölçeksiz test), varyans ayrışımı, sentetik doğrulama**

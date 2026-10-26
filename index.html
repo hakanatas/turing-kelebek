@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turing Kelebek</title>
+<meta name="description" content="Türkiye kelebeklerinde göz beneği geometrisi ve difüzyon–bozunma modeli. TÜBİTAK 2204-A lise araştırma projesi: çalışma rehberi, etkileşimli atölye, rapor, kod ve veri.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Düzen: solda başlık ve kısa anlatım, sağda canlı göz beneği; altında üç ana kapı (rehber, atölye, rapor), sonra sayılar, ekip, kaynaklar */
+:root{
+  --bg:#EDF0EA; --surface:#FBFCF9; --sunk:#E3E8E0; --ink:#1C2220; --muted:#59625D; --line:#CBD2CA;
+  --signal:#1F7A8C; --s-col:#B8336A; --lam-col:#4B3BC4; --warn:#9A5B00;
+  --wing:#D4862F; --wing-dark:#5A3D27;
+  --f-display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111614; --surface:#1A201D; --sunk:#232B27; --ink:#E6EBE5; --muted:#9BA69F; --line:#2E3833;
+  --signal:#4FB8CC; --s-col:#F0729E; --lam-col:#9C8EFF; --warn:#E3A43C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111614; --surface:#1A201D; --sunk:#232B27; --ink:#E6EBE5; --muted:#9BA69F; --line:#2E3833;
+  --signal:#4FB8CC; --s-col:#F0729E; --lam-col:#9C8EFF; --warn:#E3A43C; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+a{color:var(--signal)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;display:grid;gap:56px;padding-block:40px 64px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:32px;align-items:center}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--signal)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(36px,6vw,64px);line-height:1;letter-spacing:-.015em;margin:10px 0 18px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--wing)}
+.lead{font-size:19px;color:var(--muted);max-width:56ch;margin:0 0 18px}
+.formula{display:inline-flex;gap:10px;align-items:baseline;font-family:var(--f-mono);font-size:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 14px}
+.formula small{font-family:var(--f-body);font-size:13px;color:var(--muted)}
+.s{color:var(--s-col);font-weight:700}.l{color:var(--lam-col);font-weight:700}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:8px}
+.stage canvas{width:100%;height:auto;aspect-ratio:1/1;display:block;border-radius:12px}
+.stage p{margin:0;font-size:14px;color:var(--muted)}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3vw,32px);margin:0 0 16px;text-wrap:balance}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.door{display:grid;gap:10px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;transition:transform .15s,border-color .15s}
+.door:hover{transform:translateY(-2px);border-color:var(--ink)}
+.door .k{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.door h3{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.1;margin:0}
+.door p{margin:0;font-size:15.5px;color:var(--muted)}
+.door .go{font-weight:700;color:var(--signal)}
+.door.main{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.door.main p,.door.main .k{color:color-mix(in srgb,var(--surface) 75%,transparent)}
+.door.main .go{color:var(--wing)}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.num{border-top:2px solid var(--ink);padding-top:10px}
+.num b{display:block;font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4vw,40px);line-height:1;font-variant-numeric:tabular-nums}
+.num span{font-size:14px;color:var(--muted)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--f-mono);font-size:13px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--ink)}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:15.5px}
+.roles{display:grid;gap:10px}
+.role{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.role b{font-family:var(--f-display);font-weight:600;font-size:17px}
+.role p{margin:2px 0 0;font-size:15px;color:var(--muted)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:grid;gap:2px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.links a:hover{border-color:var(--ink)}
+.links code{font-family:var(--f-mono);font-size:13px;color:var(--signal)}
+.links span{font-size:14px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:var(--muted);display:grid;gap:6px}
+@media (max-width:860px){
+  .hero,.two{grid-template-columns:1fr}
+  .stage{max-width:420px}
+  .doors{grid-template-columns:1fr}
+  .nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){.door{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">TÜBİTAK 2204-A · Matematik × Biyoloji</div>
+      <h1>Kelebek kanadına <em>göz</em> nasıl çizilir?</h1>
+      <p class="lead">Kelebek kanatlarındaki halkalı benekler, bir odaktan yayılıp sönen bir sinyalle çizilir. Bu projede o sinyalin matematik modelini kuruyor ve Türkiye'deki Çayır esmeri (<i>Maniola jurtina</i>) kelebeklerinin fotoğraflarıyla sınıyoruz.</p>
+      <div class="formula">r = <span class="l">λ</span> · ln(<span class="s">S</span> / θ) <small>halka yarıçapı = menzil × ln(güç ÷ eşik)</small></div>
+    </div>
+    <figure class="stage" style="margin:0">
+      <canvas id="spot" role="img" aria-label="Menzil değiştikçe büyüyüp küçülen göz beneği"></canvas>
+      <p id="cap">Menzil λ değiştikçe bütün halkalar birlikte büyüyor.</p>
+    </figure>
+  </section>
+
+  <section aria-labelledby="h-doors">
+    <h2 id="h-doors">Nereden başlamak istersin?</h2>
+    <div class="doors">
+      <a class="door main" href="rehber/">
+        <span class="k">Öğrenciler için · 11 bölüm</span>
+        <h3>Çalışma rehberi</h3>
+        <p>Kelebek biyolojisinden logaritmaya, Monte Carlo'dan jüri provasına. Etkileşimli araçlar, hızlı kontroller, ara değerlendirmeler, final ve karne.</p>
+        <span class="go">Rehberi aç →</span>
+      </a>
+      <a class="door" href="goz_benegi_atolyesi.html">
+        <span class="k">15 dakikalık tanışma · 8 adım</span>
+        <h3>Göz beneği atölyesi</h3>
+        <p>Projenin bütün fikri canlandırmalarla: sinyal, eşik, iki düğme, fotoğraf tuzağı ve gerçek veri.</p>
+        <span class="go">Atölyeyi aç →</span>
+      </a>
+      <a class="door" href="ARASTIRMA_RAPORU_v3.pdf">
+        <span class="k">Güncel sürüm · v3 (PDF)</span>
+        <h3>Araştırma raporu</h3>
+        <p>Kuram, iki odaklı benekler, sayısal doğrulama ve 97 bireylik ön analiz. Öğrenci ölçümleriyle tamamlanacak bölümler işaretli.</p>
+        <span class="go">Raporu aç →</span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-nums">
+    <h2 id="h-nums">Sayılarla proje</h2>
+    <div class="nums">
+      <div class="num"><b>390</b><span>iNaturalist Türkiye gözlemi</span></div>
+      <div class="num"><b>0–2144 m</b><span>rakım aralığı</span></div>
+      <div class="num"><b>97</b><span>ön analizde ölçülen birey</span></div>
+      <div class="num"><b>0</b><span>yakalanan kelebek: yalnız CC lisanslı fotoğraflar</span></div>
+    </div>
+  </section>
+
+  <section class="two">
+    <div>
+      <h2>Nasıl çalışıyoruz?</h2>
+      <ol class="steps">
+        <li><div><b>Model</b><span>Yayılma ve sönme denkleminden halka yarıçapı formülünü türetiyoruz.</span></div></li>
+        <li><div><b>Öngörü</b><span>Modelin hangi parametresi değişirse benekte hangi izin kalacağını hesaplıyoruz.</span></div></li>
+        <li><div><b>Veri</b><span>iNaturalist fotoğraflarında beneği bilgisayarla buluyor, kanat uzunluğunu elle ölçüyoruz.</span></div></li>
+        <li><div><b>Sınama</b><span>Fotoğraf ölçeğinden bağımsız testler kullanıyor, güvenilirliklerini Monte Carlo ile ölçüyoruz.</span></div></li>
+      </ol>
+    </div>
+    <div>
+      <h2>Ekip</h2>
+      <div class="roles">
+        <div class="role"><b>Ö1 · Matematik ve simülasyon</b><p>Modelin türetilmesi, simülasyon, Monte Carlo.</p></div>
+        <div class="role"><b>Ö2 · Ölçüm ve veri kalitesi</b><p>Kanat uzunluğu ve cinsiyet işaretleme, iki ölçücü uyumu.</p></div>
+        <div class="role"><b>Ö3 · Biyoloji ve saha</b><p>Tür biyolojisi, iklim verisi, etik ve lisans.</p></div>
+        <div class="role"><b>Danışman · Hakan Ataş</b><p>Kod altyapısı, istatistik ve yarışma süreci.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-links">
+    <h2 id="h-links">Kod ve veri</h2>
+    <div class="links">
+      <a href="https://github.com/hakanatas/turing-kelebek"><code>GitHub deposu</code><span>Bütün dosyalar ve sürüm geçmişi</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/blob/main/README.md"><code>README.md</code><span>Dosya listesi ve çalıştırma sırası</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/tree/main/veri"><code>veri/</code><span>Gözlem kayıtları ve analiz tabloları (CSV)</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/tree/main/sekiller"><code>sekiller/</code><span>Rapordaki şekiller</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/blob/main/kanat_turing.py"><code>kanat_turing.py</code><span>Desen simülasyonları</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/blob/main/monte_carlo.py"><code>monte_carlo.py</code><span>Güç analizi</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fotoğraflar iNaturalist'ten, yalnızca Creative Commons lisanslı olanlar; her gözlemci raporun Ek A listesinde adıyla yer alır. Hiçbir kelebek yakalanmadı.</span>
+    <span>Kod ve metinlerin bir kısmı danışman gözetiminde yapay zekâ desteğiyle hazırlandı ve raporda beyan edildi. Ölçümlerin doğrulanması öğrencilere aittir.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const cv = document.getElementById('spot'), ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 400;
+  const size = () => { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = Math.round(r.width*d); cv.height = Math.round(r.width*d); ctx.setTransform(cv.width/W,0,0,cv.height/W,0,0); };
+  new ResizeObserver(size).observe(cv); size();
+  const draw = t => {
+    const f = reduce ? 1 : Math.exp(0.22*Math.sin(t/1400));
+    const g = ctx.createRadialGradient(200,200,40,200,200,290); g.addColorStop(0,'#D4862F'); g.addColorStop(1,'#8E5420');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,W);
+    ctx.fillStyle = 'rgba(90,61,39,.18)'; for (let i=0;i<14;i++){ ctx.fillRect(0, i*30+((i*7)%11), W, 1.2); }
+    const rd = 118*f, rp = 24*f;
+    ctx.fillStyle = '#17120E'; ctx.beginPath(); ctx.arc(200,200,rd,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#F7F3EA'; ctx.beginPath(); ctx.arc(200,200,rp,0,Math.PI*2); ctx.fill();
+    ctx.font = '500 13px "JetBrains Mono", ui-monospace, monospace'; ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.fillText('λ × ' + f.toFixed(2), 14, 26); ctx.fillText('oran ' + (rp/rd).toFixed(2), 14, 46);
+    if (!reduce) requestAnimationFrame(draw);
+  };
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
