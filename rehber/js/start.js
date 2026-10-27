@@ -24,6 +24,7 @@ function render(id){
   col.innerHTML = `<header class="u-head"><div class="eyebrow">Ünite ${u.no} / ${TK.U.length-1}</div><h1>${u.title}</h1><p class="lead">${u.lead}</p><div class="meta"><span class="pill">Süre ≈ ${u.time}</span>${u.quiz?`<span class="pill">${u.quiz.qs?u.quiz.qs.length:16} soruluk ${u.quiz.tag||'ara değerlendirme'}</span>`:''}</div></header>
     <div class="goals"><b>Bu ünitenin sonunda</b><ul>${u.goals.map(g=>`<li><span>${g}</span></li>`).join('')}</ul></div>
     ${u.sections.map((s,k) => `<section class="sec" id="${u.id}-${k}"><h2>${s.h}</h2>${s.html}</section>`).join('')}
+    ${u.summary?`<section class="sec"><div class="recap"><b class="t">Akılda kalsın</b><ul>${u.summary.map(x=>`<li>${x}</li>`).join('')}</ul></div></section>`:''}
     ${u.quiz?'<section class="sec"><h2>'+(u.quiz.final?'Sorular':(u.quiz.tag||'Ara değerlendirme'))+'</h2><div id="quizBox"></div></section>':''}
     ${u.after?`<section class="sec"><h2>${u.after.h}</h2>${u.after.html}</section>`:''}
     <nav class="nextnav" aria-label="Ünite gezinmesi">${i>0?`<a class="btn" href="#${TK.U[i-1].id}">← ${TK.U[i-1].no}. ${TK.U[i-1].short}</a>`:'<span></span>'}${i<TK.U.length-1?`<a class="btn primary" href="#${TK.U[i+1].id}">${TK.U[i+1].no}. ${TK.U[i+1].short} →</a>`:''}</nav>`;
@@ -45,5 +46,18 @@ $('#menuBtn').addEventListener('click', () => { const o = side.classList.toggle(
 $('#resetAll').addEventListener('click', () => { $('#resetConfirm').hidden = false; });
 $('#resetNo').addEventListener('click', () => { $('#resetConfirm').hidden = true; });
 $('#resetYes').addEventListener('click', () => { TK.resetAll(); $('#resetConfirm').hidden = true; location.hash = '#baslangic'; route(); });
+/* semboller ve sözlük */
+const dlg = $('#ref'), body = $('#refBody');
+const showSym = () => { $('#tabSym').classList.add('on'); $('#tabGl').classList.remove('on');
+  body.innerHTML = `<p style="margin:0 0 8px;color:var(--muted);font-size:14px">Rehberde geçen her harf ve ne anlama geldiği. Birim, o büyüklüğün neyle ölçüldüğü.</p><table><thead><tr><th>Sembol</th><th>Anlamı</th><th>Birim / örnek</th></tr></thead><tbody>${TK.SYMS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`; };
+const showGl = () => { $('#tabGl').classList.add('on'); $('#tabSym').classList.remove('on');
+  body.innerHTML = `<input id="refSearch" type="search" placeholder="Kelime ara… (ör. eşik)" aria-label="Sözlükte ara"><dl id="glList"></dl>`;
+  const list = $('#glList'), inp = $('#refSearch');
+  const draw = () => { const q = inp.value.trim().toLocaleLowerCase('tr'); list.innerHTML = TK.GLOSS.filter(g => !q || (g[0]+' '+g[1]).toLocaleLowerCase('tr').includes(q)).map(g=>`<div><dt>${g[0]}</dt><dd>${g[1]}</dd></div>`).join('') || '<div><dd>Bulunamadı.</dd></div>'; };
+  inp.oninput = draw; draw(); inp.focus(); };
+$('#refOpen').addEventListener('click', () => { showSym(); dlg.showModal(); });
+$('#refClose').addEventListener('click', () => dlg.close());
+$('#tabSym').addEventListener('click', showSym); $('#tabGl').addEventListener('click', showGl);
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 TK.refreshNav(); route();
 })();

@@ -147,6 +147,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
 .report .r{display:grid;grid-template-columns:minmax(0,1fr) 120px 60px;gap:10px;align-items:center;font-size:15px}
 .badge{display:inline-grid;place-items:center;font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:99px}
 .badge.ok{background:var(--ok-bg);color:var(--ok)}.badge.no{background:var(--sunk);color:var(--muted)}
+/* çözülmüş örnek, derinleşme, özet */
+.worked{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:0 10px 10px 0;padding:10px 14px;margin:12px 0}
+.worked>b.t{display:block;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok);margin-bottom:4px}
+.worked ol{margin:6px 0 0;padding-left:22px;display:grid;gap:4px}
+.worked .q{font-weight:700}
+details.deep{background:var(--sunk);border-radius:12px;padding:10px 14px;margin:14px 0}
+details.deep>summary{cursor:pointer;font-weight:700;color:var(--lam-col)}
+details.deep>summary small{font-weight:400;color:var(--muted)}
+details.deep[open]>summary{margin-bottom:8px}
+.recap{background:var(--ok-bg);border-radius:12px;padding:12px 16px}
+.recap b.t{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
+.recap ul{margin:6px 0 0;padding-left:20px;display:grid;gap:4px}
+.lvl{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle;background:var(--sunk);color:var(--muted)}
+/* sembol kartı ve sözlük paneli */
+dialog#ref{border:1px solid var(--line);border-radius:16px;padding:0;max-width:min(760px,calc(100vw - 32px));width:100%;max-height:85vh;background:var(--surface);color:var(--ink)}
+dialog#ref::backdrop{background:rgba(0,0,0,.4)}
+#ref .rh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface)}
+#ref .rb{padding:12px 16px;overflow:auto;max-height:calc(85vh - 64px)}
+#ref table{border-collapse:collapse;width:100%;font-size:15px}
+#ref td,#ref th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+#ref td:first-child{font-family:var(--f-mono);white-space:nowrap;font-weight:700}
+#ref dl{display:grid;gap:2px;margin:0}
+#ref dl div{padding:6px 0;border-bottom:1px solid var(--line)}
+#ref dt{font-weight:700}#ref dd{margin:0;color:var(--muted);font-size:15px}
+#refSearch{font:inherit;font-size:15px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;margin-bottom:8px}
+.refbtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
   .side{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;height:auto;max-height:100vh;border-right:0;border-bottom:1px solid var(--line);padding:10px 16px}
@@ -175,6 +201,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{ou
     </div>
   </aside>
   <main id="main"><div class="col" id="col"></div></main>
+  <button class="btn primary refbtn" id="refOpen" type="button" aria-haspopup="dialog">Semboller ve sözlük</button>
+  <dialog id="ref" aria-labelledby="refTitle">
+    <div class="rh"><div class="ctrl" style="gap:6px"><b id="refTitle" style="font-family:var(--f-display);font-size:18px;margin-right:6px">Başvuru</b><button class="btn on" type="button" id="tabSym">Semboller</button><button class="btn" type="button" id="tabGl">Sözlük</button></div><button class="btn" type="button" id="refClose">Kapat</button></div>
+    <div class="rb" id="refBody"></div>
+  </dialog>
 </div>
 
 <script src="js/core.js"></script>

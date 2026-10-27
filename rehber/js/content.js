@@ -3,12 +3,15 @@
 const w = (name) => `<div data-w="${name}"></div>`;
 const c = (id) => `<div data-c="${id}"></div>`;
 const key = (t, s, cls='') => `<div class="key ${cls}"><b class="t">${t}</b>${s}</div>`;
+const worked = (q, steps, sonuc) => `<div class="worked"><b class="t">Çözülmüş örnek</b><div class="q">${q}</div><ol>${steps.map(x=>`<li>${x}</li>`).join('')}</ol>${sonuc?`<p style="margin:6px 0 0"><b>Sonuç:</b> ${sonuc}</p>`:''}</div>`;
+const deep = (t, html) => `<details class="deep"><summary>Ö1 için derinleşme: ${t} <small>(isteğe bağlı)</small></summary>${html}</details>`;
 
 TK.U = [
 /* ============================== 0 ============================== */
 { id:'baslangic', no:0, title:'Başlarken', short:'Başlarken', time:'20 dk',
   lead:'Bu rehber seni, bir TÜBİTAK 2204-A projesinin bütün fikirlerini anlayıp jüriye kendi sözlerinle anlatabileceğin noktaya götürmek için hazırlandı.',
   goals:['Projenin tek cümlelik sorusunu söyleyebilmek','Ekipteki üç rolü ve takvimi bilmek','Rehberi nasıl kullanacağını öğrenmek','Ön testle nereden başladığını görmek'],
+  summary:['Proje bir formülün öngörülerini gerçek kelebek fotoğraflarıyla sınıyor.','Üç rol var: Ö1 matematik, Ö2 ölçüm, Ö3 biyoloji. Herkes bütün üniteleri bilmeli.','Her ünitede: hedefler → deneyerek öğren → hızlı kontrol → ara değerlendirme (%70 ile geçersin).'],
   sections:[
     {h:'Projenin sorusu', html:`
       <p>Kelebek kanatlarındaki halkalı benekler, yani <b>göz benekleri</b>, nasıl oluşuyor? Bilim insanları 50 yıldır bunun için matematiksel bir model kullanıyor. Biz bu modelin öngörülerini <b>Türkiye'deki gerçek kelebeklerin fotoğraflarıyla</b> sınıyoruz.</p>
@@ -48,6 +51,7 @@ TK.U = [
 { id:'kelebek', no:1, title:'Kelebekler ve göz beneği', short:'Kelebekler', time:'35 dk',
   lead:'Önce elimizdeki "laboratuvar hayvanını" tanıyalım: Çayır esmeri ve onun tek, büyük göz beneği.',
   goals:['Kanadın bölümlerini (apeks, taban, kosta, dış kenar) gösterebilmek','Göz beneğinin pupil ve diskini ayırt edebilmek','Erkek ve dişi Çayır esmerini ayırmanın yolunu söyleyebilmek','Nijhout\'un odak deneyini ve ne kanıtladığını anlatabilmek'],
+  summary:['Çayır esmerinin ön kanat ucunda beyaz pupilli siyah bir göz beneği var; bazen iki pupilli.','Kanat uzunluğu L, kanat tabanından apekse ölçülür.','Dişiler erkeklerden büyük; analiz cinsiyete göre ayrı yapılmalı.','Nijhout\'un deneyi: beneği ortadaki odak hücreleri "çizer"; odak taşınınca benek de taşınır.'],
   sections:[
     {h:'Çayır esmeri: Maniola jurtina', html:`
       <p>Türkiye'de yaklaşık 380 gündüz kelebeği türü yaşar. Biz bunlardan <b>Çayır esmeri</b>ni (<i>Maniola jurtina</i>) seçtik. Neden mi?</p>
@@ -85,6 +89,7 @@ TK.U = [
 { id:'desen', no:2, title:'Desen nasıl oluşur?', short:'Desen', time:'40 dk',
   lead:'Bir hücre, kendinden milimetrelerce uzaktaki bir odağın "emrini" nasıl alır? Cevap: yayılma ve sönme.',
   goals:['Difüzyonu (yayılmayı) moleküllerin rastgele hareketiyle açıklayabilmek','Sönmenin (bozunmanın) sinyali neden sınırladığını söyleyebilmek','Yayılma + sönme dengesinden "menzil" λ fikrine varabilmek','Turing\'in fikrini ve göz beneği modelinden farkını anlatabilmek'],
+  summary:['Sinyal (morfogen) odaktan rastgele hareketle yayılır (difüzyon) ve zamanla söner.','Yayılma ve sönme dengeye gelince sinyal yakında güçlü, uzakta zayıf olur.','Menzil λ = √(D/γ): hızlı yayılan, yavaş sönen sinyalin menzili uzun.','Turing: iki kimyasal kendiliğinden desen yapabilir. Göz beneği için tek sinyal ve eşik kuralı yeter.'],
   sections:[
     {h:'Yayılma: moleküllerin sarhoş yürüyüşü', html:`
       <p>Odaktaki hücreler bir kimyasal salgılar. Biyologlar buna <b>morfogen</b> ("biçim yaratan") der; biz <b>sinyal</b> diyeceğiz. Her sinyal molekülü komşu hücrelere doğru <b>rastgele</b> hareket eder: bazen sağa, bazen sola. Buna <b>difüzyon</b> denir.</p>
@@ -96,6 +101,7 @@ TK.U = [
       <p>Sinyalin ne kadar uzağa "ulaşabildiğine" <b class="l">menzil</b> diyoruz ve <b class="l">λ</b> (lamda) ile gösteriyoruz:</p>
       <div class="formula">λ = √(D / γ)    D: yayılma hızı · γ: sönme hızı</div>
       <p>Hızlı yayılan ve yavaş sönen sinyalin menzili uzundur. Aşağıdaki simülasyon, projedeki <code>kanat_turing.py</code> ile aynı yöntemle çalışıyor: her hücre her adımda komşularıyla sinyal alışverişi yapıyor.</p>
+      ${worked('Bir sinyalin yayılma hızı D = 0,01 mm²/s, sönme hızı γ = 0,04 1/s. Menzili kaç mm? Sönme 4 katına çıkarsa ne olur?', ['D ÷ γ = 0,01 ÷ 0,04 = 0,25 mm²','λ = √0,25 = <b>0,5 mm</b>','γ 4 katına çıkarsa: 0,01 ÷ 0,16 = 0,0625 mm² → λ = √0,0625 = <b>0,25 mm</b>'], 'Sönme 4 kat hızlanınca menzil yarıya iner (√4 = 2). Karekök yüzünden etki "yumuşar".')}
       ${w('diffusion')}${c('d2')}`},
     {h:'Alan Turing\'in büyük fikri', html:`
       <p><b>Alan Turing</b> bilgisayarın babalarından biri olarak bilinir. 1952'de biyolojiye dair tek makalesini yazdı: <i>"Biçim oluşumunun kimyasal temeli"</i>.</p>
@@ -123,6 +129,7 @@ TK.U = [
 { id:'mat', no:3, title:'Matematik araç kutusu', short:'Matematik', time:'50 dk',
   lead:'Modeli anlamak için dört araç gerekiyor: üstel azalma, e sayısı, logaritma ve oran. Hepsini dokunarak öğrenelim.',
   goals:['Üstel azalmayı "her adımda aynı oranda küçülme" olarak açıklayabilmek','e ≈ 2,718 sayısını ve e<sup>−1</sup> ≈ 0,37 olduğunu bilmek','ln\'i "e\'nin kaçıncı kuvveti?" sorusu olarak kullanabilmek','Logaritmik eksenin neden kullanıldığını söyleyebilmek','Birim analiziyle λ\'nın uzunluk olduğunu gösterebilmek'],
+  summary:['Üstel azalma: her eşit adımda aynı ORANDA küçülme. Her λ adımında sinyalin %37\'si kalır.','Logaritma "kaç kez çarptım?" sorusunun cevabı: log<sub>10</sub>(1000) = 3, ln(e<sup>2</sup>) = 2.','Çarpımın logaritması toplam, bölümün logaritması fark: ln(a/b) = ln a − ln b.','Logaritmik eksende üstel eğri düz çizgi olur.','Fotoğraf büyütülünce fark değişir, oran değişmez.'],
   sections:[
     {h:'Üstel azalma', html:`
       <p>Denge durumunda, odaktan r uzaklıktaki sinyal yaklaşık olarak şu formülle verilir:</p>
@@ -131,13 +138,24 @@ TK.U = [
       ${w('decay')}
       ${key('Benzetme','Sıcak bir çay düşün. Her 10 dakikada oda sıcaklığıyla arasındaki farkın yaklaşık yarısını kaybeder. Fark 60°C → 30 → 15 → 7,5… Bu da üstel azalma.','analogy')}
       ${c('m1')}`},
+    {h:'Isınma: "kaç kez?" sorusu', html:`
+      <p>Üslü sayıları 8. sınıftan biliyorsun: 10<sup>3</sup> = 10 × 10 × 10 = 1000. Üs, "kaç kez çarptığını" söyler. Eksi üs bölmek demektir: 10<sup>−2</sup> = 1 ÷ 100 = 0,01.</p>
+      <p><b>Logaritma</b> bu soruyu tersine çevirir: sonucu biliyorsun, <b>kaç kez</b> çarptığını arıyorsun.</p>
+      <div class="formula">10<sup>3</sup> = 1000   ⟺   log<sub>10</sub>(1000) = 3     ("10'u kaç kez çarparsam 1000 olur? → 3")</div>
+      ${worked('Hesapla: log<sub>10</sub>(100 000), log<sub>2</sub>(32), log<sub>10</sub>(0,001)', ['100 000 = 10 × 10 × 10 × 10 × 10 → 10 beş kez çarpıldı → <b>5</b>','32 = 2 × 2 × 2 × 2 × 2 → 2 beş kez çarpıldı → <b>5</b>','0,001 = 1 ÷ 1000 = 10<sup>−3</sup> → üç kez <i>bölündü</i> → <b>−3</b>'])}
+      ${worked('Çarpmak neden toplamaya dönüşür? log<sub>10</sub>(100 × 1000) = ?', ['100 = 10<sup>2</sup>, 1000 = 10<sup>3</sup>','100 × 1000 = 10<sup>2</sup> × 10<sup>3</sup> = 10<sup>5</sup> (üsler toplanır)','log<sub>10</sub>(100 000) = 5 = 2 + 3'], 'Bir çarpımın logaritması, logaritmaların toplamıdır. Bölme de çıkarmaya dönüşür.')}
+      ${worked('Arada kalan sayılar: log<sub>10</sub>(50) yaklaşık kaç?', ['10<sup>1</sup> = 10 ve 10<sup>2</sup> = 100','50 bu ikisinin arasında, o hâlde cevap 1 ile 2 arasında','Hesap makinesi: log<sub>10</sub>(50) ≈ 1,7'], 'Üs tam sayı olmak zorunda değil. 10<sup>1,7</sup> ≈ 50.')}
+      ${c('m0')}`},
     {h:'e sayısı ve logaritma', html:`
-      <p><b>e ≈ 2,718</b> özel bir sayıdır; doğada büyüme ve azalma süreçlerinde kendiliğinden ortaya çıkar. Formülde e<sup>−r/λ</sup> var; r = λ olduğunda değer e<sup>−1</sup> ≈ 0,37 olur. Yani her λ adımında sinyalin <b>%37'si</b> kalır.</p>
-      <p><b>Doğal logaritma</b> (ln), üs almanın tersidir. "e\'yi kaç kez çarpmalıyım ki bu sayıyı elde edeyim?" sorusunun cevabıdır.</p>
+      <p>Bilim insanları 10 yerine çoğu zaman <b>e ≈ 2,718</b> sayısını taban olarak kullanır. Neden mi? Bir şey <b>kendi miktarıyla orantılı</b> hızda büyüyor ya da azalıyorsa (sinyalin her an kendisinin belli bir yüzdesi kadar sönmesi gibi), hesaplarda kendiliğinden e çıkar.</p>
+      ${key('e nereden çıkar? Banka örneği','Bankaya 1 TL koy, yıllık faiz %100 olsun. Faiz yılda bir eklenirse yıl sonunda 2 TL olur. Altı ayda bir yarım yarım eklenirse 1,5 × 1,5 = 2,25 TL. Her ay eklenirse ≈ 2,61 TL. Her gün eklenirse ≈ 2,71 TL. Her an eklenirse tam <b>e ≈ 2,718 TL</b>. "Sürekli büyüme" e\'yi doğurur; "sürekli sönme" de aynı sayıyı.','analogy')}
+      <p>Formülde e<sup>−r/λ</sup> var. r = λ olduğunda değer e<sup>−1</sup> = 1 ÷ 2,718 ≈ 0,37. Yani her λ adımında sinyalin <b>%37'si</b> kalır.</p>
+      <p><b>Doğal logaritma</b> (ln), tabanı e olan logaritmadır: "e'yi kaç kez çarpmalıyım ki bu sayıyı elde edeyim?"</p>
       <div class="formula">e<sup>y</sup> = x   ⟺   ln(x) = y</div>
       ${w('lnmachine')}
-      <p>Üç kural yeter:</p>
+      <p>Kurallar 10 tabanındakinin aynısı:</p>
       <ul><li>ln(1) = 0 ve ln(e) = 1</li><li>ln(a × b) = ln a + ln b (çarpım toplama döner)</li><li>ln(a ÷ b) = ln a − ln b, bu yüzden ln(b/a) = −ln(a/b)</li></ul>
+      ${worked('Projede en çok kullanacağın dört hesap', ['ln(e<sup>2</sup>) = <b>2</b> (e iki kez çarpılmış)','ln(81,5) ≈ <b>4,4</b>, çünkü e<sup>4,4</sup> ≈ 81,5 (hesap makinesiyle kontrol et)','ln(81,5 ÷ 33,8) = ln(81,5) − ln(33,8) ≈ 4,4 − 3,52 = <b>0,88</b>','ln(1/2) = −ln(2) ≈ <b>−0,69</b>: sinyal yarıya inince ln 0,69 azalır'])}
       ${c('m2')}`},
     {h:'Logaritmik eksen', html:`
       <p>Sinyal 80'den 1'e kadar düşüyor. Normal (doğrusal) bir grafikte küçük değerler sıfıra yapışıp kaybolur. <b>Logaritmik eksende</b> her çizgi bir öncekinin 10 katıdır (1, 10, 100). Bu eksende üstel eğri düz bir çizgiye dönüşür.</p>
@@ -152,6 +170,7 @@ TK.U = [
       ${c('m4')}`}
   ],
   checks:{
+    m0:{q:'log<sub>10</sub>(10 000) kaçtır?', opts:['4','1000','10','40'], a:0, ex:'10 × 10 × 10 × 10 = 10 000: 10 dört kez çarpıldı.'},
     m1:{q:'λ = 0,5 mm ise odaktan 1 mm uzaklıkta sinyal, odaktakinin yaklaşık yüzde kaçıdır?', opts:['%14','%37','%50','%5'], a:0, ex:'1 mm = 2λ. İki adım: 0,37 × 0,37 ≈ 0,14.'},
     m2:{q:'ln(81,5) ≈ 4,4 ve ln(33,8) ≈ 3,52 ise ln(81,5 ÷ 33,8) kaçtır?', opts:['0,88','7,92','1,25','0,80'], a:0, ex:'Bölümün logaritması logaritmaların farkıdır: 4,4 − 3,52 = 0,88.'},
     m3:{q:'Üstel azalan bir eğri logaritmik eksende nasıl görünür?', opts:['Düz bir çizgi','Bir parabol','Yatay bir çizgi','Bir çember'], a:0, ex:'log m = log S − r/(λ·ln10): r\'ye göre doğrusal.'},
@@ -172,6 +191,7 @@ TK.U = [
 { id:'model', no:4, title:'Gradyan modeli', short:'Model', time:'45 dk',
   lead:'Şimdi araçları birleştirip projenin ana formülünü kendimiz türetiyoruz: r = λ · ln(S/θ).',
   goals:['Eşik kuralını açıklayabilmek','r = λ·ln(S/θ) formülünü adım adım türetebilmek','Formülle verilen değerlerden halka yarıçapı hesaplayabilmek','S ve λ\'nın beneği nasıl farklı değiştirdiğini gösterebilmek','"S ve θ ayrı ayrı bulunamaz" ifadesini açıklayabilmek'],
+  summary:['Her hücre sinyali bir eşikle karşılaştırıp rengini seçer (eşik kuralı).','Ana formül: r = λ · ln(S/θ).','Yalnız λ değişirse oran sabit kalır; yalnız S değişirse fark sabit kalır.','S ve θ yalnız S/θ olarak geçer; fotoğraftan ikisini ayrı ayrı bulamayız.'],
   sections:[
     {h:'Eşik kuralı', html:`
       <p>Her hücre bulunduğu yerdeki sinyali "okur" ve basit bir kurala göre renk seçer:</p>
@@ -181,7 +201,8 @@ TK.U = [
       ${key('Benzetme','Bir hoparlörden uzaklaşıyorsun. Sesi "çok yüksek" duyduğun bölge, "duyulur" bölge ve "duyulmaz" bölge var. Bölgelerin sınırı, sesin bir eşiğin altına düştüğü yer.','analogy')}${c('o1')}`},
     {h:'Formülü türetelim', html:`<p>Halkanın kenarı, sinyalin eşiğe tam eşit olduğu yerdir. Bu tek fikirden ana formüle ulaşıyoruz:</p>${w('derive')}
       <div class="formula">r<sub>p</sub> = λ · ln(S/θ<sub>1</sub>)     r<sub>d</sub> = λ · ln(S/θ<sub>2</sub>)</div>
-      <p>Örnek: λ = 0,5 mm, S = 81,5, θ<sub>2</sub> = 1 ise r<sub>d</sub> = 0,5 × ln(81,5) = 0,5 × 4,4 = <b>2,2 mm</b>.</p>${c('o2')}`},
+      ${worked('Bir Çayır esmerinde λ = 0,5 mm, S = 81,5, siyah eşiği θ<sub>2</sub> = 1, beyaz eşiği θ<sub>1</sub> = 33,8. Disk ve pupil yarıçapı kaç mm?', ['Disk: S/θ<sub>2</sub> = 81,5 ÷ 1 = 81,5','ln(81,5) ≈ 4,4 → r<sub>d</sub> = 0,5 × 4,4 = <b>2,2 mm</b>','Pupil: S/θ<sub>1</sub> = 81,5 ÷ 33,8 ≈ 2,41','ln(2,41) ≈ 0,88 → r<sub>p</sub> = 0,5 × 0,88 = <b>0,44 mm</b>','Oran: 0,44 ÷ 2,2 = 0,20; fark: 2,2 − 0,44 = 1,76 mm'], 'Pupil diskin beşte biri: gerçek kelebeklerde ölçtüğümüz oran.')}
+      ${worked('Aynı kelebekte menzil iki katına çıksa (λ = 1 mm)?', ['r<sub>d</sub> = 1 × 4,4 = 4,4 mm','r<sub>p</sub> = 1 × 0,88 = 0,88 mm','Oran: 0,88 ÷ 4,4 = 0,20 (değişmedi!)','Fark: 4,4 − 0,88 = 3,52 mm (iki katına çıktı)'])}${c('o2')}`},
     {h:'İki düğme: güç ve menzil', html:`
       <p>Formüle göre benek boyunu iki şey değiştirebilir: <b class="s">güç S</b> ve <b class="l">menzil λ</b>. İkisi de beneği büyütür ama farklı biçimde. Kaydırıcılarla oyna ve çerçeveli iki sayıyı izle.</p>
       ${w('playground')}
@@ -190,7 +211,8 @@ TK.U = [
     {h:'Gizli ikizler: S ve θ', html:`
       <p>Formülde S ve θ hep birlikte, <b>S/θ</b> olarak geçiyor. Bu bir sorun yaratır: S ve θ'yı aynı kat değiştirirsen benek hiç değişmez.</p>${w('samespot')}
       <p>Bu yüzden fotoğraftan "S mi değişti, θ mı?" sorusunu cevaplayamayız. Sorabileceğimiz doğru soru: <b>"λ mı değişiyor, yoksa ln(S/θ) mı?"</b> Bilim insanları buna <b>tanımlanamazlık</b> der.</p>${c('o4')}`},
-    {h:'Modelin sınırları', html:`<ul><li>m(r) = S·e<sup>−r/λ</sup> bir yaklaşım. Gerçek iki boyutlu çözüm Bessel fonksiyonu K<sub>0</sub> ile yazılır ve odağa çok yakında biraz farklıdır; ama oran ve fark öngörülerinin yönü değişmez.</li><li>Model kanadın büyümediğini varsayar. Gerçekte desen büyüyen kanatta belirlenir.</li><li>Otaki (2011) gibi bazı araştırmacılar tek sinyalli modelin yetersiz olduğunu savunur. Bilimde modeller sınanır; biz de bunu yapıyoruz.</li></ul>`}
+    {h:'Modelin sınırları', html:`<ul><li>m(r) = S·e<sup>−r/λ</sup> bir <b>yaklaşık</b> formül. Gerçek çözüm odağa çok yakında biraz farklı davranır; ama oran ve fark öngörülerinin yönü değişmez.</li><li>Model kanadın büyümediğini varsayar. Gerçekte desen büyüyen kanatta belirlenir.</li><li>Otaki (2011) gibi bazı araştırmacılar tek sinyalli modelin yetersiz olduğunu savunur. Bilimde modeller sınanır; biz de bunu yapıyoruz.</li></ul>
+      ${deep('Tam çözüm ve Bessel fonksiyonu', '<p>Kararlı durumda denklem D(m″ + m′/r) − γm = 0 olur. Bu, <b>değiştirilmiş Bessel denklemi</b>dir; sonlu kalan çözümü m(r) = A·K<sub>0</sub>(r/λ). Büyük r için K<sub>0</sub>(x) ≈ √(π/2x)·e<sup>−x</sup> olduğundan üstel formül iyi bir yaklaşık verir. Odağa yakın (r/λ < 1) bölgede sapma büyür; bu yüzden raporda λ kestirimi için K<sub>0</sub> sürümü öneriliyor.</p>')}`}
   ],
   checks:{
     o1:{q:'Sinyal en başta bile beyaz eşiğe ulaşamazsa benek nasıl görünür?', opts:['Pupilsiz, tamamen siyah bir disk','Tamamen beyaz','Hiç benek olmaz','İki pupilli'], a:0, ex:'Hiçbir hücre beyaz eşiği aşamaz; ama siyah eşiği aşanlar disk oluşturur.'},
@@ -213,8 +235,10 @@ TK.U = [
 { id:'senaryo', no:5, title:'Dört senaryo ve hipotezler', short:'Hipotezler', time:'40 dk',
   lead:'İyi bir deney, farklı açıklamaların farklı sonuçlar öngördüğü bir deneydir. Bizde dört rakip senaryo var.',
   goals:['Dört senaryoyu ve her birinde neyin değiştiğini söyleyebilmek','Her senaryonun (r<sub>d</sub>, r<sub>p</sub>) grafiğinde nasıl bir iz bıraktığını tarif edebilmek','Oran testinin ve oran saçılımının (CV) dört senaryoda beklenen değerlerini bilmek','H1, H2 ve H3 hipotezlerini kendi cümlelerinle yazabilmek'],
+  summary:['Dört rakip açıklama: yalnız S, yalnız λ, pupil sabit, λ + pupil eşiği.','İki ölçü birlikte kullanılır: ρ (oran boyutla ilişkili mi?) ve CV (oran ne kadar dağınık?).','Yalnız-λ ile λ + eşiği ρ ayıramaz, CV ayırır.','Hiçbir sonuç başarısızlık değildir; her sonuç modelin bir parametresi hakkında bilgi verir.'],
   sections:[
     {h:'Rakip açıklamalar', html:`
+      ${key('Önce iki sayıyı tanı','Bu ünitede iki ölçü kullanacağız; ayrıntısı Ünite 8\'de. <b>ρ (ro)</b>: "Büyük benekli kelebeklerde oran daha mı büyük, daha mı küçük?" sorusunun cevabı. +1\'e yakınsa büyük beneklerde oran da büyük, −1\'e yakınsa küçük, 0\'a yakınsa ilişki yok. <b>CV</b>: Oranın kelebekten kelebeğe ne kadar değiştiği, yüzde olarak. CV = %5 ise oranlar hemen hemen aynı; %40 ise çok dağınık.')}
       <p>Kelebekler arasında benek boyu değişiyor. Modelin içinden bunun dört olası açıklaması var:</p>
       <ol><li><b class="s">Yalnız güç S değişir.</b> Bazı odaklar daha çok sinyal üretir. → Halka farkı sabit. Küçük beneklerde pupil kaybolur.</li><li><b class="l">Yalnız menzil λ değişir.</b> Sinyal bazı kelebeklerde daha uzağa gider. → Bütün halkalar aynı oranda büyür; oran herkeste aynı.</li><li><b style="color:var(--warn)">Pupil sabit.</b> Pupil aslında eşik halkası değil, odak hücrelerinin kendisi. → Pupil hep aynı boyda, disk değişir.</li><li><b style="color:var(--ok)">λ + pupil eşiği.</b> Boyutu menzil belirler, ama beyaz eşiği θ<sub>p</sub> de kelebekten kelebeğe biraz farklı. → Oran boyuttan bağımsız ama herkeste aynı değil; <b>dağınık</b>.</li></ol>
       ${w('scenarios')}${c('s1')}`},
@@ -243,60 +267,70 @@ TK.U = [
 /* ============================== 6 ============================== */
 { id:'ikiodak', no:6, title:'İki odak: kaynaşan benekler', short:'İki odak', time:'55 dk',
   lead:'Çayır esmerinin beneğinde bazen iki pupil olur. Bu "kusur", modeli sınamak için elimizdeki en güçlü araç.',
-  goals:['Üst üste binme ilkesini (sinyallerin toplanması) açıklayabilmek','Orta noktanın neden bir eyer noktası olduğunu söyleyebilmek','Teorem 1\'i (kaynaşma koşulu) türetebilmek','Teorem 2\'deki çift pupil penceresini ve genişliğini bilmek','Ölçek bilinmeden iki oranla a/λ ve r<sub>d</sub>/λ\'nın nasıl bulunduğunu anlatabilmek'],
+  goals:['İki odağın sinyallerinin neden toplandığını söyleyebilmek','İki beneğin ne zaman tek benek gibi göründüğünü (kaynaşma koşulunu) sayılarla hesaplayabilmek','Çift pupilli beneğin hangi aralıkta oluştuğunu bilmek','Fotoğrafın ölçeğini bilmeden iki oranla iki bilinmeyenin nasıl bulunduğunu anlatabilmek'],
+  summary:['İki odağın sinyali toplanır: m = m₁ + m₂.','İki odağın tam ortası bir "geçit": orada sinyal eşiğin üstündeyse iki benek kaynaşır.','Kaynaşma koşulu: a < r + 0,69·λ (a: odaklar arası mesafenin yarısı).','Çift pupil penceresi: r<sub>p</sub> + 0,69λ < a < r<sub>d</sub> + 0,69λ. Genişliği r<sub>d</sub> − r<sub>p</sub>.','Kaynaşmış diskten ölçülen iki oran (w/a, R/a), iki bilinmeyeni ölçek bilmeden verir; üçüncü ölçüm modeli sınar.'],
   sections:[
     {h:'Çift pupilli benek', html:`
       <p>Çayır esmerinin ön kanadındaki benekte çoğu zaman tek pupil var. Ama doğada sık sık <b>iki pupilli</b> benekler de görülür (Thomson 1969): tek bir siyah disk, içinde iki beyaz nokta.</p>
       <p>Model bunu basitçe açıklar: beneğin altında <b>iki odak</b> vardır. İki odak yakınsa benekleri kaynaşır. Ünite 1'deki odak deneyinde iki odağı yan yana koyduğunda bunu görmüştün.</p>
-      ${key('Üst üste binme ilkesi','Sinyal denklemi <b>doğrusal</b>dır. Bu yüzden iki odağın sinyali, tek tek sinyallerin <b>toplamıdır</b>: m = m₁ + m₂. Monteiro ve arkadaşlarının (2001) "sinyaller toplanmalı" varsayımı aslında bir varsayım değil, denklemin bir sonucu.')}
-      <p>Her halka, toplam sinyalin bir eşiğe eşit olduğu çizgi, yani bir <b>seviye eğrisi</b>dir (haritalardaki eş yükselti eğrileri gibi).</p>`},
-    {h:'Odakları ayır', html:`<p>Aşağıda iki odak arasındaki yarı uzaklığı (a) değiştir. Sağdaki grafik sinyali iki odaktan geçen çizgi boyunca gösteriyor; kırmızı nokta orta noktadaki "geçit" değeri. Alttaki şerit hangi bölgede olduğunu söylüyor.</p>${w('twofocus')}${c('t1')}`},
-    {h:'Teorem 1: kaynaşma koşulu', html:`
-      ${key('Benzetme: dağ geçidi','İki dağ düşün. İki tepeyi birleştiren sırtın en alçak noktası bir geçittir. Geçit, sırt boyunca en alçak; ama sırta dik yönde (vadilere göre) en yüksek noktadır. Matematikte buna <b>eyer noktası</b> denir. Su seviyesi geçidin üstündeyse iki tepe tek ada olur, altındaysa iki ayrı ada.','analogy')}
-      ${w('fusion')}
-      <p>Bu kanıt tamamen lise matematiğiyle yapılıyor: üstel fonksiyon, logaritma ve iki değişkenli bir fonksiyonun kritik noktası.</p>${c('t2')}`},
-    {h:'Teorem 2: çift pupil penceresi', html:`
-      <div class="formula">r<sub>p</sub> + λ ln 2  &lt;  a  &lt;  r<sub>d</sub> + λ ln 2</div>
-      <ul><li>a bu aralığın <b>altındaysa</b> pupiller de kaynaşır: tek büyük pupil.</li><li>a bu aralığın <b>içindeyse</b>: tek disk, iki pupil.</li><li>a bu aralığın <b>üstündeyse</b>: iki ayrı benek.</li></ul>
-      <p>Pencerenin genişliği <b>r<sub>d</sub> − r<sub>p</sub></b>, yani tek beneğin halka farkı. Çayır esmeri için r<sub>d</sub> = 2,2 mm, r<sub>p</sub> = 0,44 mm, λ = 0,5 mm alırsak pencere 0,79 mm ile 2,55 mm arası; genişliği 1,76 mm.</p>
-      ${key('Yeni bir öngörü','Odak uzaklıkları rastgele dağılıyorsa, pencere genişliği r<sub>d</sub> − r<sub>p</sub> = λ(ℓ<sub>d</sub> − ℓ<sub>p</sub>) büyük olan kelebeklerde çift pupil <b>daha sık</b> görülmeli. Yani λ\'sı büyük, beneği büyük kelebeklerde. Bu, verilerle ayrıca sınanabilir.')}${c('t3')}`},
-    {h:'Önerme 3: ölçek bilmeden çöz', html:`
-      <p>Kaynaşmış diskte üç uzunluk ölçeriz: iki pupil arasındaki yarı uzaklık <b>a</b>, diskin ortadaki "bel" yarı genişliği <b>w</b> ve diskin eksen boyunca yarı uzunluğu <b>R</b>. Model bunları şöyle bağlar:</p>
-      <div class="formula">w² = (r<sub>d</sub> + λ ln 2)² − a²      R = r<sub>d</sub> + λ · ln(2 cosh(a/λ))</div>
-      <p>Fotoğrafın ölçeğini bilmediğimiz için <b>w/a</b> ve <b>R/a</b> oranlarını kullanırız. Bu iki oran iki bilinmeyeni (a/λ ve r<sub>d</sub>/λ) tek türlü belirler. Dene:</p>
+      ${key('Sinyaller toplanır','Bir odada iki lamba yak. Her noktadaki ışık, iki lambanın ışıklarının <b>toplamıdır</b>; lambalar birbirini bozmaz. Sinyaller de böyle: bir noktadaki toplam sinyal = 1. odaktan gelen + 2. odaktan gelen. Matematikçiler bunu "denklem doğrusal, bu yüzden üst üste binme geçerli" diye söyler.','analogy')}
+      <p>Her halkanın sınırı, toplam sinyalin eşiğe <b>tam eşit</b> olduğu noktalardan oluşan bir çizgidir. Haritalardaki eş yükselti eğrileri gibi: biri "sinyali 1 olan yerler", öbürü "sinyali 34 olan yerler". Bunlara <b>seviye eğrisi</b> denir.</p>`},
+    {h:'Odakları ayır', html:`<p>Aşağıda iki odak arasındaki mesafenin <b>yarısını</b> (a) değiştir. Sağdaki grafik sinyali iki odaktan geçen çizgi boyunca gösteriyor; kırmızı nokta tam ortadaki "geçit" değeri. Alttaki şerit hangi durumda olduğunu söylüyor.</p>${w('twofocus')}${c('t1')}`},
+    {h:'Ne zaman kaynaşır?', html:`
+      ${key('Benzetme: dağ geçidi','İki dağ düşün. İki tepeyi birleştiren sırtın en alçak noktası bir geçittir. Geçit, sırt boyunca en alçak; ama sırta dik yönde (vadilere göre) en yüksek noktadır. Vadiyi su basarsa ne olur? Su <b>geçidin altında</b> kalırsa iki tepe kara yoluyla birbirine bağlı, tek bir ada olur. Su <b>geçidi aşarsa</b> iki ayrı ada olur. Bizim sinyalimizde "su seviyesi" eşik, "tepeler" odaklar, "kara" ise halkanın içi.','analogy')}
+      <p>Yani tek bir soru yeter: <b>Tam ortadaki geçitte sinyal eşiğin üstünde mi?</b> Üstündeyse halka iki odağı birlikte sarar (kaynaşmış benek). Altındaysa iki ayrı halka olur.</p>
+      <p>Bu soru hesaplanınca çok sade bir kural çıkıyor (Teorem 1):</p>
+      <div class="formula">a  &lt;  r  +  0,69 · λ</div>
+      <p>Burada <b>r</b> aynı halkanın tek bir odakta olacağı yarıçap, 0,69 da ln 2 sayısı. Yani iki benek, yarıçapları dokununca değil, biraz <b>daha uzaktayken</b> bile birleşir; çünkü aradaki noktada iki odağın sinyali toplanıyor. Bu fazladan 0,69λ'ya "kaynaşma payı" diyebiliriz.</p>
+      ${worked('Çayır esmerinde disk yarıçapı r<sub>d</sub> = 2,2 mm, menzil λ = 0,5 mm. İki odak en fazla ne kadar uzakta olursa siyah diskler hâlâ birleşik olur?', ['Kaynaşma payı: 0,69 × λ = 0,69 × 0,5 ≈ 0,35 mm','Sınır: a < r<sub>d</sub> + 0,35 = 2,2 + 0,35 = 2,55 mm','a mesafenin yarısıydı; odaklar arası tam mesafe: 2 × 2,55 = 5,1 mm'], 'Odaklar 5,1 mm\'den yakınsa tek siyah disk, uzaksa iki ayrı benek görürüz. Tek tek yarıçapların toplamı 4,4 mm olduğu hâlde!')}
+      ${deep('Teorem 1\'in tam kanıtı', w('fusion') + '<p>Kanıt üstel fonksiyon, logaritma ve iki değişkenli bir fonksiyonun kritik noktası fikrini kullanıyor. Ö1 bunu jüriye tahtada anlatabilmeli.</p>')}
+      ${c('t2')}`},
+    {h:'Çift pupil penceresi', html:`
+      <p>Aynı kuralı iki kez kullanalım: bir kez <b>pupil</b> için, bir kez <b>disk</b> için. Pupil eşiği daha yüksek olduğundan pupiller daha kolay ayrılır. Arada öyle bir bölge var ki pupiller ayrılmış ama disk hâlâ tek parça: <b>çift pupilli benek</b> (Teorem 2).</p>
+      <div class="formula">r<sub>p</sub> + 0,69λ  &lt;  a  &lt;  r<sub>d</sub> + 0,69λ</div>
+      ${worked('Çayır esmeri için (r<sub>p</sub> = 0,44 mm, r<sub>d</sub> = 2,2 mm, λ = 0,5 mm) çift pupil hangi a değerlerinde oluşur?', ['Alt sınır: 0,44 + 0,35 = 0,79 mm','Üst sınır: 2,2 + 0,35 = 2,55 mm','Pencere: 0,79 mm < a < 2,55 mm','Genişlik: 2,55 − 0,79 = 1,76 mm. Bu da r<sub>d</sub> − r<sub>p</sub> = 2,2 − 0,44! (0,35\'ler birbirini götürdü.)'], 'a 0,79 mm\'den küçükse tek büyük pupil, 0,79–2,55 mm arası çift pupil, 2,55 mm\'den büyükse iki ayrı benek.')}
+      ${key('Yeni bir öngörü','Pencerenin genişliği tek beneğin halka farkı r<sub>d</sub> − r<sub>p</sub>. Halka farkı büyük olan, yani beneği büyük kelebeklerde pencere geniş; bu yüzden çift pupil <b>daha sık</b> görülmeli. Bu, verilerle ayrıca sınanabilir.')}${c('t3')}`},
+    {h:'Ölçek bilmeden çöz', html:`
+      <p>Kaynaşmış bir diskte üç uzunluk ölçeriz: iki pupil arasındaki mesafenin yarısı <b>a</b>, diskin ortadaki "bel" yarı genişliği <b>w</b> ve diskin uzun eksen boyunca yarı uzunluğu <b>R</b>. Fotoğrafın ölçeğini bilmediğimiz için bunları birbirine böleriz: <b>w/a</b> ve <b>R/a</b>. Bölünce yakınlaştırmanın etkisi sadeleşir (Ünite 7'deki ölçek tuzağını hatırla).</p>
+      ${key('İki bilinmeyenli iki denklem','Matematik derslerinden bildiğin durum: x + y = 10 ve x − y = 2 ise iki denklemden iki bilinmeyen bulunur (x = 6, y = 4). Burada da iki ölçülen oran (w/a, R/a) var ve bilinmeyen iki sayı var: odakların menzile göre uzaklığı (a/λ) ve diskin menzile göre büyüklüğü (r<sub>d</sub>/λ). İki oran, iki bilinmeyeni tek türlü belirler.','analogy')}
+      <p>Aşağıda bunu kendin yap: iki kaydırıcıyla mavi model çizgisini fotoğraftaki diske oturt.</p>
       ${w('invert')}
-      ${key('Aşırı belirlilik: modeli sınamak','İki ölçümle iki bilinmeyen bulmak henüz bir sınama değil, yalnızca bir hesap. Sınama <b>üçüncü</b> ölçümle gelir: aynı benekteki pupil boyutu da modelden hesaplanabilir. Hesaplanan ile ölçülen tutarsa model bir sınavı geçmiş olur. Ayrıca bulunan r<sub>d</sub>/λ değerleri bireyler arasında tutarlı olmalı ve tek pupilli kelebeklerden bulunanla örtüşmelidir.')}${c('t4')}`},
+      ${key('Peki model nasıl sınanıyor?','İki ölçümle iki bilinmeyen bulmak henüz bir sınama değil, yalnızca bir hesap. Sınama <b>üçüncü</b> ölçümle gelir. x + y = 10, x − y = 2 bulduktan sonra biri "x · y = 24" derse kontrol edebilirsin: 6 × 4 = 24, tutuyor! Bizde üçüncü ölçüm pupil boyutu: modelden hesaplanan pupil ile fotoğrafta ölçülen pupil tutuyorsa model sınavı geçer.')}
+      ${deep('Önerme 3\'ün formülleri', `<div class="formula">w² = (r<sub>d</sub> + λ ln 2)² − a²      R = r<sub>d</sub> + λ · ln(2 cosh(a/λ))</div><p><b>cosh</b> ("hiperbolik kosinüs") bir kısaltma: cosh(x) = (e<sup>x</sup> + e<sup>−x</sup>) ÷ 2. Örneğin cosh(0) = 1, cosh(2) ≈ 3,76. w formülü Pisagor bağıntısından gelir: bel noktası iki odağa eşit uzaklıkta ve o uzaklık r<sub>d</sub> + λ ln 2 olmalı; dik üçgenin bir dik kenarı a, öbürü w. R formülü ise iki odaktan gelen sinyalin uzun eksen üzerindeki toplamından: e<sup>−(R−a)/λ</sup> + e<sup>−(R+a)/λ</sup> = e<sup>−R/λ</sup> · 2cosh(a/λ).</p>`)}
+      ${c('t4')}`},
     {h:'Bilgisayarda doğrulama', html:`
-      <p><code>sentetik_cift_odak.py</code>, iki odaklı denklemi sonlu farklarla çözüp beş farklı odak uzaklığında beneği üretti (λ = 12 px, r<sub>d</sub> = 36 px, r<sub>p</sub> = 7,2 px):</p>
-      <div class="tw"><table class="t"><thead><tr><th>a / λ</th><th>Teorem 2'nin öngörüsü</th><th>Disk parça</th><th>Pupil parça</th></tr></thead><tbody>
+      <p><code>sentetik_cift_odak.py</code>, iki odaklı denklemi bilgisayarda adım adım çözüp beş farklı odak uzaklığında beneği üretti:</p>
+      <div class="tw"><table class="t"><thead><tr><th>a / λ</th><th>Kuralın öngörüsü</th><th>Disk kaç parça?</th><th>Pupil kaç parça?</th></tr></thead><tbody>
       <tr><td class="num">1,00</td><td>tek pupil, tek disk</td><td class="num">1</td><td class="num">1</td></tr>
       <tr><td class="num">1,67</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
       <tr><td class="num">2,33</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
       <tr><td class="num">3,00</td><td>çift pupil</td><td class="num">1</td><td class="num">2</td></tr>
       <tr><td class="num">4,00</td><td>iki ayrı benek</td><td class="num">2</td><td class="num">2</td></tr></tbody></table></div>
-      <p>Beş durumun beşinde de öngörü tuttu. Önerme 3 ile geri çözümde r<sub>d</sub> %1–2 hatayla bulundu. λ ise üstel formülle %15–24 düşük çıktı; bunun nedeni üstel yaklaşımın tam çözüm K<sub>0</sub>'a göre biraz yavaş azalması. Gerçek veride K<sub>0</sub> sürümü kullanılacak.</p>
-      <p><b>Sınırlılık:</b> Teorem iki odağın <b>eşit güçlü</b> olduğunu varsayıyor. Güçler farklıysa geçit kayar ve kriter bilgisayarla hesaplanmalı.</p>`}
+      <p>Beş durumun beşinde kural tuttu. Ters hesapta disk boyutu %1–2 hatayla bulundu. Menzil λ ise %15–24 düşük çıktı, çünkü bizim formül gerçek çözümün bir <b>yaklaşığı</b>. Gerçek veride daha doğru sürüm kullanılacak.</p>
+      <p><b>Sınırlılık:</b> Kural iki odağın <b>eşit güçlü</b> olduğunu varsayıyor. Güçler farklıysa geçit ortadan kayar ve hesap bilgisayarla yapılmalı.</p>
+      ${deep('Yaklaşık ve tam çözüm', '<p>Üstel formül m = S·e<sup>−r/λ</sup>, iki boyutlu denklemin tam çözümü olan K<sub>0</sub> (değiştirilmiş Bessel fonksiyonu) için uzak mesafelerde geçerli bir yaklaşıktır. K<sub>0</sub> odağa yakın yerlerde daha hızlı düşer; λ kestirimindeki sistematik sapma bundandır.</p>')}`}
   ],
   checks:{
-    t1:{q:'a/λ\'yı yavaşça büyütürken sırayla ne görüyorsun?', opts:['Tek pupil → çift pupil → iki ayrı benek','İki ayrı benek → çift pupil → tek pupil','Hep çift pupil','Benek kaybolur'], a:0, ex:'Önce pupiller, sonra diskler ayrılır, çünkü beyaz eşiği siyah eşiğinden yüksektir.'},
-    t2:{q:'Orta nokta O neden eyer noktasıdır?', opts:['Odakları birleştiren çizgide en düşük, ona dik yönde en yüksek nokta','Sinyalin en büyük olduğu yer','Sinyalin sıfır olduğu yer','Odaklardan birinin üstü'], a:0, ex:'Dağ geçidi gibi: sırt boyunca en alçak, vadilere göre en yüksek.'},
-    t3:{q:'r<sub>d</sub> = 2,2 mm, r<sub>p</sub> = 0,44 mm ise çift pupil penceresinin genişliği kaç mm?', opts:['1,76','2,64','0,35','2,2'], a:0, ex:'Genişlik = r_d − r_p = 1,76 mm. λ ln 2 iki uçta da aynı olduğu için sadeleşir.'},
-    t4:{q:'Önerme 3\'te neden w ve R yerine w/a ve R/a kullanıyoruz?', opts:['Fotoğrafın ölçeği bilinmiyor; oranlar ölçekten bağımsız','Daha küçük sayılar olduğu için','a sıfır olduğu için','Kural öyle'], a:0, ex:'Ünite 7\'deki ölçek tuzağıyla aynı fikir: pikseldeki uzunluklar yakınlaştırmayla değişir, oranları değişmez.'}
+    t1:{q:'a\'yı yavaşça büyütürken sırayla ne görüyorsun?', opts:['Tek pupil → çift pupil → iki ayrı benek','İki ayrı benek → çift pupil → tek pupil','Hep çift pupil','Benek kaybolur'], a:0, ex:'Önce pupiller, sonra diskler ayrılır, çünkü beyaz eşiği siyah eşiğinden yüksektir.'},
+    t2:{q:'Disk yarıçapı 3 mm, λ = 1 mm. Siyah diskler hangi a değerinin altında birleşik kalır?', opts:['3,69 mm','3 mm','4 mm','6 mm'], a:0, ex:'a < 3 + 0,69 × 1 = 3,69 mm.'},
+    t3:{q:'r<sub>d</sub> = 2,2 mm, r<sub>p</sub> = 0,44 mm ise çift pupil penceresinin genişliği kaç mm?', opts:['1,76','2,64','0,35','2,2'], a:0, ex:'Genişlik = r_d − r_p = 1,76 mm. 0,69λ iki uçta da aynı olduğu için sadeleşir.'},
+    t4:{q:'Neden w ve R yerine w/a ve R/a kullanıyoruz?', opts:['Fotoğrafın ölçeği bilinmiyor; oranlar ölçekten bağımsız','Daha küçük sayılar olduğu için','a sıfır olduğu için','Kural öyle'], a:0, ex:'Ünite 7\'deki ölçek tuzağıyla aynı fikir: pikseldeki uzunluklar yakınlaştırmayla değişir, oranları değişmez.'}
   },
   quiz:{ id:'ikiodak', qs:[
-    {q:'İki odaklı benekte toplam sinyal nedir?', opts:['İki tek-odak sinyalinin toplamı','Büyük olanı','Çarpımı','Ortalaması'], a:0, ex:'Denklem doğrusal olduğu için üst üste binme geçerli.'},
-    {q:'Orta noktada sinyal 2e<sup>−a</sup> (λ = 1). Benekler hangi koşulda kaynaşır?', opts:['2e<sup>−a</sup> ≥ θ','e<sup>−a</sup> ≥ 2θ','a ≥ θ','2a ≤ θ'], a:0, ex:'Geçitte bile sinyal eşiğin üstündeyse halka iki odağı birlikte sarar.'},
-    {t:'num', q:'r<sub>d</sub> = 2,2 mm, λ = 0,5 mm. a\'nın hangi değerinin altında disk tek parçadır? (ln 2 ≈ 0,693)', a:2.55, tol:0.02, unit:'mm', ex:'r_d + λ ln 2 = 2,2 + 0,35 = 2,55 mm.'},
-    {t:'num', q:'Aynı kelebekte r<sub>p</sub> = 0,44 mm. Pupiller hangi a değerinin üstünde ayrı olur?', a:0.79, tol:0.02, unit:'mm', ex:'r_p + λ ln 2 = 0,44 + 0,35 = 0,79 mm.'},
-    {q:'Çift pupil penceresinin genişliği neye eşittir?', opts:['r<sub>d</sub> − r<sub>p</sub>','λ ln 2','r<sub>d</sub> + r<sub>p</sub>','2a'], a:0, ex:'İki sınırdaki λ ln 2 terimleri sadeleşir.'},
-    {q:'Teorem 2\'ye göre çift pupil hangi kelebeklerde daha sık beklenir?', opts:['λ\'sı (ve halka farkı) büyük olanlarda','Pupili olmayanlarda','En küçüklerde','Hiç fark yok'], a:0, ex:'Pencere genişliği r_d − r_p = λ(ℓ_d − ℓ_p); λ büyükse pencere geniş.'},
-    {q:'Önerme 3\'te iki oranla (w/a, R/a) iki bilinmeyen bulunuyor. Model nasıl <b>sınanır</b>?', opts:['Üçüncü bir ölçümle: pupil boyutu ya da konturun tamamı tutmalı','İki oranı tekrar ölçerek','Ölçeği tahmin ederek','Sınanamaz'], a:0, ex:'Bilinmeyenden fazla ölçüm = aşırı belirli sistem. Fazla ölçüm tutarsa model güçlenir.'}
+    {q:'İki odaklı benekte bir noktadaki toplam sinyal nedir?', opts:['İki odaktan gelen sinyallerin toplamı','Büyük olanı','Çarpımı','Ortalaması'], a:0, ex:'İki lamba gibi: ışıklar toplanır.'},
+    {q:'İki beneğin kaynaşıp kaynaşmayacağını anlamak için nereye bakarız?', opts:['İki odağın tam ortasındaki geçit noktasına','Odakların üstüne','Kanadın kenarına','Pupilin merkezine'], a:0, ex:'Geçitte sinyal eşiğin üstündeyse halka iki odağı birlikte sarar.'},
+    {t:'num', q:'r<sub>d</sub> = 2,2 mm, λ = 0,5 mm. a\'nın hangi değerinin altında disk tek parçadır? (0,69 × λ kullan)', a:2.55, tol:0.02, unit:'mm', ex:'2,2 + 0,69 × 0,5 ≈ 2,55 mm.'},
+    {t:'num', q:'Aynı kelebekte r<sub>p</sub> = 0,44 mm. Pupiller hangi a değerinin üstünde ayrı olur?', a:0.79, tol:0.02, unit:'mm', ex:'0,44 + 0,35 = 0,79 mm.'},
+    {q:'Çift pupil penceresinin genişliği neye eşittir?', opts:['r<sub>d</sub> − r<sub>p</sub>','0,69 · λ','r<sub>d</sub> + r<sub>p</sub>','2a'], a:0, ex:'İki sınırdaki 0,69λ terimleri birbirini götürür.'},
+    {q:'Kurala göre çift pupil hangi kelebeklerde daha sık beklenir?', opts:['Halka farkı (beneği) büyük olanlarda','Pupili olmayanlarda','En küçüklerde','Hiç fark yok'], a:0, ex:'Pencere genişliği r_d − r_p; büyükse çift pupil için daha geniş bir aralık var.'},
+    {q:'İki oranla iki bilinmeyen bulduktan sonra model nasıl <b>sınanır</b>?', opts:['Üçüncü bir ölçümle: modelin hesapladığı pupil boyu, ölçülenle tutmalı','İki oranı tekrar ölçerek','Ölçeği tahmin ederek','Sınanamaz'], a:0, ex:'x + y = 10, x − y = 2 bulduktan sonra x · y = 24 kontrolü gibi.'}
   ]}
 },
 /* ============================== 7 ============================== */
 { id:'veri', no:7, title:'Veri ve ölçüm', short:'Veri', time:'50 dk',
   lead:'Hiç kelebek yakalamadan 97 kelebeği nasıl ölçtük? Vatandaş bilimi, lisanslar, bilgisayarla görme ve bir ölçek tuzağı.',
   goals:['iNaturalist ve vatandaş bilimini açıklayabilmek','Hangi lisanslı fotoğrafı kullanabileceğine karar verebilmek','Yarı-yükseklik yöntemiyle halka sınırının nasıl bulunduğunu anlatabilmek','Piksel ölçeğinde farkın neden yanıltıcı olduğunu, oranın neden güvenilir olduğunu gösterebilmek'],
+  summary:['Veriler iNaturalist\'teki vatandaş bilimi fotoğraflarından; yalnız CC lisanslılar, fotoğrafçının adıyla.','Bilgisayar halka sınırını yarı-yükseklik yöntemiyle bulur.','508 fotoğraftan 97 kelebek analize girdi.','Fotoğraf ölçeği bilinmediği için fark yerine oran kullanılır; mm için kanat uzunluğu elle ölçülür.'],
   sections:[
     {h:'Vatandaş bilimi: iNaturalist', html:`
       <p><b>iNaturalist</b>, dünyanın her yerinden insanların doğada gördükleri canlıların fotoğraflarını paylaştığı bir sitedir. Başka kullanıcılar türü doğrular. Yeterince kişi aynı türde anlaşırsa gözlem <b>"araştırma düzeyi"</b> olur.</p>
@@ -313,6 +347,7 @@ TK.U = [
       <p>Bilgisayar her şeyi <b>piksel</b> olarak ölçer. Ama kimi fotoğrafçı kelebeğe çok yaklaşmış, kimi uzaktan çekmiş. 1 mm, bir fotoğrafta 3 piksel, başka birinde 15 piksel olabilir.</p>
       ${w('pixel')}
       ${key('Yöntemin en önemli dersi','Piksel ölçeğinde fark, yakınlaştırmayla değişir; bu yüzden "fark sabit mi?" sorusu milimetre bilinmeden sorulamaz. Oran ise yakınlaştırmadan bağımsızdır. Bu yüzden proje <b>oran testini</b> kullanır ve ana analizde her fotoğrafta <b>kanat uzunluğunu elle ölçerek</b> milimetreye geçer.')}
+      ${worked('Aynı kelebeğin iki fotoğrafı: Ayşe uzaktan çekmiş (pupil 2 px, disk 10 px), Mert iki kat yakından (pupil 4 px, disk 20 px). Fark ve oran ne?', ['Ayşe: fark = 10 − 2 = 8 px; oran = 2 ÷ 10 = 0,2','Mert: fark = 20 − 4 = 16 px; oran = 4 ÷ 20 = 0,2','Fark iki katına çıktı, oran aynı kaldı'], 'Aynı kelebek, farklı "farklar". Fotoğraflar arasında karşılaştırma yaparken yalnız oran güvenilir.')}
       <p>Bir de <b>nicemleme</b> sorunu var: piksel bölünemez. Uzak çekimlerde pupil yalnızca 1–2 piksel, yani ölçüm ±0,5 piksel hatalı olabilir. Bu küçük sayıda büyük göreli hata demek.</p>${c('v3')}`}
   ],
   checks:{
@@ -334,6 +369,7 @@ TK.U = [
 { id:'istatistik', no:8, title:'İstatistik ve Monte Carlo', short:'İstatistik', time:'65 dk',
   lead:'Gürültülü verilerden güvenilir sonuç çıkarmanın araçları: dağılım, korelasyon, p-değeri, gürültüyü ayırmak, güç ve bilgisayar deneyleri.',
   goals:['Ortalama, standart sapma ve değişim katsayısını (CV) hesaplayıp yorumlayabilmek','Spearman ρ\'nun sıralarla nasıl çalıştığını açıklayabilmek','p-değerini karıştırma testiyle açıklayabilmek','Oran saçılımını gerçek fark ve ölçüm gürültüsü olarak ayırabilmek','Güç ve yanlış alarm kavramlarını Monte Carlo ile anlatabilmek','ICC\'nin neyi ölçtüğünü söyleyebilmek'],
+  summary:['CV = standart sapma ÷ ortalama: saçılımı yüzde olarak verir.','Spearman ρ sıralara bakar; −1 ile +1 arası.','p-değeri: hiç ilişki yokken bu kadar uç bir sonucun ne sıklıkla çıkacağı. p = 0,17 → anlamlı değil.','Oranın saçılımının büyük kısmı ölçüm hatası değil, gerçek fark (CV<sub>gerçek</sub> ≈ 0,17).','Monte Carlo: testleri cevabı bilinen sahte verilerle sınamak. ρ ve CV birlikte yalnız bir senaryoya uyuyor.'],
   sections:[
     {h:'Dağılımı ölçmek', html:`
       <p><b>Ortalama</b> bir grubun "tipik" değeridir. <b>Standart sapma (SS)</b> değerlerin ortalamadan tipik olarak ne kadar uzaklaştığıdır. <b>Değişim katsayısı CV = SS ÷ ortalama</b>, dağılımı yüzde olarak verir; böylece farklı büyüklükleri karşılaştırabilirsin.</p>
@@ -347,16 +383,18 @@ TK.U = [
       ${w('permutation')}
       ${key('p-değeri','"Hiç ilişki olmasaydı, en az bu kadar uç bir sonucu ne sıklıkla görürdük?" Genelde p < 0,05 ise sonuca <b>anlamlı</b> denir. Anlamlı olmamak "ilişki yok" demek değildir; "bu veriyle ilişki gösterilemedi" demektir.')}${c('i3')}`},
     {h:'Saçılım gerçek mi, gürültü mü?', html:`
-      <p>Oranın %19'luk saçılımının iki kaynağı olabilir: kelebekler <b>gerçekten</b> farklı, ya da biz <b>yanlış ölçüyoruz</b>. Ölçüm hatası piksel cinsinden yaklaşık sabittir (τ). 2 piksellik bir pupilde 0,2 piksel hata büyük, 5 piksellik pupilde küçüktür. Yani gürültü <b>küçük beneklerde</b> daha çok saçılım yaratır.</p>
-      <div class="formula">CV² ≈ CV²<sub>gerçek</sub> + τ² · (1/r<sub>p</sub>² + 1/r<sub>d</sub>²)</div>
-      <p>Kelebekleri benek boyuna göre üç gruba ayırıp her grubun CV\'sini ölçeriz. Sonra bu formülü üç noktaya oturtunca iki bilinmeyen çıkar: <b>kesme</b> gerçek saçılımı, <b>eğim</b> ölçüm gürültüsünü verir. Raporda buna Önerme 4b deniyor.</p>
+      <p>Oranın %19'luk saçılımının iki kaynağı olabilir: kelebekler <b>gerçekten</b> farklı, ya da biz <b>yanlış ölçüyoruz</b>. Hangisi olduğunu anlamak için bir ipucu var: ölçüm hatası piksel cinsinden hep aşağı yukarı aynıdır (yaklaşık 0,2 piksel). 2 piksellik bir pupilde 0,2 piksel hata <b>%10</b> demek; 5 piksellik bir pupilde yalnızca <b>%4</b>. Yani gürültü <b>küçük beneklerde</b> daha çok saçılım yaratır, büyüklerde neredeyse kaybolur.</p>
+      ${key('Fikir: büyük beneklere bak','Kelebekleri benek boyuna göre üç gruba ayır: küçük, orta, büyük. Saçılım gruptan gruba nasıl değişiyor? Eğer saçılımın tamamı ölçüm hatası olsaydı, büyük beneklerde saçılım neredeyse sıfıra inerdi. İnmiyorsa, kalan kısım <b>gerçek</b> farktır.','analogy')}
+      ${worked('Ölçülen saçılım: küçük beneklerde %20, orta %19, büyük %17,5. Ne sonuç çıkar?', ['Küçükten büyüğe saçılım biraz azalıyor: gürültünün küçük bir payı var.','Ama büyük beneklerde bile %17,5 kalıyor; sıfıra yaklaşmıyor.','Aşağıdaki araçla çizgiyi üç noktaya oturtunca "sonsuz büyük benek" için kalan saçılım ≈ %17 çıkıyor.'], 'Saçılımın büyük kısmı gerçek: kelebeklerin oranları gerçekten farklı.')}
+      ${key('İki gürültü nasıl toplanır?','İki bağımsız saçılım kaynağı, dik üçgenin kenarları gibi toplanır: toplam² = gerçek² + gürültü². Pisagor! Örneğin gerçek saçılım %17, gürültü %10 ise toplam √(17² + 10²) ≈ %19,7 olur, %27 değil.')}
       ${w('variance')}
+      ${deep('Önerme 4b\'nin formülü', '<div class="formula">CV² ≈ CV²<sub>gerçek</sub> + τ² · (1/r<sub>p</sub>² + 1/r<sub>d</sub>²)</div><p>τ piksel cinsinden ölçüm hatası. Formül "delta yöntemi" denen birinci mertebe yaklaşımla çıkar. q = 1/r<sub>p</sub>² + 1/r<sub>d</sub>² dersek CV² ile q arasında doğrusal bir ilişki olur: kesme CV²<sub>gerçek</sub>, eğim τ². Üç gruptan üç nokta (q, CV²) bu doğruya oturtulur (rapor: CV<sub>gerçek</sub> = 0,169, τ = 0,21 px, uyum r = 0,92). Yalnız piksel yuvarlaması τ<sub>0</sub> = 0,5/√12 ≈ 0,144 px verir.</p>')}
       ${key('Raporun kendini düzelttiği yer','Raporun önceki sürümü (v2) ölçüm gürültüsünü 0,5 piksel <b>varsaymıştı</b> ve "saçılımın neredeyse tamamı gürültü" sonucuna varmıştı. v3 gürültüyü <b>veriden ölçtü</b>: τ ≈ 0,21 px. Bu, piksel yuvarlamasının tek başına verdiği 0,14 px\'e yakın. Sonuç tersine döndü: saçılımın büyük kısmı <b>gerçek</b>. Varsayım yerine ölçmek, bilimin en önemli alışkanlıklarından biri.')}${c('i5')}`},
     {h:'Monte Carlo: testi test etmek', html:`
       <p>Testlerimiz gerçek gürültü altında senaryoları ayırabilir mi? Bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz: her senaryoda 97 kelebek, veriden ölçülen gürültü (τ = 0,15 px), 400 tekrar. Bu araç projedeki <code>monte_carlo.py</code>\'nin tarayıcı sürümü.</p>
       ${w('montecarlo')}
       <ul><li><b>Güç:</b> Gerçekten bir etki varken testin onu yakalama olasılığı. Yalnız-S senaryosunda ≈ %97–99.</li><li><b>Yanlış alarm:</b> Etki yokken testin "var" deme olasılığı. Yalnız-λ senaryosunda ≈ %6 (beklenen %5\'e yakın).</li><li><b>İki ölçüt birlikte:</b> ρ ve oran CV\'sinin <b>ikisi birden</b> gerçek veriye yalnız bir senaryoda uyuyor.</li></ul>
-      ${key('Monte Carlo\'nun bulduğu sürpriz','Ön analizde piksel ölçeğinde yapılan bir model karşılaştırması (AIC) "orantılı model açık ara kazandı" demişti. Monte Carlo bu testin <b>her senaryoda</b> orantılı modeli seçtiğini gösterdi (%82–100); yani o sonuç bir yöntem yanılgısıydı.')}${c('i4')}`},
+      ${key('Monte Carlo\'nun bulduğu sürpriz','Ön analizde piksel ölçeğinde bir model karşılaştırması yapılmıştı. (AIC denen bu yöntem, birkaç modelden hangisinin veriye en iyi uyduğunu puanlar.) Sonuç "orantılı model açık ara kazandı" demişti. Monte Carlo bu testin <b>her senaryoda</b> orantılı modeli seçtiğini gösterdi (%82–100); yani o sonuç bir yöntem yanılgısıydı.')}${c('i4')}`},
     {h:'Ölçüm güvenilirliği: ICC', html:`
       <p>İki kişi aynı fotoğrafı ölçerse aynı sayıyı bulur mu? <b>ICC</b> (sınıf içi korelasyon katsayısı) bunu 0 ile 1 arasında ölçer. Hedefimiz <b>ICC > 0,8</b>.</p>${w('icc')}`}
   ],
@@ -373,8 +411,8 @@ TK.U = [
     {q:'Spearman ρ = 0,05 ne anlatır?', opts:['Neredeyse hiç ilişki yok','Güçlü pozitif ilişki','Güçlü negatif ilişki','Ölçüm hatası'], a:0, ex:'Sıfıra yakın = ilişki yok.'},
     {q:'Karıştırma testinde oranları kelebekler arasında karıştırmak neyi taklit eder?', opts:['Oran ile benek boyu arasında hiçbir bağ olmadığı bir dünyayı','Ölçüm hatasını','Daha çok kelebeği','Fotoğraf yakınlaştırmasını'], a:0, ex:'Karıştırma eşleşmeyi bozar; "ilişki yok" varsayımı altında ρ\'nun dağılımını verir.'},
     {q:'CV² ile q = 1/r<sub>p</sub>² + 1/r<sub>d</sub>² arasındaki doğrunun <b>kesmesi</b> neyi verir?', opts:['Gerçek bireysel saçılımı (CV²<sub>gerçek</sub>)','Ölçüm gürültüsünü','Kelebek sayısını','Ortalama oranı'], a:0, ex:'q = 0, sonsuz büyük benek demek; orada gürültünün katkısı sıfır, geriye gerçek saçılım kalır.'},
-    {t:'match', q:'Monte Carlo\'da senaryoların ortalama ρ değerleri:', pairs:[['Yalnız S','yaklaşık +0,45'],['Pupil sabit','yaklaşık −0,53'],['Yalnız λ ya da λ + eşik','sıfıra yakın']], ex:'Gerçek değer −0,14: S ve pupil sabit senaryolarının bölgelerinden uzak.'},
-    {t:'match', q:'Monte Carlo\'da oran CV\'leri:', pairs:[['Yalnız λ','≈ 0,09'],['λ + pupil eşiği','≈ 0,19'],['Yalnız S','≈ 0,39']], ex:'Gerçek veride CV 0,19: yalnız λ + eşik senaryosu uyuyor.'},
+    {q:'Monte Carlo\'da bir senaryo 400 denemenin hepsinde ρ\'yu +0,3 ile +0,6 arasında veriyor. Gerçek veride ρ = −0,14. Ne sonuç çıkarırsın?', opts:['Bu senaryo gerçek veriyle uyumsuz; −0,14 onun asla üretmediği bir değer','Bu senaryo doğru','Gerçek veri hatalı','Daha çok deneme yapmak gerekir'], a:0, ex:'Monte Carlo, bir senaryo doğru olsaydı hangi sonuçları göreceğimizi gösterir. Gözlenen değer o aralığın tamamen dışındaysa senaryo elenir.'},
+    {q:'İki senaryo da ρ ≈ 0 veriyor. Birinde oran CV\'si 0,09, ötekinde 0,19. Gerçekte CV 0,19. Hangisi uyumlu ve neden?', opts:['CV\'si 0,19 olan; çünkü iki ölçütün ikisi de tutmalı','CV\'si 0,09 olan; daha az gürültülü','İkisi de; ρ aynı','Hiçbiri'], a:0, ex:'Bir senaryoyu kabul etmek için gözlenen her ölçüyü açıklaması gerekir. ρ ikisinde de uyuyor; CV yalnız birinde.'},
     {q:'Bir testin "gücü" nedir?', opts:['Gerçek bir etkiyi yakalama olasılığı','Hesaplama hızı','Yanlış alarm olasılığı','Veri sayısı'], a:0, ex:'Yalnız-S senaryosunda oran testinin gücü ≈ %97–99.'},
     {q:'v2 ile v3 arasındaki en önemli fark nedir?', opts:['v3 ölçüm gürültüsünü varsaymak yerine veriden ölçtü; saçılımın çoğunun gerçek olduğu çıktı','v3 daha çok kelebek ölçtü','v3 başka tür inceledi','v2 hiç Monte Carlo kullanmadı'], a:0, ex:'τ varsayımı 0,5 px idi; veriden 0,21 px çıktı.'},
     {q:'Ön analizde ölçek vekili için ICC = 0,30 bulundu. Bu ne demek?', opts:['Aynı kelebeğin farklı fotoğrafları çok farklı değerler veriyor; ölçüm güvenilmez','Ölçüm mükemmel','Kelebeklerin %30\'u ölçüldü','Hata %30'], a:0, ex:'Hedef 0,8. Bu yüzden elle kanat uzunluğu ölçümüne geçildi.'}
@@ -384,6 +422,7 @@ TK.U = [
 { id:'bulgular', no:9, title:'Bulgular ve yorum', short:'Bulgular', time:'40 dk',
   lead:'97 gerçek kelebek ne dedi? Ne kadar emin olabiliriz? Hangi sorular hâlâ açık?',
   goals:['Ön bulguyu üç cümleyle anlatabilmek','Dört senaryodan üçünün neden elendiğini gerekçeleriyle açıklayabilmek','Bulgunun Monteiro vd. (1997) ile ilişkisini söyleyebilmek','Çift pupil ölçümlerinin neden asıl sınav olduğunu anlatabilmek','Çalışmanın sınırlılıklarını sayabilmek'],
+  summary:['Dört senaryodan üçü elendi; yalnız "λ + pupil eşiği" uyumlu.','Ön bulgu: benek boyutu menzilden (λ), halka oranı eşiklerden geliyor.','Bu, Monteiro vd. (1997)\'nin laboratuvar bulgusunun doğadaki karşılığı.','Asıl sınav çift pupilli benek ölçümleri; henüz yapılmadı.','Sınırlılıkları açıkça söylemek projeyi güçlendirir.'],
   sections:[
     {h:'Gerçek veri', html:`${w('realdata')}${c('b1')}`},
     {h:'Dört senaryonun durumu', html:`
@@ -392,6 +431,7 @@ TK.U = [
       <tr><td><span class="l">Yalnız λ</span></td><td class="num">−0,01</td><td class="num">0,09</td><td style="color:var(--bad)"><b>✗ CV çok küçük</b></td></tr>
       <tr><td><b style="color:var(--warn)">Pupil sabit</b></td><td class="num">−0,53</td><td class="num">0,22</td><td style="color:var(--bad)"><b>✗ ρ çok negatif</b></td></tr>
       <tr><td><b style="color:var(--ok)">λ + pupil eşiği</b></td><td class="num">−0,01</td><td class="num">0,19</td><td style="color:var(--ok)"><b>✓ uyumlu</b></td></tr></tbody></table></div>
+      ${worked('Tablodan bir satır okuyalım: "Pupil sabit".', ['Bu senaryo doğru olsaydı Monte Carlo\'da ρ hep −0,53 civarında çıkardı.','Gerçek veride ρ = −0,14.','Monte Carlo bu senaryoda −0,14 kadar yüksek bir ρ\'yu neredeyse hiç üretmiyor (test %100 "anlamlı negatif" buluyor).'], 'Gerçek veri, "pupil sabit" doğru olsaydı göreceğimiz şeye benzemiyor: senaryo elenir. Diğer satırları da aynı yolla oku.')}
       <p><b>Yalnız S neden değil?</b> Pozitif bir ρ beklenirdi (%97–99 güçle); gözlenen negatif. Ayrıca kelebeklerin altıda birinde pupilsiz benek öngörür.</p>
       <p><b>Pupil sabit neden değil?</b> ρ ≈ −0,53 beklenirdi ve test bunu %100 yakalardı; gözlenen −0,14 çok uzakta.</p>
       <p><b>Yalnız λ neden değil?</b> ρ uyuyor, ama varyans ayrışımı oranın gerçekten değiştiğini gösterdi (CV<sub>gerçek</sub> ≈ 0,17). Yalnız λ değişseydi oran herkeste aynı olurdu.</p>
@@ -409,8 +449,8 @@ TK.U = [
     b3:{q:'Hangisi bu çalışmanın bir sınırlılığı DEĞİLDİR?', opts:['Kelebeklerin yakalanıp öldürülmesi','Pupilin az pikselle ölçülmesi','Kaynaşma teoreminin eşit güçlü odak varsayımı','Üstel yaklaşımın λ\'yı düşük kestirmesi'], a:0, ex:'Hiç kelebek yakalanmadı.'}
   },
   quiz:{ id:'bulgular', qs:[
-    {t:'num', q:'Tek benek ön analizine giren birey sayısı kaçtır?', a:97, tol:0, ex:'n = 97.'},
-    {q:'Gözlenen Spearman ρ değeri hangisidir?', opts:['−0,14','+0,45','−0,53','0'], a:0, ex:'ρ = −0,14, p = 0,17.'},
+    {q:'Raporda neden "kanıtladık" yerine "uyumlu" ya da "destekliyor" deriz?', opts:['Veri bir açıklamayla uyuşabilir ama başka açıklamaları tamamen dışlamaz; ölçümler de henüz bitmedi','Kanıtlamak yasak olduğu için','Jüri sevmediği için','Matematik kullanmadığımız için'], a:0, ex:'97 kelebekle ve gürültülü bir ölçekle alınan bir sonuç güçlü bir ipucudur, kesin kanıt değil.'},
+    {q:'Gözlenen ρ = −0,14. Yalnızca bu sayıya bakarak hangi iki senaryo zayıflar?', opts:['Yalnız S (+0,45 beklenirdi) ve pupil sabit (−0,53 beklenirdi)','Yalnız λ ve λ + eşik','Hepsi','Hiçbiri'], a:0, ex:'Sıfıra yakın bir ρ, güçlü pozitif ya da güçlü negatif ilişki bekleyen senaryolarla uyuşmaz.'},
     {t:'match', q:'Her senaryoyu eleyen (ya da destekleyen) kanıtla eşleştir.', pairs:[['Yalnız S','Pozitif ρ ve pupilsiz benek beklenirdi'],['Pupil sabit','ρ ≈ −0,53 beklenirdi'],['Yalnız λ','Oran saçılımı çok küçük kalırdı'],['λ + pupil eşiği','ρ ve CV ikisi de uyuyor']], ex:'İki ölçüt (ρ ve CV) birlikte tek bir senaryoyu bırakıyor.'},
     {q:'Ön bulguya göre benek boyutu ve halka oranı nelerden etkileniyor?', opts:['Boyut menzil λ\'dan, oran eşiklerden','Boyut güç S\'den, oran λ\'dan','İkisi de yalnız λ\'dan','İkisi de rakımdan'], a:0, ex:'Monteiro vd. (1997)\'nin iş bölümüyle aynı.'},
     {q:'Projenin "asıl sınavı" neden çift pupilli benekler?', opts:['Teorem 1–2 ve Önerme 3 ölçek bilmeden modeli doğrudan sınamaya izin veriyor','Daha güzel oldukları için','Daha çok fotoğrafları olduğu için','Tek benekler ölçülemediği için'], a:0, ex:'İki oranla iki bilinmeyen, üçüncü ölçümle sınama: aşırı belirli sistem.'},
@@ -421,11 +461,13 @@ TK.U = [
 { id:'gorev', no:10, title:'Senin görevin', short:'Görevler', time:'60 dk',
   lead:'Artık projeyi anlıyorsun. Şimdi sıra senin ellerinle yapacağın ölçümlerde, raporda ve jüri karşısında.',
   goals:['Kanat uzunluğunu ve benek yarıçapını fotoğraftan ölçüp mm\'ye çevirebilmek','Dahil etme ölçütlerini uygulayabilmek','Kod dosyalarının ne yaptığını ve sırasını bilmek','Rolüne ait görevleri takip edebilmek','En olası jüri sorularına cevap verebilmek'],
+  summary:['mm/piksel = L<sub>mm</sub> ÷ L<sub>px</sub>; her uzunluk bu sayıyla çarpılarak mm\'ye çevrilir.','Dahil etme: dik açı, keskin, benek bütün, disk ≥ 6 piksel.','Çift pupillilerde a, w, R işaretlenir; yalnız oranlar kullanılır.','İki kişi aynı 30 fotoğrafı ayrı ayrı ölçer; hedef ICC > 0,8.','Kendi ellerinle yapmadığın ölçüm "bulgu" olarak sunulmaz.'],
   sections:[
     {h:'Ölçüm atölyesi', html:`
       <p>Ana analizde her fotoğrafta <b>kanat uzunluğunu (L)</b> elle işaretleyeceksin. Sonra piksel ölçümlerini milimetreye çevireceksin:</p>
       <div class="formula">1 px = L<sub>mm</sub> ÷ L<sub>px</sub>     r<sub>mm</sub> = r<sub>px</sub> × (L<sub>mm</sub> ÷ L<sub>px</sub>)</div>
       <p>L<sub>mm</sub> olarak tür ve cinsiyet ortalaması kullanılır (erkek ~22 mm, dişi ~25 mm). Aşağıda üç fotoğrafla prova yap. Hedef: L hatası %5'in altında.</p>
+      ${worked('Bir dişi kelebeğin fotoğrafında L = 180 px ölçtün, disk yarıçapı 16 px. Disk kaç mm?', ['Dişi kanat ortalaması: L<sub>mm</sub> = 25 mm','1 px = 25 ÷ 180 ≈ 0,139 mm','Disk = 16 × 0,139 ≈ <b>2,22 mm</b>','Kontrol: Çayır esmerinde disk ~2 mm civarında; sonuç mantıklı.'], 'Her sonucu "mantıklı mı?" diye kontrol et. 22 mm ya da 0,2 mm çıksaydı bir yerde hata yaptığını anlardın.')}
       ${w('measure')}${c('g1')}`},
     {h:'Dahil etme ölçütleri', html:`<p>Protokole göre bir fotoğraf ancak şu koşullarda veri setine girer: kanat <b>dik açıyla</b> görünüyor (elipslik < 1,15), benek <b>bütün</b>, <b>aşınma yok</b>, görüntü <b>keskin</b> ve disk en az <b>6 piksel</b>.</p>${w('include')}`},
     {h:'Çift pupilli benekleri ölçmek', html:`<p>Çift pupilli fotoğraflar ayrı bir kümeye alınır (hedef n ≈ 40). Her birinde tıklama aracıyla şunlar işaretlenir:</p>
@@ -435,7 +477,7 @@ TK.U = [
       ${key('Altın kural','Kendi ellerinle yapmadığın hiçbir ölçüm "bulgu" olarak sunulmaz. Otomatik ölçümler öğrenci doğrulamasından geçmeden veri setine girmez.')}`},
     {h:'Kod haritası', html:`${w('codemap')}<p>Kodu yazmak zorunda değilsin, ama <b>ne yaptığını</b> anlatabilmelisin. Ö1, <code>kanat_turing.py</code>'yi satır satır anlamakla sorumlu.</p>`},
     {h:'Görev listem', html: w('tasks')},
-    {h:'Rapor yazarken', html:`<ul><li>Raporun güncel hali <code>ARASTIRMA_RAPORU_v2.md</code>. <b>[DOLDURULACAK]</b> yazan yerler sizin ölçümlerinizle dolacak.</li><li>Her bölüm tek bir öğrencinin sorumluluğunda; ama herkes her bölümü okur.</li><li>Sayıları her zaman birimiyle yaz (mm, px, m).</li><li>"Kanıtladık" yerine "destekliyor", "uyumlu" gibi dikkatli ifadeler kullan.</li><li>Ortak çalışma günlüğüne her hafta tarih–yapılan–karar yaz. Jüri "süreci" sorduğunda bunu gösterirsin.</li></ul>`},
+    {h:'Rapor yazarken', html:`<ul><li>Raporun güncel hali <code>ARASTIRMA_RAPORU_v3.md</code>. <b>[DOLDURULACAK]</b> yazan yerler sizin ölçümlerinizle dolacak.</li><li>Her bölüm tek bir öğrencinin sorumluluğunda; ama herkes her bölümü okur.</li><li>Sayıları her zaman birimiyle yaz (mm, px, m).</li><li>"Kanıtladık" yerine "destekliyor", "uyumlu" gibi dikkatli ifadeler kullan.</li><li>Ortak çalışma günlüğüne her hafta tarih–yapılan–karar yaz. Jüri "süreci" sorduğunda bunu gösterirsin.</li></ul>`},
     {h:'Jüri provası', html:`<p>Her soruyu önce yüksek sesle kendin cevapla, sonra karta dokunup karşılaştır.</p>${w('jury')}`}
   ],
   checks:{
@@ -460,6 +502,95 @@ TK.U = [
   after:{h:'Karne', html: w('karne') + `<p>Bütün üniteler yeşilse ve finalde %80'in üstündeysen jüri karşısına çıkmaya hazırsın. Son bir öneri: projeyi hiç bilmeyen birine (ailene, bir arkadaşına) 5 dakikada anlat. Anlatamadığın yer, tekrar etmen gereken yerdir.</p>`},
   quiz:{ id:'final', tag:'Final', pass:70, final:true }
 }
+];
+
+/* Sembol kartı */
+TK.SYMS = [
+ ['S','Odağın salgıladığı sinyalin gücü','birimsiz; örnek 81,5'],
+ ['λ (lamda)','Sinyalin menzili: ne kadar uzağa ulaştığı. λ = √(D/γ)','mm; örnek 0,5 mm'],
+ ['D','Yayılma hızı (difüzyon katsayısı)','mm²/s'],
+ ['γ (gama)','Sönme hızı','1/s'],
+ ['m(r)','Odaktan r uzaklıktaki sinyal miktarı. m = S · e<sup>−r/λ</sup>','birimsiz'],
+ ['θ (teta)','Eşik: bir rengin seçilmesi için sinyalin aşması gereken değer. θ₁ beyaz, θ₂ siyah eşiği','birimsiz; örnek θ₂ = 1, θ₁ ≈ 33,8'],
+ ['r<sub>p</sub>','Pupil (beyaz) yarıçapı','mm ya da px; örnek 0,44 mm'],
+ ['r<sub>d</sub>','Disk (siyah) yarıçapı','mm ya da px; örnek 2,2 mm'],
+ ['r<sub>p</sub>/r<sub>d</sub>','Oran: pupil ÷ disk. Yakınlaştırmadan etkilenmez','örnek 0,20'],
+ ['r<sub>d</sub> − r<sub>p</sub>','Fark: siyah halkanın kalınlığı. Yakınlaştırmayla değişir','örnek 1,76 mm'],
+ ['L','Ön kanat uzunluğu (tabandan apekse)','♂ ~22 mm, ♀ ~25 mm'],
+ ['s','Benekten kanat kenarına uzaklık; ön analizde kullanılan kaba ölçek','px'],
+ ['e','Doğal sabit ≈ 2,718','—'],
+ ['ln','Doğal logaritma: "e\'yi kaç kez çarpmalıyım?"','ln(e) = 1'],
+ ['a','İki odak arasındaki mesafenin yarısı','mm ya da px'],
+ ['w','Kaynaşmış diskin ortadaki bel yarı genişliği','mm ya da px'],
+ ['R','Kaynaşmış diskin uzun eksen boyunca yarı uzunluğu','mm ya da px'],
+ ['ρ (ro)','Spearman korelasyonu: iki ölçüm birlikte artıyor mu? −1 ile +1 arası','gerçek veride −0,14'],
+ ['p','p-değeri: sonucun şansla çıkma sıklığı. 0,05\'ten küçükse "anlamlı"','gerçek veride 0,17'],
+ ['CV','Değişim katsayısı = standart sapma ÷ ortalama','gerçek oran CV\'si 0,19'],
+ ['τ (tau)','Piksel cinsinden ölçüm hatası','≈ 0,2 px'],
+ ['n','Örneklem büyüklüğü (kaç kelebek)','97'],
+ ['ICC','İki ölçücünün uyumu, 0 ile 1 arası','hedef > 0,8']
+];
+/* Sözlük */
+TK.GLOSS = [
+ ['Göz beneği','Kanattaki halkalı benek. Ortası beyaz pupil, çevresi siyah disk.'],
+ ['Pupil','Göz beneğinin ortasındaki beyaz nokta.'],
+ ['Disk','Pupili çevreleyen siyah bölge.'],
+ ['Apeks','Ön kanadın en uç noktası.'],
+ ['Kanat tabanı','Kanadın gövdeye bağlandığı yer.'],
+ ['Kosta','Ön kanadın üst (ön) kenarı.'],
+ ['Odak','Beneğin ortasında sinyal salgılayan hücre grubu.'],
+ ['Morfogen (sinyal)','Hücrelere hangi rengi seçeceklerini "söyleyen", odaktan yayılan kimyasal.'],
+ ['Difüzyon (yayılma)','Moleküllerin rastgele hareketle çok yoğun yerden az yoğun yere dağılması.'],
+ ['Sönme (bozunma)','Sinyalin zamanla parçalanıp azalması.'],
+ ['Menzil','Sinyalin anlamlı miktarda ulaşabildiği uzaklık; λ ile gösterilir.'],
+ ['Kararlı durum (denge)','Üretim, yayılma ve sönmenin dengelendiği, sinyalin artık değişmediği durum.'],
+ ['Eşik','Bir rengin seçilmesi için sinyalin aşması gereken değer.'],
+ ['Eşik kuralı','Her hücrenin, sinyali eşiklerle karşılaştırıp renk seçmesi.'],
+ ['Turing deseni','Alan Turing\'in 1952\'de gösterdiği fikir: farklı hızda yayılan iki kimyasal kendiliğinden desen oluşturabilir.'],
+ ['Gray–Scott modeli','İki kimyasallı, yalnız iki sayı (F, k) değiştirilerek benek, şerit ya da labirent üreten desen modeli.'],
+ ['Üstel azalma','Her eşit adımda aynı oranda küçülme.'],
+ ['Logaritma','Üs almanın tersi: "tabanı kaç kez çarparsam bu sayıyı elde ederim?"'],
+ ['Doğal logaritma (ln)','Tabanı e olan logaritma.'],
+ ['Logaritmik eksen','Her çizginin bir öncekinin 10 katı olduğu eksen. Üstel eğriyi düz gösterir.'],
+ ['Boyut analizi','Birimleri kontrol ederek bir formülün mantıklı olup olmadığını sınamak.'],
+ ['Türetme','Bilinen bir eşitlikten adım adım yeni bir formüle ulaşmak.'],
+ ['Tanımlanamazlık','Bir modelde iki büyüklüğün yalnız birlikte görünmesi yüzünden veriden ayrı ayrı bulunamaması (S ve θ gibi).'],
+ ['Senaryo','Verideki farkı açıklayabilecek rakip açıklamalardan biri.'],
+ ['Hipotez','Veriyle sınanabilecek bir iddia.'],
+ ['Üst üste binme','Doğrusal bir denklemde iki kaynağın etkilerinin toplanması.'],
+ ['Seviye eğrisi','Bir büyüklüğün aynı değeri aldığı noktaları birleştiren çizgi (haritadaki eş yükselti eğrisi gibi).'],
+ ['Eyer noktası','Bir yönde en düşük, ona dik yönde en yüksek olan nokta; dağ geçidi gibi.'],
+ ['Kaynaşma','İki beneğin halkalarının birleşip tek bir şekil oluşturması.'],
+ ['Çift pupilli benek','Tek siyah disk içinde iki beyaz pupil.'],
+ ['Teorem','Kanıtlanmış matematiksel ifade.'],
+ ['Önerme','Kanıtlanmış, genelde teoremden daha küçük çaplı ifade.'],
+ ['Aşırı belirli sistem','Bilinmeyenden fazla ölçüm olan durum; fazla ölçüm modeli sınamaya yarar.'],
+ ['Vatandaş bilimi','Gönüllülerin topladığı verilerle yapılan bilimsel çalışma.'],
+ ['iNaturalist','İnsanların doğada gördükleri canlıların fotoğraflarını paylaştığı ve türleri birlikte doğruladığı site.'],
+ ['Araştırma düzeyi','iNaturalist\'te türü topluluk tarafından doğrulanmış gözlem.'],
+ ['Creative Commons (CC)','Fotoğrafçının, belirli koşullarla kullanıma izin verdiği lisanslar (BY: adını ver, NC: ticari değil).'],
+ ['Piksel','Dijital fotoğrafı oluşturan en küçük kare.'],
+ ['Nicemleme hatası','Ölçümün piksel gibi bölünemeyen adımlara yuvarlanmasından gelen hata.'],
+ ['Radyal profil','Merkezden dışarı doğru ölçülen parlaklık değerleri.'],
+ ['Yarı-yükseklik yöntemi','Sınırı, parlaklığın iki komşu bölgenin tam ortasına indiği yerde kabul etmek.'],
+ ['Ölçek','Fotoğrafta 1 mm\'nin kaç piksele denk geldiği.'],
+ ['Vekil','Doğrudan ölçülemeyen bir şeyin yerine kullanılan dolaylı ölçü.'],
+ ['Dahil etme ölçütü','Bir fotoğrafın veri setine girmesi için sağlaması gereken koşullar.'],
+ ['Ortalama','Değerlerin toplamının sayılarına bölümü.'],
+ ['Standart sapma','Değerlerin ortalamadan tipik uzaklığı.'],
+ ['Değişim katsayısı (CV)','Standart sapma ÷ ortalama; saçılımın yüzdesi.'],
+ ['Korelasyon','İki ölçümün birlikte değişip değişmediği.'],
+ ['Spearman ρ','Değerlerin sıralarına bakan korelasyon; uç değerlere dayanıklı.'],
+ ['p-değeri','Hiç ilişki yokken en az bu kadar uç bir sonucun şansla çıkma sıklığı.'],
+ ['Anlamlı','Genelde p < 0,05: sonucun şansla açıklanması zor.'],
+ ['Karıştırma testi','Verileri rastgele karıştırıp sonucu yeniden hesaplayarak şansın ne üretebileceğini görmek.'],
+ ['Güç','Gerçek bir etki varken testin onu yakalama olasılığı.'],
+ ['Yanlış alarm','Etki yokken testin "var" deme olasılığı.'],
+ ['Monte Carlo','Bir yöntemi cevabı bilinen sahte verilerle yüzlerce kez deneyerek sınamak.'],
+ ['Varyans ayrışımı','Toplam saçılımı gerçek fark ve ölçüm hatası olarak ikiye ayırmak.'],
+ ['ICC','Aynı şeyi ölçen iki kişinin (ya da iki fotoğrafın) uyumu; 1 tam uyum.'],
+ ['AIC','Birkaç modelden hangisinin veriye en iyi uyduğunu puanlayan ölçü.'],
+ ['Sınırlılık','Bir çalışmanın sonuçlarını zayıflatabilecek, açıkça söylenmesi gereken eksik.']
 ];
 
 /* final: bütün ünite sorularından rastgele 16 */
