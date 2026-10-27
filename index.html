@@ -72,6 +72,11 @@ h2{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3vw,32px);m
 .links code{font-family:var(--f-mono);font-size:13px;color:var(--signal)}
 .links span{font-size:14px;color:var(--muted)}
 footer{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:var(--muted);display:grid;gap:6px}
+.chain{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:56ch}
+.chain li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:16px}
+.chain li>b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--wing);color:#fff;font-family:var(--f-mono);font-size:13px}
+.sub{margin:-8px 0 16px;color:var(--muted)}
+.found p{margin:0;font-size:18px;max-width:70ch;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--signal);border-radius:0 12px 12px 0;padding:14px 18px}
 @media (max-width:860px){
   .hero,.two{grid-template-columns:1fr}
   .stage{max-width:420px}
@@ -88,46 +93,56 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:va
     <div>
       <div class="eyebrow">TÜBİTAK 2204-A · Matematik × Biyoloji</div>
       <h1>Kelebek kanadına <em>göz</em> nasıl çizilir?</h1>
-      <p class="lead">Kelebek kanatlarındaki halkalı benekler, bir odaktan yayılıp sönen bir sinyalle çizilir. Bu projede o sinyalin matematik modelini kuruyor ve Türkiye'deki Çayır esmeri (<i>Maniola jurtina</i>) kelebeklerinin fotoğraflarıyla sınıyoruz.</p>
-      <div class="formula">r = <span class="l">λ</span> · ln(<span class="s">S</span> / θ) <small>halka yarıçapı = menzil × ln(güç ÷ eşik)</small></div>
+      <p class="lead">Kanatta fırça yok; peki hücreler bu halkaları nasıl "çiziyor"? Bu projede bunun matematiğini kuruyor ve Türkiye'de çekilmiş Çayır esmeri (<i>Maniola jurtina</i>) fotoğraflarıyla sınıyoruz.</p>
+      <ol class="chain">
+        <li><b>1</b><span>Beneğin ortasındaki hücreler bir <b>sinyal</b> salgılar.</span></li>
+        <li><b>2</b><span>Sinyal suya damlayan mürekkep gibi <b>yayılır</b> ve yavaş yavaş <b>söner</b>.</span></li>
+        <li><b>3</b><span>Her hücre ona ulaşan sinyale bakar: çok güçlüyse <b>beyaz</b>, ortaysa <b>siyah</b>, zayıfsa <b>turuncu</b> olur.</span></li>
+      </ol>
     </div>
     <figure class="stage" style="margin:0">
       <canvas id="spot" role="img" aria-label="Menzil değiştikçe büyüyüp küçülen göz beneği"></canvas>
-      <p id="cap">Menzil λ değiştikçe bütün halkalar birlikte büyüyor.</p>
+      <p id="cap">Sinyal daha uzağa ulaşınca bütün halkalar birlikte büyüyor; pupil ile diskin oranı aynı kalıyor.</p>
     </figure>
   </section>
 
   <section aria-labelledby="h-doors">
-    <h2 id="h-doors">Nereden başlamak istersin?</h2>
+    <h2 id="h-doors">Nereden başlamalıyım?</h2>
+    <p class="sub">Bu sırayla ilerlemeni öneriyoruz.</p>
     <div class="doors">
-      <a class="door main" href="rehber/">
-        <span class="k">Öğrenciler için · 12 bölüm</span>
-        <h3>Çalışma rehberi</h3>
-        <p>Kelebek biyolojisinden logaritmaya, iki odak teoreminden Monte Carlo'dan jüri provasına. Etkileşimli araçlar, hızlı kontroller, ara değerlendirmeler, final ve karne.</p>
-        <span class="go">Rehberi aç →</span>
-      </a>
       <a class="door" href="goz_benegi_atolyesi.html">
-        <span class="k">15 dakikalık tanışma · 8 adım</span>
+        <span class="k">1. adım · 15 dakika</span>
         <h3>Göz beneği atölyesi</h3>
-        <p>Projenin bütün fikri canlandırmalarla: sinyal, eşik, iki düğme, fotoğraf tuzağı ve gerçek veri.</p>
+        <p>Önce bütün fikri gör: 8 kısa adım, her adımda oynayabileceğin bir canlandırma. Hiçbir ön bilgi gerekmez.</p>
         <span class="go">Atölyeyi aç →</span>
       </a>
+      <a class="door main" href="rehber/">
+        <span class="k">2. adım · 4–5 hafta</span>
+        <h3>Çalışma rehberi</h3>
+        <p>Projeyi baştan sona öğren: kelebekler, sinyal, gereken matematik, ölçüm ve istatistik. Çözülmüş örnekler, kısa sınavlar, sözlük ve karne.</p>
+        <span class="go">Rehberi aç →</span>
+      </a>
       <a class="door" href="ARASTIRMA_RAPORU_v3.pdf">
-        <span class="k">Güncel sürüm · v3 (PDF)</span>
+        <span class="k">3. adım · ileri düzey</span>
         <h3>Araştırma raporu</h3>
-        <p>Kuram, iki odaklı benekler, sayısal doğrulama ve 97 bireylik ön analiz. Öğrenci ölçümleriyle tamamlanacak bölümler işaretli.</p>
+        <p>Projenin bilimsel metni (PDF). Rehberi bitirdikten sonra oku; boş bırakılan bölümler sizin ölçümlerinizle dolacak.</p>
         <span class="go">Raporu aç →</span>
       </a>
     </div>
   </section>
 
+  <section aria-labelledby="h-found" class="found">
+    <h2 id="h-found">Şimdiye kadar ne bulduk?</h2>
+    <p>97 kelebeğin fotoğrafına bakınca bir ipucu çıktı: beneğin <b>ne kadar büyük</b> olacağını sinyalin ne kadar uzağa ulaştığı belirliyor gibi; beyaz noktanın siyah diske <b>oranını</b> ise hücrelerin renk seçme sınırları. Bu henüz bir ön bulgu. Asıl sınav, içinde iki beyaz nokta olan "çift pupilli" benekleri ölçmek; o iş öğrencileri bekliyor.</p>
+  </section>
+
   <section aria-labelledby="h-nums">
     <h2 id="h-nums">Sayılarla proje</h2>
     <div class="nums">
-      <div class="num"><b>390</b><span>iNaturalist Türkiye gözlemi</span></div>
-      <div class="num"><b>0–2144 m</b><span>rakım aralığı</span></div>
-      <div class="num"><b>97</b><span>ön analizde ölçülen birey</span></div>
-      <div class="num"><b>0</b><span>yakalanan kelebek: yalnız CC lisanslı fotoğraflar</span></div>
+      <div class="num"><b>390</b><span>Türkiye'den kelebek gözlemi (iNaturalist)</span></div>
+      <div class="num"><b>0–2144 m</b><span>deniz kıyısından dağlara</span></div>
+      <div class="num"><b>97</b><span>şimdiye kadar ölçülen kelebek</span></div>
+      <div class="num"><b>0</b><span>yakalanan kelebek: yalnızca izinli fotoğraflar</span></div>
     </div>
   </section>
 
@@ -135,37 +150,38 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:va
     <div>
       <h2>Nasıl çalışıyoruz?</h2>
       <ol class="steps">
-        <li><div><b>Model</b><span>Yayılma ve sönme denkleminden halka yarıçapı formülünü türetiyoruz.</span></div></li>
-        <li><div><b>Öngörü</b><span>Modelin hangi parametresi değişirse benekte hangi izin kalacağını hesaplıyoruz.</span></div></li>
-        <li><div><b>Veri</b><span>iNaturalist fotoğraflarında beneği bilgisayarla buluyor, kanat uzunluğunu elle ölçüyoruz.</span></div></li>
-        <li><div><b>Sınama</b><span>Fotoğraf ölçeğinden bağımsız testler kullanıyor, güvenilirliklerini Monte Carlo ile ölçüyoruz.</span></div></li>
+        <li><div><b>Fikir</b><span>"Sinyal yayılır, söner, hücreler eşiğe göre renk seçer" fikrini bir formüle çeviriyoruz.</span></div></li>
+        <li><div><b>Tahmin</b><span>Formül bize, kelebekler arasında hangi farkı görmemiz gerektiğini söylüyor.</span></div></li>
+        <li><div><b>Ölçüm</b><span>İnsanların paylaştığı kelebek fotoğraflarında benekleri ölçüyoruz: bir kısmını bilgisayar, kanat uzunluğunu öğrenciler elle.</span></div></li>
+        <li><div><b>Kontrol</b><span>Fotoğraflar farklı uzaklıktan çekildiği için ölçüleri birbirine bölerek karşılaştırıyor, yöntemimizi önce bilgisayarda sahte kelebeklerle deniyoruz.</span></div></li>
       </ol>
     </div>
     <div>
       <h2>Ekip</h2>
       <div class="roles">
-        <div class="role"><b>Ö1 · Matematik ve simülasyon</b><p>Modelin türetilmesi, simülasyon, Monte Carlo.</p></div>
-        <div class="role"><b>Ö2 · Ölçüm ve veri kalitesi</b><p>Kanat uzunluğu ve cinsiyet işaretleme, iki ölçücü uyumu.</p></div>
-        <div class="role"><b>Ö3 · Biyoloji ve saha</b><p>Tür biyolojisi, iklim verisi, etik ve lisans.</p></div>
-        <div class="role"><b>Danışman · Hakan Ataş</b><p>Kod altyapısı, istatistik ve yarışma süreci.</p></div>
+        <div class="role"><b>Ö1 · Matematik</b><p>Formülleri anlar, tahtada anlatır, bilgisayar deneylerini yorumlar.</p></div>
+        <div class="role"><b>Ö2 · Ölçüm</b><p>Fotoğraflarda kanat uzunluğunu ve cinsiyeti işaretler, ölçümlerin güvenilir olduğunu kontrol eder.</p></div>
+        <div class="role"><b>Ö3 · Biyoloji</b><p>Kelebeklerin yaşamını, iklim bilgisini ve fotoğraf izinlerini araştırır.</p></div>
+        <div class="role"><b>Danışman · Hakan Ataş</b><p>Kodları hazırlar, haftalık toplantıları yönetir, yarışma sürecini takip eder.</p></div>
       </div>
     </div>
   </section>
 
   <section aria-labelledby="h-links">
     <h2 id="h-links">Kod ve veri</h2>
+    <p class="sub">Öğretmenler ve meraklı öğrenciler için. Rehberi takip etmek için bunlara gerek yok.</p>
     <div class="links">
       <a href="https://github.com/hakanatas/turing-kelebek"><code>GitHub deposu</code><span>Bütün dosyalar ve sürüm geçmişi</span></a>
       <a href="https://github.com/hakanatas/turing-kelebek/blob/main/README.md"><code>README.md</code><span>Dosya listesi ve çalıştırma sırası</span></a>
       <a href="https://github.com/hakanatas/turing-kelebek/tree/main/veri"><code>veri/</code><span>Gözlem kayıtları ve analiz tabloları (CSV)</span></a>
       <a href="https://github.com/hakanatas/turing-kelebek/tree/main/sekiller"><code>sekiller/</code><span>Rapordaki şekiller</span></a>
       <a href="https://github.com/hakanatas/turing-kelebek/blob/main/kanat_turing.py"><code>kanat_turing.py</code><span>Desen simülasyonları</span></a>
-      <a href="https://github.com/hakanatas/turing-kelebek/blob/main/monte_carlo.py"><code>monte_carlo.py</code><span>Güç analizi</span></a>
+      <a href="https://github.com/hakanatas/turing-kelebek/blob/main/monte_carlo.py"><code>monte_carlo.py</code><span>Sahte kelebeklerle yöntem denemesi</span></a>
     </div>
   </section>
 
   <footer>
-    <span>Fotoğraflar iNaturalist'ten, yalnızca Creative Commons lisanslı olanlar; her gözlemci raporun Ek A listesinde adıyla yer alır. Hiçbir kelebek yakalanmadı.</span>
+    <span>Fotoğraflar iNaturalist'ten; yalnızca sahibinin kullanıma izin verdiği (Creative Commons lisanslı) fotoğraflar kullanıldı ve her fotoğrafçının adı raporda yer alıyor. Hiçbir kelebek yakalanmadı.</span>
     <span>Kod ve metinlerin bir kısmı danışman gözetiminde yapay zekâ desteğiyle hazırlandı ve raporda beyan edildi. Ölçümlerin doğrulanması öğrencilere aittir.</span>
   </footer>
 </div>
@@ -186,7 +202,7 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:va
     ctx.fillStyle = '#17120E'; ctx.beginPath(); ctx.arc(200,200,rd,0,Math.PI*2); ctx.fill();
     ctx.fillStyle = '#F7F3EA'; ctx.beginPath(); ctx.arc(200,200,rp,0,Math.PI*2); ctx.fill();
     ctx.font = '500 13px "JetBrains Mono", ui-monospace, monospace'; ctx.fillStyle = 'rgba(255,255,255,.92)';
-    ctx.fillText('λ × ' + f.toFixed(2), 14, 26); ctx.fillText('oran ' + (rp/rd).toFixed(2), 14, 46);
+    ctx.fillText('menzil × ' + f.toFixed(2).replace('.',','), 14, 26); ctx.fillText('oran ' + (rp/rd).toFixed(2).replace('.',','), 14, 46);
     if (!reduce) requestAnimationFrame(draw);
   };
   requestAnimationFrame(draw);
