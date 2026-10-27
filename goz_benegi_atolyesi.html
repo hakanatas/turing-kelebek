@@ -76,6 +76,14 @@ dt{font-weight:700}dd{margin:0;color:var(--muted);font-size:15px}
 .note{font-size:13px;color:var(--muted)}
 @media (max-width:860px){.lesson-grid{grid-template-columns:1fr}.stage{order:-1}.readouts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.worked{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:0 10px 10px 0;padding:10px 14px;margin:12px 0;font-size:16px}
+.worked>b.t{display:block;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok);margin-bottom:4px}
+.worked ol{margin:6px 0 0;padding-left:22px}
+.worked li{margin-bottom:3px}
+.recap{background:color-mix(in srgb,var(--ok) 12%,var(--surface));border-radius:10px;padding:8px 12px;margin:12px 0 0;font-size:16px}
+.recap b{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok);display:block}
+details.more{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:8px 12px;margin:10px 0;font-size:15px}
+details.more>summary{cursor:pointer;font-weight:700;color:var(--lam-col)}
 </style>
 
 <div class="wrap">
@@ -161,6 +169,14 @@ dt{font-weight:700}dd{margin:0;color:var(--muted);font-size:15px}
       <div><dt>Monte Carlo</dt><dd>Bir yöntemi, cevabı bilinen sahte verilerle yüzlerce kez deneyip sınamak.</dd></div>
       <div><dt>iNaturalist</dt><dd>İnsanların doğada çektikleri fotoğrafları paylaştığı vatandaş bilimi sitesi.</dd></div>
       <div><dt>Turing deseni</dt><dd>Alan Turing'in 1952'de gösterdiği fikir: yayılan kimyasallar desen oluşturabilir.</dd></div>
+      <div><dt>Fark</dt><dd>Disk yarıçapı − pupil yarıçapı: siyah halkanın kalınlığı. Fotoğraf yakınlaştırmasıyla değişir.</dd></div>
+      <div><dt>Saçılım</dt><dd>Bir ölçümün kelebekten kelebeğe ne kadar değiştiği, yüzde olarak (CV).</dd></div>
+      <div><dt>Senaryo</dt><dd>Verideki farkı açıklayabilecek rakip açıklamalardan biri.</dd></div>
+      <div><dt>Ölçek</dt><dd>Fotoğrafta 1 mm'nin kaç piksele denk geldiği. iNaturalist fotoğraflarında bilinmiyor.</dd></div>
+      <div><dt>Logaritmik eksen</dt><dd>1, 10, 100 diye giden eksen; her çizgi bir öncekinin 10 katı.</dd></div>
+      <div><dt>ln</dt><dd>"e ≈ 2,718'i kaç kez çarparsam bu sayıyı elde ederim?" Örnek: ln(81,5) ≈ 4,4.</dd></div>
+      <div><dt>Histogram</dt><dd>Her değerin kaç kez çıktığını çubuklarla gösteren grafik.</dd></div>
+      <div><dt>Çift pupilli benek</dt><dd>Tek siyah disk içinde iki beyaz pupil; iki odaktan oluşur.</dd></div>
     </dl>
   </details>
 </div>
@@ -174,7 +190,8 @@ const STEPS = [
   <p>Bu kelebek <b>Çayır esmeri</b> (<i>Maniola jurtina</i>). Türkiye'de deniz kıyısından 2000 metreye kadar her yerde yaşar. Ön kanadının ucunda siyah bir benek var, ortasında da küçük beyaz bir nokta.</p>
   <p>Buna <b>göz beneği</b> diyoruz. Ortadaki beyaz kısım <b>pupil</b>, çevresindeki siyah kısım <b>disk</b>.</p>
   <p>Bazı kelebeklerde benek büyük, bazılarında küçük. Projenin sorusu şu: bu fark nereden geliyor? Kanadı boyayan "talimat"ın hangi ayarı değişiyor?</p>
-  <div class="ask"><b>Sınıfta sor</b>Kanatta fırça yok. Hücreler nereye siyah, nereye beyaz koyacaklarını nasıl biliyor olabilir?</div>`},
+  <div class="ask"><b>Sınıfta sor</b>Kanatta fırça yok. Hücreler nereye siyah, nereye beyaz koyacaklarını nasıl biliyor olabilir?</div>
+  <div class="recap"><b>Akılda kalsın</b>Göz beneği = ortada beyaz <b>pupil</b> + çevresinde siyah <b>disk</b>. Soru: benek boyu kelebekten kelebeğe neden değişiyor?</div>`},
  {short:"Sinyal", cap:"Sinyal odaktan yayılıyor", html:`
   <div class="eyebrow">Adım 2 / 8 · Sinyal</div>
   <h2>Ortadaki hücreler bir sinyal salgılıyor</h2>
@@ -183,7 +200,9 @@ const STEPS = [
   <p>Sonunda bir denge kurulur: odağın yanında sinyal güçlü, uzakta zayıf. Sinyalin ne kadar uzağa gidebildiğine <span class="l">menzil</span> diyoruz ve <span class="l">λ</span> (lamda) ile gösteriyoruz.</p>
   <p>Tuvaldeki her küçük kare bir hücre. Bilgisayar, her hücrenin komşularıyla sinyal alışverişini adım adım hesaplıyor. Projedeki <code>kanat_turing.py</code> da aynısını yapıyor.</p>
   <div class="ask"><b>Sınıfta sor</b>Menzil kaydırıcısını sağa çekince mavi bulut nasıl değişiyor? Sağdaki eğri ne oluyor?</div>
-  <p class="formula">Formül köşesi: <code>λ = √(D / γ)</code>. D yayılma hızı, γ sönme hızı. Hızlı yayılan, yavaş sönen sinyalin menzili uzundur.</p>`},
+  <details class="more"><summary>Meraklısına: menzil formülü</summary><p style="margin:6px 0">λ = √(D ÷ γ). D yayılma hızı, γ sönme hızı. Hızlı yayılan, yavaş sönen sinyalin menzili uzundur.</p>
+  <div class="worked"><b class="t">Çözülmüş örnek</b>D = 0,01, γ = 0,04 ise menzil kaç?<ol><li>D ÷ γ = 0,01 ÷ 0,04 = 0,25</li><li>λ = √0,25 = <b>0,5 mm</b></li><li>Sönme 4 kat hızlanırsa: √(0,01 ÷ 0,16) = 0,25 mm. Menzil yarıya iner.</li></ol></div></details>
+  <div class="recap"><b>Akılda kalsın</b>Sinyal odaktan yayılır ve söner. Sonuç: yakında güçlü, uzakta zayıf. Ne kadar uzağa gittiği = <b>menzil λ</b>.</div>`},
  {short:"Eşik", cap:"Eşik kuralı: sinyale göre renk", html:`
   <div class="eyebrow">Adım 3 / 8 · Eşik kuralı</div>
   <h2>Her hücre sinyale bakıp rengini seçiyor</h2>
@@ -194,8 +213,9 @@ const STEPS = [
    <li>Zayıfsa → turuncu kalırım.</li>
   </ul>
   <p>Mavi çizgi, merkezden uzaklaştıkça sinyalin nasıl azaldığını gösteriyor. Çizgi beyaz eşiğin altına indiği yerde pupil biter. Siyah eşiğin altına indiği yerde disk biter.</p>
-  <p>Dikey eksende her çizgi bir öncekinin <b>10 katı</b>. Bu yüzden sönen sinyal düz bir çizgi gibi görünüyor.</p>
-  <div class="ask"><b>Sınıfta sor</b>Sinyal en başta bile beyaz eşiğe ulaşamasaydı benek nasıl görünürdü?</div>`},
+  <p>Grafiğin dikey ekseni sıradan bir cetvel değil: <b>1, 10, 100</b> diye gidiyor, her çizgi bir öncekinin 10 katı. Böylece hem çok büyük hem çok küçük değerler aynı grafiğe sığıyor ve sönen sinyal düz bir çizgi gibi görünüyor.</p>
+  <div class="ask"><b>Sınıfta sor</b>Sinyal en başta bile beyaz eşiğe ulaşamasaydı benek nasıl görünürdü?</div>
+  <div class="recap"><b>Akılda kalsın</b>Halkanın kenarı, sinyalin bir <b>eşiğin</b> altına indiği yer. İki eşik var, bu yüzden iki halka var.</div>`},
  {short:"İki düğme", cap:"Güç ve menzil düğmeleri", html:`
   <div class="eyebrow">Adım 4 / 8 · Oyun alanı</div>
   <h2>Beneği büyütmenin iki yolu var</h2>
@@ -206,7 +226,9 @@ const STEPS = [
   </ul>
   <p>İki düğme de beneği büyütür, ama farklı biçimde. Düğmelerle oyna ve alttaki çerçeveli iki sayıyı izle: <b>Fark</b> ve <b>Oran</b>.</p>
   <div class="ask"><b>Sınıfta sor</b>Yalnız S'yi değiştirince hangi sayı hiç değişmiyor? Yalnız λ'yı değiştirince hangisi? (Önce "Başa döndür"e bas.)</div>
-  <p class="formula">Formül köşesi: <code>r = λ · ln(S / θ)</code>. Halka yarıçapı = menzil × (güç ile eşiğin oranının logaritması).</p>`},
+  <div class="worked"><b class="t">Çözülmüş örnek: ekrandaki başlangıç kelebeği</b>Disk 2,20 mm, pupil 0,44 mm.<ol><li>Fark = 2,20 − 0,44 = <b>1,76 mm</b> (siyah halkanın kalınlığı)</li><li>Oran = 0,44 ÷ 2,20 = <b>0,20</b> (pupil diskin beşte biri)</li><li>Menzili iki katına çıkar: disk 4,40, pupil 0,88 → fark 3,52 (değişti), oran 0,20 (aynı!)</li></ol></div>
+  <details class="more"><summary>Meraklısına: ana formül</summary><p style="margin:6px 0"><code>r = λ · ln(S / θ)</code>. Halka yarıçapı = menzil × ln(güç ÷ eşik). "ln", "e ≈ 2,718 sayısını kaç kez çarparsam bu sayıyı elde ederim?" sorusunun cevabı; örneğin ln(81,5) ≈ 4,4. Disk için: 0,5 × ln(81,5 ÷ 1) = 0,5 × 4,4 = 2,2 mm. Ayrıntısı çalışma rehberinin 3. ve 4. ünitelerinde.</p></details>
+  <div class="recap"><b>Akılda kalsın</b>Menzil λ değişince <b>oran</b> sabit kalır; güç S değişince <b>fark</b> sabit kalır.</div>`},
  {short:"İzler", cap:"Üç senaryo, üç farklı iz", html:`
   <div class="eyebrow">Adım 5 / 8 · Öngörü</div>
   <h2>Her düğme beneğe farklı bir iz bırakır</h2>
@@ -215,28 +237,35 @@ const STEPS = [
   <p><b>Sağda</b> üçüncü bir olasılık var: pupil, odak hücrelerinin kendisi olsaydı boyu hiç değişmezdi.</p>
   <p>Alttaki küçük grafikler, kelebekleri yan yana koyunca her senaryoda hangi çizgiyi göreceğimizi gösteriyor. Üç senaryo, üç farklı çizgi. Kelebekleri ölçersek hangisinin doğru olduğunu anlayabiliriz.</p>
   <p>Bir de <b>dördüncü</b> olasılık var: boyutu menzil belirler, ama beyaz eşiği de kelebekten kelebeğe biraz farklıdır. O zaman oran boyuttan bağımsız kalır ama herkeste aynı olmaz. Bu senaryoyu 7. adımda göreceksin.</p>
-  <div class="ask"><b>Sınıfta sor</b>Doğada pupilsiz bir Çayır esmeri neredeyse hiç görülmez. Bu, hangi senaryo için kötü haber?</div>`},
+  <div class="ask"><b>Sınıfta sor</b>Doğada pupilsiz bir Çayır esmeri neredeyse hiç görülmez. Bu, hangi senaryo için kötü haber?</div>
+  <div class="recap"><b>Akılda kalsın</b>Her açıklama (senaryo) farklı bir iz bırakır. Kelebekleri ölçüp hangi izi gördüğümüze bakarak açıklamalar arasında seçim yapabiliriz.</div>`},
  {short:"Fotoğraf", cap:"Fotoğraf tuzağı: pikseller", html:`
   <div class="eyebrow">Adım 6 / 8 · Ölçüm sorunu</div>
   <h2>Ama fotoğrafın ölçeğini bilmiyoruz</h2>
   <p>Hiç kelebek yakalamadık. Ölçümleri, insanların iNaturalist'te paylaştığı <b>390 Türkiye fotoğrafından</b> yaptık. Sorun şu: kimi fotoğrafçı çok yaklaşmış, kimi uzaktan çekmiş. Bilgisayar boyları milimetre değil <b>piksel</b> olarak ölçüyor.</p>
   <p>Kaydırıcıyla fotoğrafçıyı yaklaştır. Aynı kelebeğin piksel cinsinden <b>farkı</b> sürekli değişiyor. <b>Oran</b> ise neredeyse aynı kalıyor, çünkü yakınlaştırma iki halkayı da aynı kat büyütüyor ve bölünce bu kat sadeleşiyor.</p>
+  <div class="worked"><b class="t">Çözülmüş örnek</b>Aynı kelebeğin iki fotoğrafı: Ayşe uzaktan çekmiş (pupil 2 px, disk 10 px), Mert iki kat yakından (pupil 4 px, disk 20 px).<ol><li>Ayşe: fark 10 − 2 = 8 px, oran 2 ÷ 10 = 0,2</li><li>Mert: fark 20 − 4 = 16 px, oran 4 ÷ 20 = 0,2</li><li>Fark iki katına çıktı, oran aynı kaldı.</li></ol></div>
   <p>Bu yüzden projede farka değil orana güveniyoruz. Uzaktan çekilmiş fotoğraflarda pupil yalnızca 1–2 piksel. Oran bu yüzden biraz titriyor; buna nicemleme hatası denir.</p>
-  <div class="ask"><b>Sınıfta sor</b>Bir kelebeğin gerçek boyunu fotoğraftan bulmak için kanatta neyi ölçebiliriz?</div>`},
+  <div class="ask"><b>Sınıfta sor</b>Bir kelebeğin gerçek boyunu fotoğraftan bulmak için kanatta neyi ölçebiliriz?</div>
+  <div class="recap"><b>Akılda kalsın</b>Fotoğrafların ölçeği farklı. Fark yakınlaştırmayla değişir, <b>oran değişmez</b>.</div>`},
  {short:"Deney", cap:"Monte Carlo: 400 sahte deney", html:`
   <div class="eyebrow">Adım 7 / 8 · Bilgisayar deneyi</div>
   <h2>Test gerçekten işe yarıyor mu?</h2>
-  <p>Ölçekten bağımsız testimizin sorusu şu: <b>büyük beneklerde oran büyüyor mu, küçülüyor mu, aynı mı kalıyor?</b> Cevabı tek bir sayıyla veriyoruz: <b>ρ</b> (ro). Artıysa ikisi birlikte artıyor, eksiyse biri artarken öteki azalıyor, sıfıra yakınsa ilişki yok.</p>
-  <p>Gerçek fotoğrafların bütün gürültüsüyle bu test yine çalışır mı? Bunu anlamak için bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz.</p>
-  <p>Her denemede 97 sahte kelebek üretilir, sahte fotoğraflarla ölçülür ve ρ hesaplanır. Bu her senaryo için 400 kez tekrarlanır. Bu yönteme <b>Monte Carlo</b> denir.</p>
-  <p>Dördüncü senaryo da var: <b>λ + pupil eşiği</b>. Bunda ρ, yalnız-λ gibi sıfıra yakın; ama oran kelebekten kelebeğe gerçekten değişiyor. İkisini <b>oranın saçılımı</b> ayırıyor: yalnız-λ'da saçılım %9, λ + eşikte %19. Gerçek kelebeklerde %19.</p>
-  <p>Kesikli çizgi gerçek kelebeklerimizin değeri: <b>−0.14</b>. Hem ρ hem saçılım yalnızca bir senaryoya uyuyor.</p>
-  <div class="ask"><b>Sınıfta sor</b>Gerçek değer hangi senaryonun tepesinden en uzakta? Hangisine en yakın?</div>
-  <p class="note">Bu deney tarayıcında canlı çalışıyor: <code>monte_carlo.py</code> içindeki oran testinin aynısı. Sonuçlar rapor v3'tekiyle aynı çıkıyor (+0.45 / −0.01 / −0.53 / −0.01).</p>`},
+  <p>Kelebeklere iki soru soruyoruz:</p>
+  <ul>
+   <li><b>ρ (ro):</b> Büyük benekli kelebeklerde oran daha mı büyük, daha mı küçük? +1'e yakınsa büyük, −1'e yakınsa küçük, 0'a yakınsa fark yok.</li>
+   <li><b>Saçılım:</b> Oran kelebekten kelebeğe ne kadar değişiyor? %5 ise hepsi hemen hemen aynı, %40 ise çok dağınık.</li>
+  </ul>
+  <p>Fotoğraflar bulanık, pikseller kaba. Bu gürültüye rağmen sorularımız doğru cevabı bulur mu? Bunu anlamak için bilgisayarda <b>cevabını bildiğimiz sahte kelebekler</b> üretiyoruz: 97 sahte kelebek, sahte fotoğraflarla ölçülüyor ve ρ hesaplanıyor. Bu her senaryo için 400 kez tekrarlanıyor. Bu yönteme <b>Monte Carlo</b> denir.</p>
+  <div class="worked"><b class="t">Grafik nasıl okunur?</b><ol><li>Her renk bir senaryo.</li><li>Her çubuk: o ρ değerinin 400 denemede kaç kez çıktığı. Çubukların yığıldığı yer, o senaryonun "tipik" sonucu.</li><li>Kesikli çizgi gerçek kelebeklerimiz: <b>−0,14</b>.</li><li>Kesikli çizgi bir senaryonun çubuklarından çok uzaktaysa, o senaryo gerçek kelebekleri açıklayamıyor.</li></ol></div>
+  <p>Son iki senaryonun ikisi de ρ ≈ 0 veriyor. Onları <b>saçılım</b> ayırıyor: yalnız menzil değişseydi saçılım %9 olurdu, "λ + pupil eşiği" senaryosunda %19. Gerçek kelebeklerde <b>%19</b>.</p>
+  <div class="ask"><b>Sınıfta sor</b>Kesikli çizgi hangi iki senaryonun çubuklarından çok uzakta? Kalan iki senaryoyu ne ayırıyor?</div>
+  <p class="note">Bu deney tarayıcında canlı çalışıyor; projedeki <code>monte_carlo.py</code> ile aynı hesap. Ortalama ρ değerleri rapordakiyle aynı çıkıyor: +0,45 / −0,01 / −0,53 / −0,01.</p>
+  <div class="recap"><b>Akılda kalsın</b>Monte Carlo = yöntemi önce cevabı bilinen sahte verilerle denemek. ρ ve saçılım <b>birlikte</b> yalnız bir senaryoya uyuyor.</div>`},
  {short:"Sonuç", cap:"Gerçek veri: 97 kelebek", html:`
   <div class="eyebrow">Adım 8 / 8 · Ne bulduk?</div>
   <h2>Boyut menzilden, oran eşikten</h2>
-  <p>Grafikteki her nokta, gerçek bir Çayır esmeri fotoğrafı (97 birey, 0–2144 m).</p>
+  <p>Grafikteki her nokta, gerçek bir Çayır esmeri fotoğrafı (97 birey, 0–2144 m). Yatay eksen benek ne kadar büyük, dikey eksen oran. Kesikli çizgiler, her senaryo doğru olsaydı noktaların nereye dizilmesi gerektiğini gösteriyor. Noktalar yatay çizginin çevresinde ama geniş bir bantta.</p>
   <div class="verdict">
    <div class="v-bad"><i>✗</i><span><b>Yalnız güç (S):</b> ρ yaklaşık +0.45 çıkardı ve kelebeklerin altıda birinde pupil kaybolurdu.</span></div>
    <div class="v-bad"><i>✗</i><span><b>Pupil sabit:</b> ρ yaklaşık −0.53 çıkardı; −0.14 çok uzakta.</span></div>
@@ -251,6 +280,7 @@ const STEPS = [
    <li>Dişi/erkek etiketi ve sıcaklık bilgisi eklemek.</li>
    <li>3–4 halkalı Tavus kelebeğinde (<i>Aglais io</i>) aynı testi yapmak.</li>
   </ol>
+  <div class="recap"><b>Akılda kalsın</b>Benek <b>boyutu</b> menzilden (λ), halka <b>oranı</b> eşiklerden geliyor gibi görünüyor. Bu bir ön bulgu; asıl sınav çift pupilli benekler.</div>
   <p class="note">Bu bir ön bulgudur. Kesin sonucu sizin elle yapacağınız ölçümler verecek. Ayrıntılar ve iki odaklı benekler için çalışma rehberine bakın.</p>`}
 ];
 
