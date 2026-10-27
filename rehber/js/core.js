@@ -136,9 +136,11 @@ TK.quiz = (el, qs, opt) => {
     foot.append(go); el.append(foot, res);
     go.addEventListener('click', () => {
       const unanswered = items.filter(it => { const v = it.get(); return v === -1 || (typeof v === 'number' && !Number.isFinite(v)) || (Array.isArray(v) && v.some(x=>!x)); }).length;
+      const block = opt.beforeCheck && opt.beforeCheck();
+      if (block){ res.hidden=false; res.className='msg warn'; res.innerHTML = block; return; }
       if (unanswered && !go.dataset.force){ res.hidden=false; res.className='msg warn'; res.textContent = `${unanswered} soru boş. Yine de kontrol etmek için düğmeye tekrar bas.`; go.dataset.force='1'; return; }
-      let score = 0;
-      items.forEach((it,i) => { const v = it.get(), ok = it.grade(v); if (ok) score++; it.mark(ok); it.ex.hidden=false; it.ex.className = 'ex '+(ok?'ok':'bad'); it.ex.innerHTML = (ok?'<b>Doğru.</b> ':'<b>Yanlış.</b> '+it.answerText()) + (qs[i].ex||''); });
+      let score = 0; const oks = [];
+      items.forEach((it,i) => { const v = it.get(), ok = it.grade(v); if (ok) score++; oks.push(ok); it.mark(ok); it.ex.hidden=false; it.ex.className = 'ex '+(ok?'ok':'bad'); it.ex.innerHTML = (ok?'<b>Doğru.</b> ':'<b>Yanlış.</b> '+it.answerText()) + (qs[i].ex||''); });
       const pct = Math.round(100*score/qs.length), pass = pct >= (opt.pass ?? 70);
       res.hidden=false; res.className = 'msg ' + (pass?'ok':'warn');
       res.innerHTML = `<span class="score">${score} / ${qs.length}</span> &nbsp; %${pct} · ${pass ? (opt.passMsg || 'Bu üniteyi geçtin. Harika!') : 'Açıklamaları oku, ilgili bölüme dön ve tekrar dene.'}`;
@@ -148,7 +150,7 @@ TK.quiz = (el, qs, opt) => {
       const rec = TK.state.quiz[opt.id] || { best:0, attempts:0, first:null };
       rec.attempts++; rec.last = pct; rec.best = Math.max(rec.best, pct); if (rec.first === null) rec.first = pct; rec.date = new Date().toISOString().slice(0,10);
       TK.state.quiz[opt.id] = rec; TK.save();
-      opt.onDone && opt.onDone(pct);
+      opt.onDone && opt.onDone(pct, { correct:score, total:qs.length, oks, qs, attempt:rec.attempts, res });
     });
   };
   render();

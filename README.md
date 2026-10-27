@@ -56,6 +56,16 @@ Rehberi takip etmek için bu bölüme gerek yok.
 | `goz_benegi_atolyesi.html` | 8 adımlık canlandırmalı atölye |
 | `rehber/` | 12 bölümlük etkileşimli çalışma rehberi |
 
+## Öğrenci sonuçları
+
+Öğrencilerin ön test ve final sonuçları (ad, sınıf, puan, tekrar edilmesi gereken konular) öğretmenin Google E-Tablosuna gönderilir. Kurulum bir kez yapılır, yaklaşık 5 dakika sürer: [`ogretmen/KURULUM.md`](ogretmen/KURULUM.md).
+
+| Dosya | Ne? |
+|---|---|
+| `ogretmen/KURULUM.md` | Adım adım kurulum notu |
+| `ogretmen/sonuc_toplayici.gs` | E-tabloya yapıştırılacak Apps Script kodu |
+| `rehber/js/config.js` | Sonuçların gönderileceği adres (kurulumdan sonra doldurulur) |
+
 ## Belgeler
 
 | Dosya | Ne? |

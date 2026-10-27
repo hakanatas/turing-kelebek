@@ -594,5 +594,5 @@ TK.GLOSS = [
 ];
 
 /* final: bütün ünite sorularından rastgele 16 */
-TK.finalQs = () => { const bank = []; TK.U.forEach(u => { if (u.quiz && u.quiz.qs && u.id!=='baslangic') u.quiz.qs.forEach(q => bank.push(q)); }); return TK.shuffle(bank).slice(0,16); };
+TK.finalQs = () => { const bank = []; TK.U.forEach(u => { if (u.quiz && u.quiz.qs && u.id!=='baslangic') u.quiz.qs.forEach(q => { q._unit = u.no+'. '+u.short; bank.push(q); }); }); return TK.shuffle(bank).slice(0,16); };
 })();

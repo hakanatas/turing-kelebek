@@ -33,8 +33,12 @@ function render(id){
   mountW();
   if (u.quiz){
     const qs = u.quiz.final ? TK.finalQs() : u.quiz.qs;
+    const graded = u.quiz.id==='on-test' || u.quiz.id==='final';
+    if (graded) $('#quizBox').before(TK.identBox());
     TK.quiz($('#quizBox'), qs, { id:u.quiz.id, tag:u.quiz.tag, pass:passOf(u), passMsg:u.quiz.passMsg, regen: u.quiz.final ? TK.finalQs : null,
-      onDone: () => { const kb = col.querySelector('.w .report'); if (kb){ const host = kb.parentElement; host.innerHTML=''; TK.W.karne(host); } } });
+      beforeCheck: graded ? () => (TK.state.student && TK.state.student.name && TK.state.student.cls) ? null : 'Önce yukarıya <b>adını soyadını</b> ve <b>sınıfını</b> yaz. Sonucun öğretmenine bu adla gönderilecek.' : null,
+      onDone: (pct, d) => { const kb = col.querySelector('.w .report'); if (kb){ const host = kb.parentElement; host.innerHTML=''; TK.W.karne(host); }
+        if (graded) TK.sendResult(u.quiz.id==='final' ? 'Final' : 'Ön test', pct, d); } });
   }
   side.classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded','false');
   window.scrollTo(0,0);
@@ -46,6 +50,46 @@ $('#menuBtn').addEventListener('click', () => { const o = side.classList.toggle(
 $('#resetAll').addEventListener('click', () => { $('#resetConfirm').hidden = false; });
 $('#resetNo').addEventListener('click', () => { $('#resetConfirm').hidden = true; });
 $('#resetYes').addEventListener('click', () => { TK.resetAll(); $('#resetConfirm').hidden = true; location.hash = '#baslangic'; route(); });
+/* öğrenci kimliği ve sonuç gönderme */
+TK.identBox = () => {
+  const st = TK.state.student || {};
+  const box = TK.el('div', {class:'ident'}, `<b class="t">Öğrenci bilgisi</b><p>Sonucun öğretmeninin tablosuna bu bilgilerle gönderilecek.</p>
+    <div class="ctrl"><label for="stName">Ad soyad <input type="text" id="stName" autocomplete="name" maxlength="60" value=""></label>
+    <label for="stCls">Sınıf / no <input type="text" id="stCls" maxlength="20" placeholder="9-A / 123" value=""></label></div>`);
+  const n = box.querySelector('#stName'), c = box.querySelector('#stCls'); n.value = st.name || ''; c.value = st.cls || '';
+  const save = () => { TK.state.student = { name:n.value.trim(), cls:c.value.trim() }; TK.save(); };
+  n.addEventListener('input', save); c.addEventListener('input', save);
+  return box;
+};
+const strip = h => String(h).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+TK.sendResult = (test, pct, d) => {
+  const st = TK.state.student || {};
+  const wrong = d.qs.map((q,i) => d.oks[i] ? null : (q._unit || ('Soru '+(i+1)+': '+strip(q.q).slice(0,50)))).filter(Boolean);
+  const weak = [...new Set(wrong)].join(' · ');
+  const now = new Date(), when = now.toLocaleString('tr-TR');
+  const rec = { token:(TK.CONFIG||{}).token, name:st.name, cls:st.cls, test, pct, correct:d.correct, total:d.total, attempt:d.attempt, weak, answers:d.oks.map((o,i)=>(i+1)+(o?'✓':'✗')).join(' '), when, iso:now.toISOString() };
+  const code = `Turing Kelebek · ${test} · ${st.name} (${st.cls}) · %${pct} (${d.correct}/${d.total}) · ${when}` + (weak ? ` · Tekrar: ${weak}` : '');
+  const box = TK.el('div', {class:'sendbox'}); d.res.after(box);
+  const showCode = (msg, cls) => {
+    box.className = 'sendbox msg ' + cls;
+    box.innerHTML = `${msg}<textarea readonly rows="3" aria-label="Sonuç metni"></textarea><button class="btn" type="button">Sonuç metnini kopyala</button>`;
+    const ta = box.querySelector('textarea'); ta.value = code;
+    box.querySelector('button').onclick = () => { const b = box.querySelector('button'); navigator.clipboard?.writeText(code).then(() => b.textContent='Kopyalandı ✓', () => { ta.select(); b.textContent='Metin seçildi; Ctrl+C ile kopyala'; }) || (ta.select()); };
+  };
+  if (!(TK.CONFIG && TK.CONFIG.resultsUrl)){ showCode('Sonuçların otomatik gönderimi henüz kurulmadı. Aşağıdaki metni kopyalayıp öğretmenine gönder.', ''); return; }
+  box.className='sendbox msg'; box.textContent = 'Sonuç öğretmenine gönderiliyor…';
+  TK.postResult(rec).then(() => { box.className='sendbox msg ok'; box.innerHTML = `<b>Sonucun öğretmenine gönderildi ✓</b> (${st.name}, ${st.cls}, %${pct})`; })
+    .catch(() => { TK.state.outbox = (TK.state.outbox||[]).concat([rec]); TK.save(); showCode('<b>Sonuç şu an gönderilemedi</b> (internet ya da ayar sorunu). Sayfayı bir dahaki açışında yeniden denenecek. İstersen aşağıdaki metni kopyalayıp öğretmenine de gönder.', 'warn'); });
+};
+TK.postResult = rec => fetch(TK.CONFIG.resultsUrl, { method:'POST', body:JSON.stringify(rec) })
+  .then(r => r.json()).then(j => { if (!j || !j.ok) throw new Error((j && j.error) || 'hata'); return j; });
+const flushOutbox = async () => {
+  if (!(TK.CONFIG && TK.CONFIG.resultsUrl) || !(TK.state.outbox||[]).length) return;
+  const left = [];
+  for (const rec of TK.state.outbox){ try { await TK.postResult(rec); } catch(e){ left.push(rec); } }
+  TK.state.outbox = left; TK.save();
+};
+
 /* semboller ve sözlük */
 const dlg = $('#ref'), body = $('#refBody');
 const showSym = () => { $('#tabSym').classList.add('on'); $('#tabGl').classList.remove('on');
@@ -59,5 +103,5 @@ $('#refOpen').addEventListener('click', () => { showSym(); dlg.showModal(); });
 $('#refClose').addEventListener('click', () => dlg.close());
 $('#tabSym').addEventListener('click', showSym); $('#tabGl').addEventListener('click', showGl);
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
-TK.refreshNav(); route();
+TK.refreshNav(); route(); flushOutbox();
 })();
